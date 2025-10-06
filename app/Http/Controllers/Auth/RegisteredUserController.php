@@ -45,6 +45,10 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        $defaultRedirect = $user->can('access-admin')
+            ? route('admin.panel', absolute: false)
+            : '/';
+
+        return redirect($defaultRedirect);
     }
 }
