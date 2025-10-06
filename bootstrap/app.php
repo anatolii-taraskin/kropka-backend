@@ -14,6 +14,9 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'admin' => \App\Http\Middleware\EnsureUserIsAdmin::class,
+            // Register short aliases so routes can attach the locale middlewares declaratively.
+            'set.locale' => \App\Http\Middleware\SetLocaleFromRoute::class,
+            'resolve.locale' => \App\Http\Middleware\ResolveRequestLocale::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
