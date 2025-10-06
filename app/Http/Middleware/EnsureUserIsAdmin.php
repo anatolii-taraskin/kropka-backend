@@ -17,7 +17,7 @@ class EnsureUserIsAdmin
     {
         $user = $request->user();
 
-        if (! $user || $user->email !== config('admin.email')) {
+        if (! $user || ! $user->can('access-admin')) {
             abort(Response::HTTP_FORBIDDEN);
         }
 

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Auth;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -38,7 +39,30 @@ class EmailVerificationTest extends TestCase
 
         Event::assertDispatched(Verified::class);
         $this->assertTrue($user->fresh()->hasVerifiedEmail());
-        $response->assertRedirect(route('dashboard', absolute: false).'?verified=1');
+        $response->assertRedirect('/?verified=1');
+    }
+
+    public function test_admin_email_verification_redirects_to_admin_panel(): void
+    {
+        $adminRole = Role::factory()->create(['name' => 'admin']);
+
+        $admin = User::factory()->unverified()->create([
+            'email' => config('admin.email'),
+            'password' => bcrypt('password'),
+        ]);
+
+        $admin->roles()->attach($adminRole);
+
+        $verificationUrl = URL::temporarySignedRoute(
+            'verification.verify',
+            now()->addMinutes(60),
+            ['id' => $admin->id, 'hash' => sha1($admin->email)]
+        );
+
+        $response = $this->actingAs($admin)->get($verificationUrl);
+
+        $this->assertTrue($admin->fresh()->hasVerifiedEmail());
+        $response->assertRedirect(route('admin.panel', absolute: false).'?verified=1');
     }
 
     public function test_email_is_not_verified_with_invalid_hash(): void
