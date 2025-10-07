@@ -10,11 +10,9 @@
     </header>
 
     @if (session('status') === 'password-updated')
-        <div class="mt-4 rounded-md bg-green-50 p-4">
-            <p class="text-sm text-green-700">
-                {{ __('profile.password.success') }}
-            </p>
-        </div>
+        <x-alert-success class="mt-4">
+            {{ __('profile.password.success') }}
+        </x-alert-success>
     @endif
 
     <form method="post" action="{{ route('password.update') }}" class="mt-6 space-y-6">
