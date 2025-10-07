@@ -28,5 +28,7 @@ class DatabaseSeeder extends Seeder
         $adminRole = Role::firstOrCreate(['name' => 'admin']);
 
         $admin->roles()->syncWithoutDetaching([$adminRole->id]);
+
+        $this->call(StudioInfoSeeder::class);
     }
 }
