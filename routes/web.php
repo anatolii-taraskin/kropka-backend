@@ -26,12 +26,13 @@ Route::middleware(['auth', 'admin', 'resolve.locale:admin'])->group(function () 
 
     Route::put('/admin/studio-infos', [StudioInfoController::class, 'update'])
         ->name('admin.studio-infos.update');
-});
 
-Route::middleware(['auth', 'resolve.locale:admin'])->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/admin/profile', [ProfileController::class, 'edit'])
+        ->name('profile.edit');
+    Route::patch('/admin/profile', [ProfileController::class, 'update'])
+        ->name('profile.update');
+    Route::delete('/admin/profile', [ProfileController::class, 'destroy'])
+        ->name('profile.destroy');
 });
 
 Route::middleware('resolve.locale')->group(function () {
