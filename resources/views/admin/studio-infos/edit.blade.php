@@ -48,15 +48,15 @@
                                             id="studio_infos_{{ $field['property'] }}"
                                             name="studio_infos[{{ $field['property'] }}]"
                                             rows="4"
-                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
                                             @if ($field['required']) required @endif
                                         >{{ $inputValue }}</textarea>
                                     @else
-                                        <x-text-input
+                                        <input
                                             id="studio_infos_{{ $field['property'] }}"
                                             name="studio_infos[{{ $field['property'] }}]"
                                             type="{{ $field['type'] }}"
-                                            class="mt-1 block w-full"
+                                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
                                             value="{{ $inputValue }}"
                                             @if ($field['required']) required @endif
                                         />
