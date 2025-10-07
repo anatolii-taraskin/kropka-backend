@@ -29,6 +29,9 @@ class DatabaseSeeder extends Seeder
 
         $admin->roles()->syncWithoutDetaching([$adminRole->id]);
 
-        $this->call(StudioInfoSeeder::class);
+        $this->call([
+            StudioInfoSeeder::class,
+            StudioRuleSeeder::class,
+        ]);
     }
 }

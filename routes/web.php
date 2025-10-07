@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\StudioInfoController;
+use App\Http\Controllers\Admin\StudioRuleController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -26,6 +27,12 @@ Route::middleware(['auth', 'admin', 'resolve.locale:admin'])->group(function () 
 
     Route::put('/admin/studio-infos', [StudioInfoController::class, 'update'])
         ->name('admin.studio-infos.update');
+
+    Route::get('/admin/studio-rules', [StudioRuleController::class, 'edit'])
+        ->name('admin.studio-rules.edit');
+
+    Route::put('/admin/studio-rules', [StudioRuleController::class, 'update'])
+        ->name('admin.studio-rules.update');
 
     Route::get('/admin/profile', [ProfileController::class, 'edit'])
         ->name('profile.edit');
