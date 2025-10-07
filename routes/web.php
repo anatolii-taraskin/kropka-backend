@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\StudioInfoController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +20,12 @@ Route::middleware(['auth', 'admin', 'resolve.locale:admin'])->group(function () 
     Route::get('/admin', function () {
         return view('admin.panel');
     })->name('admin.panel');
+
+    Route::get('/admin/studio-infos', [StudioInfoController::class, 'edit'])
+        ->name('admin.studio-infos.edit');
+
+    Route::put('/admin/studio-infos', [StudioInfoController::class, 'update'])
+        ->name('admin.studio-infos.update');
 });
 
 Route::middleware(['auth', 'resolve.locale:admin'])->group(function () {
