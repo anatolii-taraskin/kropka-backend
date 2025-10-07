@@ -3,7 +3,7 @@
 return [
     'information' => [
         'title' => 'Profile Information',
-        'description' => "Update your account's profile information and email address.",
+        'description' => "",
         'success' => 'Your profile changes have been saved successfully.',
         'fields' => [
             'name' => 'Name',

@@ -5,7 +5,7 @@ return [
     'welcome' => 'Welcome, Admin!',
     'studio_infos' => [
         'title' => 'Studio information',
-        'description' => 'Update the studio details that are displayed on the public website.',
+        'description' => '',
         'submit' => 'Save changes',
         'success' => 'Studio information has been updated.',
         'fields' => [
