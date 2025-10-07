@@ -9,7 +9,7 @@
     $currentLocale = app()->getLocale();
 @endphp
 
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
+<nav x-data="{ open: false }" class="bg-white border-b border-emerald-100">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -17,7 +17,7 @@
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ auth()->check() && auth()->user()->can('access-admin') ? route('admin.panel') : route('localized.welcome', ['locale' => app()->getLocale()]) }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
+                        <x-application-logo class="block h-9 w-auto fill-current text-emerald-700" />
                     </a>
                 </div>
 
@@ -37,18 +37,18 @@
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6 sm:space-x-6">
                 @if (count($languageSwitcherLocales) > 1)
-                    <div class="flex items-center space-x-2 text-sm font-medium text-gray-500">
+                    <div class="flex items-center space-x-2 text-sm font-medium text-emerald-600">
                         @foreach ($languageSwitcherLocales as $locale)
                             <a
                                 href="{{ request()->fullUrlWithQuery(['lang' => $locale]) }}"
-                                class="uppercase transition-colors {{ $currentLocale === $locale ? 'text-gray-900' : 'text-gray-500 hover:text-gray-700' }}"
+                                class="uppercase transition-colors {{ $currentLocale === $locale ? 'text-emerald-800' : 'text-emerald-600 hover:text-emerald-700' }}"
                                 @if ($currentLocale === $locale) aria-current="true" @endif
                             >
                                 {{ $locale }}
                             </a>
 
                             @if (! $loop->last)
-                                <span class="text-gray-300">/</span>
+                                <span class="text-emerald-300">/</span>
                             @endif
                         @endforeach
                     </div>
@@ -56,7 +56,7 @@
 
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
-                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
+                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-emerald-700 bg-white hover:text-emerald-800 focus:outline-none transition ease-in-out duration-150">
                             <div>{{ Auth::user()->name }}</div>
 
                             <div class="ms-1">
@@ -88,7 +88,7 @@
 
             <!-- Hamburger -->
             <div class="-me-2 flex items-center sm:hidden">
-                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
+                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-emerald-500 hover:text-emerald-600 hover:bg-emerald-50 focus:outline-none focus:bg-emerald-50 focus:text-emerald-600 transition duration-150 ease-in-out">
                     <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                         <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -112,26 +112,26 @@
         @endif
 
         <!-- Responsive Settings Options -->
-        <div class="pt-4 pb-1 border-t border-gray-200">
+        <div class="pt-4 pb-1 border-t border-emerald-200">
             <div class="px-4">
-                <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
-                <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
+                <div class="font-medium text-base text-emerald-800">{{ Auth::user()->name }}</div>
+                <div class="font-medium text-sm text-emerald-600">{{ Auth::user()->email }}</div>
             </div>
 
             @if (count($languageSwitcherLocales) > 1)
                 <div class="mt-4 px-4">
-                    <div class="flex items-center space-x-2 text-sm font-medium text-gray-500">
+                    <div class="flex items-center space-x-2 text-sm font-medium text-emerald-600">
                         @foreach ($languageSwitcherLocales as $locale)
                             <a
                                 href="{{ request()->fullUrlWithQuery(['lang' => $locale]) }}"
-                                class="uppercase transition-colors {{ $currentLocale === $locale ? 'text-gray-900' : 'text-gray-500 hover:text-gray-700' }}"
+                                class="uppercase transition-colors {{ $currentLocale === $locale ? 'text-emerald-800' : 'text-emerald-600 hover:text-emerald-700' }}"
                                 @if ($currentLocale === $locale) aria-current="true" @endif
                             >
                                 {{ $locale }}
                             </a>
 
                             @if (! $loop->last)
-                                <span class="text-gray-300">/</span>
+                                <span class="text-emerald-300">/</span>
                             @endif
                         @endforeach
                     </div>

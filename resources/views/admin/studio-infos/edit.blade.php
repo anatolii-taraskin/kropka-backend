@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2 class="font-semibold text-xl text-emerald-900 leading-tight">
             {{ __('admin.studio_infos.title') }}
         </h2>
     </x-slot>
@@ -11,11 +11,11 @@
                 <div class="max-w-xl">
                     <section>
                         <header>
-                            <h2 class="text-lg font-medium text-gray-900">
+                            <h2 class="text-lg font-medium text-emerald-900">
                                 {{ __('admin.studio_infos.title') }}
                             </h2>
 
-                            <p class="mt-1 text-sm text-gray-600">
+                            <p class="mt-1 text-sm text-emerald-700">
                                 {{ __('admin.studio_infos.description') }}
                             </p>
                         </header>
@@ -46,7 +46,7 @@
                                             id="studio_infos_{{ $field['property'] }}"
                                             name="studio_infos[{{ $field['property'] }}]"
                                             rows="4"
-                                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
+                                            class="border-emerald-200 focus:border-emerald-500 focus:ring-emerald-500 rounded-md shadow-sm mt-1 block w-full"
                                             @if ($field['required']) required @endif
                                         >{{ $inputValue }}</textarea>
                                     @else
@@ -54,7 +54,7 @@
                                             id="studio_infos_{{ $field['property'] }}"
                                             name="studio_infos[{{ $field['property'] }}]"
                                             type="{{ $field['type'] }}"
-                                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
+                                            class="border-emerald-200 focus:border-emerald-500 focus:ring-emerald-500 rounded-md shadow-sm mt-1 block w-full"
                                             value="{{ $inputValue }}"
                                             @if ($field['required']) required @endif
                                         />
