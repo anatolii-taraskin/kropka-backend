@@ -21,11 +21,9 @@
                         </header>
 
                         @if (session('status') === 'studio-infos-updated')
-                            <div class="mt-4 rounded-md bg-green-50 p-4">
-                                <p class="text-sm text-green-700">
-                                    {{ __('admin.studio_infos.success') }}
-                                </p>
-                            </div>
+                            <x-alert-success class="mt-4">
+                                {{ __('admin.studio_infos.success') }}
+                            </x-alert-success>
                         @endif
 
                         <form method="post" action="{{ route('admin.studio-infos.update') }}" class="mt-6 space-y-6">

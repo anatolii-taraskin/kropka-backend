@@ -10,11 +10,9 @@
     </header>
 
     @if (session('status') === 'profile-updated')
-        <div class="mt-4 rounded-md bg-green-50 p-4">
-            <p class="text-sm text-green-700">
-                {{ __('profile.information.success') }}
-            </p>
-        </div>
+        <x-alert-success class="mt-4">
+            {{ __('profile.information.success') }}
+        </x-alert-success>
     @endif
 
     <form id="send-verification" method="post" action="{{ route('verification.send') }}">
@@ -47,9 +45,9 @@
                     </p>
 
                     @if (session('status') === 'verification-link-sent')
-                        <p class="mt-2 font-medium text-sm text-green-600">
+                        <x-alert-success class="mt-3">
                             {{ __('profile.information.verification_link_sent') }}
-                        </p>
+                        </x-alert-success>
                     @endif
                 </div>
             @endif
