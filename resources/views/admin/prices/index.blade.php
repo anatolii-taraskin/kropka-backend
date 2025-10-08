@@ -11,17 +11,21 @@
         <x-alert-success>
             {{ __('admin.prices.create_success') }}
         </x-alert-success>
+
+        <br/>
     @elseif ($status === 'price-updated')
         <x-alert-success>
             {{ __('admin.prices.update_success') }}
         </x-alert-success>
+
+        <br/>
     @elseif ($status === 'price-deleted')
         <x-alert-success>
             {{ __('admin.prices.delete_success') }}
         </x-alert-success>
-    @endif
 
-    <br/>
+        <br/>
+    @endif
 
     <section class="bg-white shadow sm:rounded-lg overflow-hidden">
         @if ($prices->isEmpty())
