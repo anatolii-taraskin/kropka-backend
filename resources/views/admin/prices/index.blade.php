@@ -36,7 +36,7 @@
                         </thead>
                         <tbody class="divide-y divide-gray-200 bg-white">
                         @foreach ($prices as $price)
-                            <tr>
+                            <tr class="border-b">
                                 <td class="px-6 py-4 align-top">
                                     <div class="space-y-1">
                                         <div class="flex items-center gap-2">
@@ -45,40 +45,37 @@
                                                 </span>
 
                                             @unless ($price->is_active)
-                                                <span
-                                                    class="inline-flex items-center rounded-full bg-gray-200 px-2 py-0.5 text-xs font-medium text-gray-600">
+                                                <span class="inline-flex items-center rounded-full bg-gray-200 px-2 py-0.5 text-xs font-medium text-gray-600">
                                                         {{ __('admin.prices.status.inactive') }}
-                                                    </span>
+                                                </span>
                                             @endunless
                                         </div>
 
                                         <div class="flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-500">
                                             @if ($price->col1)
                                                 <span>
-                                                        <span
-                                                            class="font-medium">{{ __('admin.prices.fields.col1') }}:</span>
+                                                    <span class="font-medium">{{ __('admin.prices.fields.col1') }}:</span>
                                                         {{ $price->col1 }}
-                                                    </span>
+                                                </span>
                                             @endif
 
                                             @if ($price->col2)
                                                 <span>
-                                                        <span
-                                                            class="font-medium">{{ __('admin.prices.fields.col2') }}:</span>
+                                                    <span class="font-medium">{{ __('admin.prices.fields.col2') }}:</span>
                                                         {{ $price->col2 }}
-                                                    </span>
+                                                </span>
                                             @endif
 
                                             @if ($price->col3)
                                                 <span>
-                                                        <span
-                                                            class="font-medium">{{ __('admin.prices.fields.col3') }}:</span>
+                                                    <span class="font-medium">{{ __('admin.prices.fields.col3') }}:</span>
                                                         {{ $price->col3 }}
-                                                    </span>
+                                                </span>
                                             @endif
                                         </div>
                                     </div>
                                 </td>
+
                                 <td class="px-6 py-4">
                                     <div x-data="{}" class="flex items-center justify-end gap-3">
                                         <a
