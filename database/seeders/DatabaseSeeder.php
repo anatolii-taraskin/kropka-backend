@@ -32,6 +32,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             StudioInfoSeeder::class,
             StudioRuleSeeder::class,
+            PriceSeeder::class,
         ]);
     }
 }
