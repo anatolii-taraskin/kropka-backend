@@ -12,7 +12,7 @@ use Illuminate\View\View;
 class PriceController extends Controller
 {
     /**
-     * Display the list of prices and the creation form.
+     * Display the list of prices.
      */
     public function index(): View
     {
@@ -21,10 +21,19 @@ class PriceController extends Controller
             ->orderBy('id')
             ->get();
 
-        $nextSort = ($prices->max('sort') ?? 0) + 1;
-
         return view('admin.prices.index', [
             'prices' => $prices,
+        ]);
+    }
+
+    /**
+     * Show the form for creating a new price entry.
+     */
+    public function create(): View
+    {
+        $nextSort = (Price::max('sort') ?? 0) + 1;
+
+        return view('admin.prices.create', [
             'nextSort' => $nextSort,
         ]);
     }
@@ -50,6 +59,16 @@ class PriceController extends Controller
         return redirect()
             ->route('admin.prices.index')
             ->with('status', 'price-created');
+    }
+
+    /**
+     * Show the form for editing the specified price entry.
+     */
+    public function edit(Price $price): View
+    {
+        return view('admin.prices.edit', [
+            'price' => $price,
+        ]);
     }
 
     /**

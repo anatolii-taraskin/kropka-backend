@@ -32,8 +32,14 @@ Route::middleware(['auth', 'admin', 'resolve.locale:admin'])->group(function () 
     Route::get('/admin/prices', [PriceController::class, 'index'])
         ->name('admin.prices.index');
 
+    Route::get('/admin/prices/create', [PriceController::class, 'create'])
+        ->name('admin.prices.create');
+
     Route::post('/admin/prices', [PriceController::class, 'store'])
         ->name('admin.prices.store');
+
+    Route::get('/admin/prices/{price}/edit', [PriceController::class, 'edit'])
+        ->name('admin.prices.edit');
 
     Route::put('/admin/prices/{price}', [PriceController::class, 'update'])
         ->name('admin.prices.update');

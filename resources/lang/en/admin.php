@@ -42,7 +42,7 @@ return [
         'create_title' => 'Add a new price tile',
         'create_description' => 'Fill in the details to create a new price tile for the public site.',
         'list_title' => 'Existing price tiles',
-        'list_description' => 'Edit, deactivate or reorder the tiles that are shown to guests.',
+        'list_description' => 'Manage the tiles that are shown to guests.',
         'submit_create' => 'Create tile',
         'submit_update' => 'Save changes',
         'delete' => 'Delete',
@@ -53,6 +53,30 @@ return [
         'empty' => 'There are no price tiles yet.',
         'updated_at' => 'Updated :date',
         'date_format' => 'm/d/Y H:i',
+        'add_button' => 'Add',
+        'back_to_list' => 'Back to list',
+        'cancel' => 'Cancel',
+        'edit_title' => 'Edit price tile',
+        'edit_description' => 'Update the details of the price tile and save your changes.',
+        'delete_title' => 'Delete tile',
+        'delete_confirm_simple' => 'Are you sure you want to delete this tile?',
+        'table' => [
+            'columns' => [
+                'title' => 'Solo / with student',
+                'actions' => 'Actions',
+            ],
+        ],
+        'actions' => [
+            'edit' => 'Edit',
+            'delete' => 'Delete',
+        ],
+        'status' => [
+            'inactive' => 'Inactive',
+        ],
+        'modal' => [
+            'confirm' => 'Yes',
+            'cancel' => 'No',
+        ],
         'fields' => [
             'name' => 'Title',
             'col1' => 'Column 1',
