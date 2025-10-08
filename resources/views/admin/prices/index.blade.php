@@ -4,7 +4,6 @@
     :content-class="null"
 >
     @php
-        $createErrors = $errors->getBag('createPrice');
         $status = session('status');
     @endphp
 
@@ -22,120 +21,8 @@
         </x-alert-success>
     @endif
 
-    <section class="bg-white shadow sm:rounded-lg p-6">
-        <header>
-            <h2 class="text-lg font-medium text-gray-900">
-                {{ __('admin.prices.create_title') }}
-            </h2>
-            <p class="mt-1 text-sm text-gray-600">
-                {{ __('admin.prices.create_description') }}
-            </p>
-        </header>
-
-        <form method="post" action="{{ route('admin.prices.store') }}" class="mt-6 space-y-6">
-            @csrf
-
-            <div>
-                <x-input-label for="price_name" :value="__('admin.prices.fields.name')" />
-                <x-text-input
-                    id="price_name"
-                    name="name"
-                    type="text"
-                    class="mt-1 block w-full"
-                    value="{{ $createErrors->isEmpty() ? '' : old('name') }}"
-                    required
-                    maxlength="255"
-                />
-                <x-input-error class="mt-2" :messages="$createErrors->get('name')" />
-            </div>
-
-            <div class="grid gap-6 md:grid-cols-3">
-                <div>
-                    <x-input-label for="price_col1" :value="__('admin.prices.fields.col1')" />
-                    <x-text-input
-                        id="price_col1"
-                        name="col1"
-                        type="text"
-                        class="mt-1 block w-full"
-                        value="{{ $createErrors->isEmpty() ? '' : old('col1') }}"
-                        maxlength="255"
-                    />
-                    <x-input-error class="mt-2" :messages="$createErrors->get('col1')" />
-                </div>
-
-                <div>
-                    <x-input-label for="price_col2" :value="__('admin.prices.fields.col2')" />
-                    <x-text-input
-                        id="price_col2"
-                        name="col2"
-                        type="text"
-                        class="mt-1 block w-full"
-                        value="{{ $createErrors->isEmpty() ? '' : old('col2') }}"
-                        maxlength="255"
-                    />
-                    <x-input-error class="mt-2" :messages="$createErrors->get('col2')" />
-                </div>
-
-                <div>
-                    <x-input-label for="price_col3" :value="__('admin.prices.fields.col3')" />
-                    <x-text-input
-                        id="price_col3"
-                        name="col3"
-                        type="text"
-                        class="mt-1 block w-full"
-                        value="{{ $createErrors->isEmpty() ? '' : old('col3') }}"
-                        maxlength="255"
-                    />
-                    <x-input-error class="mt-2" :messages="$createErrors->get('col3')" />
-                </div>
-            </div>
-
-            <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-                <div>
-                    <x-input-label for="price_sort" :value="__('admin.prices.fields.sort')" />
-                    <x-text-input
-                        id="price_sort"
-                        name="sort"
-                        type="number"
-                        min="0"
-                        max="255"
-                        class="mt-1 block w-32"
-                        value="{{ $createErrors->isEmpty() ? $nextSort : old('sort', $nextSort) }}"
-                        required
-                    />
-                    <x-input-error class="mt-2" :messages="$createErrors->get('sort')" />
-                </div>
-
-                @php
-                    $createIsActive = $createErrors->isEmpty() ? true : (old('is_active', '0') === '1');
-                @endphp
-
-                <div class="flex items-center">
-                    <input type="hidden" name="is_active" value="0" />
-                    <input
-                        id="price_is_active"
-                        name="is_active"
-                        type="checkbox"
-                        value="1"
-                        class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
-                        @checked($createIsActive)
-                    />
-                    <label for="price_is_active" class="ms-2 text-sm text-gray-600">
-                        {{ __('admin.prices.fields.is_active') }}
-                    </label>
-                </div>
-            </div>
-
-            <div class="flex items-center">
-                <x-primary-button>
-                    {{ __('admin.prices.submit_create') }}
-                </x-primary-button>
-            </div>
-        </form>
-    </section>
-
-    <section class="bg-white shadow sm:rounded-lg p-6">
-        <header class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+    <section class="bg-white shadow sm:rounded-lg">
+        <div class="flex flex-col gap-4 p-6 sm:flex-row sm:items-center sm:justify-between">
             <div>
                 <h2 class="text-lg font-medium text-gray-900">
                     {{ __('admin.prices.list_title') }}
@@ -144,150 +31,134 @@
                     {{ __('admin.prices.list_description') }}
                 </p>
             </div>
-        </header>
+
+            <a
+                href="{{ route('admin.prices.create') }}"
+                class="inline-flex items-center gap-2 rounded-md bg-gray-800 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white shadow-sm transition duration-150 ease-in-out hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            >
+                <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M10 3a1 1 0 0 1 1 1v5h5a1 1 0 1 1 0 2h-5v5a1 1 0 1 1-2 0v-5H4a1 1 0 1 1 0-2h5V4a1 1 0 0 1 1-1Z" clip-rule="evenodd" />
+                </svg>
+                <span>{{ __('admin.prices.add_button') }}</span>
+            </a>
+        </div>
 
         @if ($prices->isEmpty())
-            <p class="mt-6 text-sm text-gray-500">
+            <p class="px-6 pb-6 text-sm text-gray-500">
                 {{ __('admin.prices.empty') }}
             </p>
         @else
-            <div class="mt-6 space-y-6">
-                @foreach ($prices as $price)
-                    @php
-                        $updateErrors = $errors->getBag('updatePrice' . $price->id);
-                        $useOldValues = ! $updateErrors->isEmpty();
-                        $updatedAt = $price->updated_at ? $price->updated_at->format(__('admin.prices.date_format')) : null;
-                    @endphp
+            <div class="border-t border-gray-200">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
+                                    {{ __('admin.prices.table.columns.title') }}
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider text-gray-500">
+                                    {{ __('admin.prices.table.columns.actions') }}
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200 bg-white">
+                            @foreach ($prices as $price)
+                                <tr>
+                                    <td class="px-6 py-4 align-top">
+                                        <div class="space-y-1">
+                                            <div class="flex items-center gap-2">
+                                                <span class="text-sm font-medium text-gray-900">
+                                                    {{ $price->name }}
+                                                </span>
 
-                    <div class="border border-gray-200 rounded-lg bg-gray-50 p-4">
-                        <form method="post" action="{{ route('admin.prices.update', $price) }}" class="space-y-4">
-                            @csrf
-                            @method('put')
+                                                @unless ($price->is_active)
+                                                    <span class="inline-flex items-center rounded-full bg-gray-200 px-2 py-0.5 text-xs font-medium text-gray-600">
+                                                        {{ __('admin.prices.status.inactive') }}
+                                                    </span>
+                                                @endunless
+                                            </div>
 
-                            <div class="grid gap-4 md:grid-cols-2">
-                                <div>
-                                    <x-input-label for="price_{{ $price->id }}_name" :value="__('admin.prices.fields.name')" />
-                                    <x-text-input
-                                        id="price_{{ $price->id }}_name"
-                                        name="name"
-                                        type="text"
-                                        class="mt-1 block w-full"
-                                        value="{{ $useOldValues ? old('name') : $price->name }}"
-                                        required
-                                        maxlength="255"
-                                    />
-                                    <x-input-error class="mt-2" :messages="$updateErrors->get('name')" />
-                                </div>
+                                            <div class="flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-500">
+                                                @if ($price->col1)
+                                                    <span>
+                                                        <span class="font-medium">{{ __('admin.prices.fields.col1') }}:</span>
+                                                        {{ $price->col1 }}
+                                                    </span>
+                                                @endif
 
-                                <div class="grid gap-4 sm:grid-cols-3">
-                                    <div>
-                                        <x-input-label for="price_{{ $price->id }}_col1" :value="__('admin.prices.fields.col1')" />
-                                        <x-text-input
-                                            id="price_{{ $price->id }}_col1"
-                                            name="col1"
-                                            type="text"
-                                            class="mt-1 block w-full"
-                                            value="{{ $useOldValues ? old('col1') : $price->col1 }}"
-                                            maxlength="255"
-                                        />
-                                        <x-input-error class="mt-2" :messages="$updateErrors->get('col1')" />
-                                    </div>
+                                                @if ($price->col2)
+                                                    <span>
+                                                        <span class="font-medium">{{ __('admin.prices.fields.col2') }}:</span>
+                                                        {{ $price->col2 }}
+                                                    </span>
+                                                @endif
 
-                                    <div>
-                                        <x-input-label for="price_{{ $price->id }}_col2" :value="__('admin.prices.fields.col2')" />
-                                        <x-text-input
-                                            id="price_{{ $price->id }}_col2"
-                                            name="col2"
-                                            type="text"
-                                            class="mt-1 block w-full"
-                                            value="{{ $useOldValues ? old('col2') : $price->col2 }}"
-                                            maxlength="255"
-                                        />
-                                        <x-input-error class="mt-2" :messages="$updateErrors->get('col2')" />
-                                    </div>
+                                                @if ($price->col3)
+                                                    <span>
+                                                        <span class="font-medium">{{ __('admin.prices.fields.col3') }}:</span>
+                                                        {{ $price->col3 }}
+                                                    </span>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div x-data="{}" class="flex items-center justify-end gap-3">
+                                            <a
+                                                href="{{ route('admin.prices.edit', $price) }}"
+                                                class="text-gray-500 transition duration-150 ease-in-out hover:text-gray-700"
+                                                title="{{ __('admin.prices.actions.edit') }}"
+                                            >
+                                                <span class="sr-only">{{ __('admin.prices.actions.edit') }}</span>
+                                                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                    <path d="M13.586 3.586a2 2 0 0 1 2.828 2.828l-8.25 8.25a2 2 0 0 1-.878.515l-3.193.8a.75.75 0 0 1-.91-.91l.8-3.193a2 2 0 0 1 .515-.878l8.25-8.25Z" />
+                                                    <path d="M5.75 15.25h8.5a.75.75 0 0 1 0 1.5h-8.5a.75.75 0 0 1 0-1.5Z" />
+                                                </svg>
+                                            </a>
 
-                                    <div>
-                                        <x-input-label for="price_{{ $price->id }}_col3" :value="__('admin.prices.fields.col3')" />
-                                        <x-text-input
-                                            id="price_{{ $price->id }}_col3"
-                                            name="col3"
-                                            type="text"
-                                            class="mt-1 block w-full"
-                                            value="{{ $useOldValues ? old('col3') : $price->col3 }}"
-                                            maxlength="255"
-                                        />
-                                        <x-input-error class="mt-2" :messages="$updateErrors->get('col3')" />
-                                    </div>
-                                </div>
-                            </div>
+                                            <button
+                                                type="button"
+                                                class="text-gray-500 transition duration-150 ease-in-out hover:text-red-600"
+                                                title="{{ __('admin.prices.actions.delete') }}"
+                                                x-on:click.prevent="$dispatch('open-modal', 'confirm-price-{{ $price->id }}')"
+                                            >
+                                                <span class="sr-only">{{ __('admin.prices.actions.delete') }}</span>
+                                                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                    <path fill-rule="evenodd" d="M9 2a1 1 0 0 0-.894.553L7.382 4H4a1 1 0 0 0 0 2h.243l.82 9.02A2 2 0 0 0 7.057 17h5.886a2 2 0 0 0 1.994-1.98L15.757 6H16a1 1 0 1 0 0-2h-3.382l-.724-1.447A1 1 0 0 0 11 2H9Zm-1 5a1 1 0 1 1 2 0v6a1 1 0 1 1-2 0V7Zm5-1a1 1 0 0 0-1 1v6a1 1 0 1 0 2 0V7a1 1 0 0 0-1-1Z" clip-rule="evenodd" />
+                                                </svg>
+                                            </button>
+                                        </div>
 
-                            <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-                                <div>
-                                    <x-input-label for="price_{{ $price->id }}_sort" :value="__('admin.prices.fields.sort')" />
-                                    <x-text-input
-                                        id="price_{{ $price->id }}_sort"
-                                        name="sort"
-                                        type="number"
-                                        min="0"
-                                        max="255"
-                                        class="mt-1 block w-32"
-                                        value="{{ $useOldValues ? old('sort') : $price->sort }}"
-                                        required
-                                    />
-                                    <x-input-error class="mt-2" :messages="$updateErrors->get('sort')" />
-                                </div>
+                                        <x-modal name="confirm-price-{{ $price->id }}" focusable>
+                                            <form method="post" action="{{ route('admin.prices.destroy', $price) }}" class="p-6">
+                                                @csrf
+                                                @method('delete')
 
-                                @php
-                                    $updateIsActive = $useOldValues ? (old('is_active', '0') === '1') : (bool) $price->is_active;
-                                @endphp
+                                                <h2 class="text-lg font-medium text-gray-900">
+                                                    {{ __('admin.prices.delete_title') }}
+                                                </h2>
 
-                                <div class="flex items-center">
-                                    <input type="hidden" name="is_active" value="0" />
-                                    <input
-                                        id="price_{{ $price->id }}_is_active"
-                                        name="is_active"
-                                        type="checkbox"
-                                        value="1"
-                                        class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
-                                        @checked($updateIsActive)
-                                    />
-                                    <label for="price_{{ $price->id }}_is_active" class="ms-2 text-sm text-gray-600">
-                                        {{ __('admin.prices.fields.is_active') }}
-                                    </label>
-                                </div>
-                            </div>
+                                                <p class="mt-2 text-sm text-gray-600">
+                                                    {{ __('admin.prices.delete_confirm_simple') }}
+                                                </p>
 
-                            <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                                <div class="flex items-center gap-3">
-                                    <x-primary-button>
-                                        {{ __('admin.prices.submit_update') }}
-                                    </x-primary-button>
+                                                <div class="mt-6 flex justify-end gap-3">
+                                                    <x-secondary-button x-on:click.prevent="$dispatch('close-modal', 'confirm-price-{{ $price->id }}')">
+                                                        {{ __('admin.prices.modal.cancel') }}
+                                                    </x-secondary-button>
 
-                                    @if ($updatedAt)
-                                        <span class="text-xs text-gray-500">
-                                            {{ __('admin.prices.updated_at', ['date' => $updatedAt]) }}
-                                        </span>
-                                    @endif
-                                </div>
-
-                                <x-danger-button form="delete-price-{{ $price->id }}">
-                                    {{ __('admin.prices.delete') }}
-                                </x-danger-button>
-                            </div>
-                        </form>
-
-                        <form
-                            id="delete-price-{{ $price->id }}"
-                            method="post"
-                            action="{{ route('admin.prices.destroy', $price) }}"
-                            class="hidden"
-                            onsubmit="return confirm('{{ __('admin.prices.delete_confirm', ['name' => $price->name]) }}');"
-                        >
-                            @csrf
-                            @method('delete')
-                        </form>
-                    </div>
-                @endforeach
+                                                    <x-danger-button>
+                                                        {{ __('admin.prices.modal.confirm') }}
+                                                    </x-danger-button>
+                                                </div>
+                                            </form>
+                                        </x-modal>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
         @endif
     </section>
