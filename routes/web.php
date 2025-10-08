@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\PriceController;
 use App\Http\Controllers\Admin\StudioInfoController;
 use App\Http\Controllers\Admin\StudioRuleController;
 use App\Http\Controllers\ProfileController;
@@ -27,6 +28,18 @@ Route::middleware(['auth', 'admin', 'resolve.locale:admin'])->group(function () 
 
     Route::put('/admin/studio-infos', [StudioInfoController::class, 'update'])
         ->name('admin.studio-infos.update');
+
+    Route::get('/admin/prices', [PriceController::class, 'index'])
+        ->name('admin.prices.index');
+
+    Route::post('/admin/prices', [PriceController::class, 'store'])
+        ->name('admin.prices.store');
+
+    Route::put('/admin/prices/{price}', [PriceController::class, 'update'])
+        ->name('admin.prices.update');
+
+    Route::delete('/admin/prices/{price}', [PriceController::class, 'destroy'])
+        ->name('admin.prices.destroy');
 
     Route::get('/admin/studio-rules', [StudioRuleController::class, 'edit'])
         ->name('admin.studio-rules.edit');
