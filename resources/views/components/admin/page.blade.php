@@ -1,7 +1,7 @@
 @props([
     'title',
-    'containerClass' => 'p-2 pb-3 lg:px-8 bg-white shadow sm:rounded-lg',
-    'contentClass' => 'max-w-xl pb-3',
+    'containerClass' => 'p-2 pb-3 lg:px-8 bg-white shadow sm:rounded-lg max-w-xl pb-3',
+    'contentClass' => 'max-w-xl pb-3 sm:rounded-lg',
 ])
 
 <x-app-layout>
