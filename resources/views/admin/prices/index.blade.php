@@ -23,7 +23,7 @@
 
     <br/>
 
-    <section class="bg-white shadow sm:rounded-lg">
+    <section class="bg-white shadow sm:rounded-lg overflow-hidden">
         @if ($prices->isEmpty())
             <p class="px-6 pb-6 text-sm text-gray-500">
                 {{ __('admin.prices.empty') }}
