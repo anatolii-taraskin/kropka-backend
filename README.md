@@ -21,16 +21,6 @@ Laravel is a web application framework with expressive, elegant syntax. We belie
 
 Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-## Frontend assets and Vite
-
-This project uses [Vite](https://vitejs.dev/) to compile frontend assets such as Tailwind CSS utilities and JavaScript modules. Vite does not download stylesheets from the internet at build time. Instead, it reads the configuration in `package.json`, installs the declared dependencies into `node_modules` via `npm install`, and then bundles everything locally:
-
-1. **Install dependencies** – run `npm install` once. The command pulls published packages from the npm registry (the same place most Node.js packages live) and stores them in the `node_modules` folder inside the repository root. Nothing is fetched dynamically when you later run the dev server.
-2. **Compile assets** – start the watcher with `npm run dev` (or build for production with `npm run build`). Vite looks at `resources/css/app.css`, `resources/js/app.js`, and any files they import, processes them with Tailwind/PostCSS according to `tailwind.config.js`, and emits the compiled assets into the `public` directory.
-3. **Serve in Blade** – Laravel's Blade layout pulls in the generated files through the `@vite` directive. When you run `php artisan serve` alongside `npm run dev`, the dev server injects the processed CSS/JS into the page.
-
-If you do not see the expected colors locally, make sure the above steps have completed successfully. In particular, ensure that `npm install` finished without errors so Tailwind and its plugins are present, and that the Vite dev server (or `npm run build`) has generated the CSS before reloading the page.
-
 ## Learning Laravel
 
 Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
