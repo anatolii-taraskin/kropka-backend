@@ -16,9 +16,6 @@
                 <h2 class="text-lg font-medium text-gray-900">
                     {{ __('admin.prices.edit_title') }}
                 </h2>
-                <p class="mt-1 text-sm text-gray-600">
-                    {{ __('admin.prices.edit_description') }}
-                </p>
 
                 @if ($updatedAt)
                     <p class="mt-3 text-xs text-gray-500">
