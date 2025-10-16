@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\EquipmentController;
 use App\Http\Controllers\Admin\PriceController;
 use App\Http\Controllers\Admin\StudioInfoController;
 use App\Http\Controllers\Admin\StudioRuleController;
@@ -46,6 +47,24 @@ Route::middleware(['auth', 'admin', 'resolve.locale:admin'])->group(function () 
 
     Route::delete('/admin/prices/{price}', [PriceController::class, 'destroy'])
         ->name('admin.prices.destroy');
+
+    Route::get('/admin/equipment', [EquipmentController::class, 'index'])
+        ->name('admin.equipment.index');
+
+    Route::get('/admin/equipment/create', [EquipmentController::class, 'create'])
+        ->name('admin.equipment.create');
+
+    Route::post('/admin/equipment', [EquipmentController::class, 'store'])
+        ->name('admin.equipment.store');
+
+    Route::get('/admin/equipment/{equipment}/edit', [EquipmentController::class, 'edit'])
+        ->name('admin.equipment.edit');
+
+    Route::put('/admin/equipment/{equipment}', [EquipmentController::class, 'update'])
+        ->name('admin.equipment.update');
+
+    Route::delete('/admin/equipment/{equipment}', [EquipmentController::class, 'destroy'])
+        ->name('admin.equipment.destroy');
 
     Route::get('/admin/studio-rules', [StudioRuleController::class, 'edit'])
         ->name('admin.studio-rules.edit');

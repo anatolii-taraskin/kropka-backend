@@ -1,0 +1,146 @@
+<x-admin.page
+    :title="__('admin.equipment.title')"
+    container-class="bg-transparent shadow-none p-0 space-y-6"
+    :content-class="null"
+>
+    @php
+        $status = session('status');
+    @endphp
+
+    @if ($status === 'equipment-created')
+        <x-alert-success>
+            {{ __('admin.equipment.create_success') }}
+        </x-alert-success>
+
+        <br/>
+    @elseif ($status === 'equipment-updated')
+        <x-alert-success>
+            {{ __('admin.equipment.update_success') }}
+        </x-alert-success>
+
+        <br/>
+    @elseif ($status === 'equipment-deleted')
+        <x-alert-success>
+            {{ __('admin.equipment.delete_success') }}
+        </x-alert-success>
+
+        <br/>
+    @endif
+
+    <section class="bg-white shadow sm:rounded-lg overflow-hidden">
+        @if ($equipment->isEmpty())
+            <p class="px-6 pb-6 text-sm text-gray-500">
+                {{ __('admin.equipment.empty') }}
+            </p>
+        @else
+            <div class="border-t border-gray-200">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                        </thead>
+                        <tbody class="divide-y divide-gray-200 bg-white">
+                        @foreach ($equipment as $item)
+                            <tr class="border-b">
+                                <td class="px-6 py-4 align-top">
+                                    <div class="flex items-start gap-4">
+                                        @if ($item->photo_path)
+                                            <div class="h-16 w-16 flex-shrink-0 overflow-hidden rounded-md border border-gray-200 bg-gray-50">
+                                                <img
+                                                    src="{{ $item->photoUrl() }}"
+                                                    alt="{{ $item->name }}"
+                                                    class="h-full w-full object-cover"
+                                                />
+                                            </div>
+                                        @endif
+
+                                        <div class="space-y-2">
+                                            <span class="block text-sm font-medium text-gray-900">
+                                                {{ $item->name }}
+                                            </span>
+
+                                            @if ($item->description)
+                                                <p class="text-sm text-gray-600 whitespace-pre-line">
+                                                    {{ $item->description }}
+                                                </p>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td class="px-6 py-4">
+                                    <div x-data="{}" class="flex items-center justify-end gap-3">
+                                        <a
+                                            href="{{ route('admin.equipment.edit', $item) }}"
+                                            class="text-gray-500 transition duration-150 ease-in-out hover:text-gray-700"
+                                            title="{{ __('admin.equipment.actions.edit') }}"
+                                        >
+                                            <span class="sr-only">{{ __('admin.equipment.actions.edit') }}</span>
+                                            <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                <path
+                                                    d="M13.586 3.586a2 2 0 0 1 2.828 2.828l-8.25 8.25a2 2 0 0 1-.878.515l-3.193.8a.75.75 0 0 1-.91-.91l.8-3.193a2 2 0 0 1 .515-.878l8.25-8.25Z"/>
+                                                <path d="M5.75 15.25h8.5a.75.75 0 0 1 0 1.5h-8.5a.75.75 0 0 1 0-1.5Z"/>
+                                            </svg>
+                                        </a>
+
+                                        <button
+                                            type="button"
+                                            class="text-red-600 transition duration-150 ease-in-out hover:text-red-700"
+                                            title="{{ __('admin.equipment.actions.delete') }}"
+                                            x-on:click.prevent="$dispatch('open-modal', 'confirm-equipment-{{ $item->id }}')"
+                                        >
+                                            <span class="sr-only">{{ __('admin.equipment.actions.delete') }}</span>
+                                            <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                                <path fill-rule="evenodd"
+                                                      d="M9 2a1 1 0 0 0-.894.553L7.382 4H4a1 1 0 0 0 0 2h.243l.82 9.02A2 2 0 0 0 7.057 17h5.886a2 2 0 0 0 1.994-1.98L15.757 6H16a1 1 0 1 0 0-2h-3.382l-.724-1.447A1 1 0 0 0 11 2H9Zm-1 5a1 1 0 1 1 2 0v6a1 1 0 1 1-2 0V7Zm5-1a1 1 0 0 0-1 1v6a1 1 0 1 0 2 0V7a1 1 0 0 0-1-1Z"
+                                                      clip-rule="evenodd"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+
+                                    <x-modal name="confirm-equipment-{{ $item->id }}" focusable>
+                                        <form method="post" action="{{ route('admin.equipment.destroy', $item) }}" class="p-6">
+                                            @csrf
+                                            @method('delete')
+
+                                            <h2 class="text-lg font-medium text-gray-900">
+                                                {{ __('admin.equipment.delete_title') }}
+                                            </h2>
+
+                                            <p class="mt-2 text-sm text-gray-600">
+                                                {{ __('admin.equipment.delete_confirm_simple') }}
+                                            </p>
+
+                                            <div class="mt-6 flex justify-end gap-3">
+                                                <x-secondary-button x-on:click.prevent="$dispatch('close-modal', 'confirm-equipment-{{ $item->id }}')">
+                                                    {{ __('admin.equipment.modal.cancel') }}
+                                                </x-secondary-button>
+
+                                                <x-danger-button>
+                                                    {{ __('admin.equipment.modal.confirm') }}
+                                                </x-danger-button>
+                                            </div>
+                                        </form>
+                                    </x-modal>
+                                </td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        @endif
+        <div class="flex justify-start p-6">
+            <a
+                href="{{ route('admin.equipment.create') }}"
+                class="inline-flex items-center gap-2 rounded-md border border-transparent bg-blue-600 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition ease-in-out duration-150 hover:bg-blue-500 focus:bg-blue-500 active:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            >
+                <svg class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd"
+                          d="M10 3a1 1 0 0 1 1 1v5h5a1 1 0 1 1 0 2h-5v5a1 1 0 1 1-2 0v-5H4a1 1 0 1 1 0-2h5V4a1 1 0 0 1 1-1Z"
+                          clip-rule="evenodd"/>
+                </svg>
+                <span>{{ __('admin.equipment.add_button') }}</span>
+            </a>
+        </div>
+    </section>
+</x-admin.page>
