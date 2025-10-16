@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Price;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 
@@ -31,11 +33,7 @@ class PriceController extends Controller
      */
     public function create(): View
     {
-        $nextSort = (Price::max('sort') ?? 0) + 1;
-
-        return view('admin.prices.create', [
-            'nextSort' => $nextSort,
-        ]);
+        return view('admin.prices.create');
     }
 
     /**
@@ -53,6 +51,8 @@ class PriceController extends Controller
         $validated = $validator->validateWithBag('createPrice');
 
         $data = $this->prepareData($validated);
+
+        $data['sort'] = min((Price::max('sort') ?? 0) + 1, 255);
 
         Price::create($data);
 
@@ -117,7 +117,6 @@ class PriceController extends Controller
             'col2' => ['nullable', 'string', 'max:255'],
             'col3' => ['nullable', 'string', 'max:255'],
             'is_active' => ['sometimes', 'boolean'],
-            'sort' => ['required', 'integer', 'min:0', 'max:255'],
         ];
     }
 
@@ -132,7 +131,6 @@ class PriceController extends Controller
             'col2' => __('admin.prices.fields.col2'),
             'col3' => __('admin.prices.fields.col3'),
             'is_active' => __('admin.prices.fields.is_active'),
-            'sort' => __('admin.prices.fields.sort'),
         ];
     }
 
@@ -147,10 +145,30 @@ class PriceController extends Controller
             'col2' => $this->sanitizeNullableString($input['col2'] ?? null),
             'col3' => $this->sanitizeNullableString($input['col3'] ?? null),
             'is_active' => array_key_exists('is_active', $input) ? (bool) $input['is_active'] : false,
-            'sort' => isset($input['sort']) ? (int) $input['sort'] : 0,
         ];
 
         return $data;
+    }
+
+    /**
+     * Update the sort order for price tiles.
+     */
+    public function reorder(Request $request): JsonResponse
+    {
+        $data = $request->validate([
+            'order' => ['required', 'array'],
+            'order.*' => ['integer', 'distinct', 'exists:prices,id'],
+        ]);
+
+        $ids = $data['order'];
+
+        DB::transaction(function () use ($ids) {
+            foreach ($ids as $index => $id) {
+                Price::whereKey($id)->update(['sort' => min($index + 1, 255)]);
+            }
+        });
+
+        return response()->json(['status' => 'ok']);
     }
 
     private function sanitizeString(string $value): string

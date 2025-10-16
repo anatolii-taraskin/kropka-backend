@@ -39,6 +39,9 @@ Route::middleware(['auth', 'admin', 'resolve.locale:admin'])->group(function () 
     Route::post('/admin/prices', [PriceController::class, 'store'])
         ->name('admin.prices.store');
 
+    Route::post('/admin/prices/reorder', [PriceController::class, 'reorder'])
+        ->name('admin.prices.reorder');
+
     Route::get('/admin/prices/{price}/edit', [PriceController::class, 'edit'])
         ->name('admin.prices.edit');
 
@@ -56,6 +59,9 @@ Route::middleware(['auth', 'admin', 'resolve.locale:admin'])->group(function () 
 
     Route::post('/admin/equipment', [EquipmentController::class, 'store'])
         ->name('admin.equipment.store');
+
+    Route::post('/admin/equipment/reorder', [EquipmentController::class, 'reorder'])
+        ->name('admin.equipment.reorder');
 
     Route::get('/admin/equipment/{equipment}/edit', [EquipmentController::class, 'edit'])
         ->name('admin.equipment.edit');

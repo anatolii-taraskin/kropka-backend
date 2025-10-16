@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Equipment;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
@@ -32,11 +34,7 @@ class EquipmentController extends Controller
      */
     public function create(): View
     {
-        $nextSort = (Equipment::max('sort') ?? 0) + 1;
-
-        return view('admin.equipment.create', [
-            'nextSort' => $nextSort,
-        ]);
+        return view('admin.equipment.create');
     }
 
     /**
@@ -54,6 +52,8 @@ class EquipmentController extends Controller
         $validated = $validator->validateWithBag('createEquipment');
 
         $data = $this->prepareData($validated);
+
+        $data['sort'] = min((Equipment::max('sort') ?? 0) + 1, 255);
 
         if ($request->hasFile('photo')) {
             $data['photo_path'] = $request->file('photo')->store('equipment', 'public');
@@ -120,6 +120,27 @@ class EquipmentController extends Controller
     }
 
     /**
+     * Update the sort order for equipment tiles.
+     */
+    public function reorder(Request $request): JsonResponse
+    {
+        $data = $request->validate([
+            'order' => ['required', 'array'],
+            'order.*' => ['integer', 'distinct', 'exists:equipment,id'],
+        ]);
+
+        $ids = $data['order'];
+
+        DB::transaction(function () use ($ids) {
+            foreach ($ids as $index => $id) {
+                Equipment::whereKey($id)->update(['sort' => min($index + 1, 255)]);
+            }
+        });
+
+        return response()->json(['status' => 'ok']);
+    }
+
+    /**
      * Validation rules for equipment forms.
      */
     private function rules(): array
@@ -129,7 +150,6 @@ class EquipmentController extends Controller
             'description' => ['nullable', 'string'],
             'photo' => ['nullable', 'image', 'max:5120'],
             'is_active' => ['sometimes', 'boolean'],
-            'sort' => ['required', 'integer', 'min:0', 'max:255'],
         ];
     }
 
@@ -143,7 +163,6 @@ class EquipmentController extends Controller
             'description' => __('admin.equipment.fields.description'),
             'photo' => __('admin.equipment.fields.photo'),
             'is_active' => __('admin.equipment.fields.is_active'),
-            'sort' => __('admin.equipment.fields.sort'),
         ];
     }
 
@@ -156,7 +175,6 @@ class EquipmentController extends Controller
             'name' => $this->sanitizeString($input['name'] ?? ''),
             'description' => $this->sanitizeNullableString($input['description'] ?? null),
             'is_active' => array_key_exists('is_active', $input) ? (bool) $input['is_active'] : false,
-            'sort' => isset($input['sort']) ? (int) $input['sort'] : 0,
         ];
     }
 

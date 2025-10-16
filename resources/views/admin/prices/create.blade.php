@@ -82,23 +82,7 @@
                 </div>
             </div>
 
-            <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-                <div>
-                    <x-input-label for="price_sort" :value="__('admin.prices.fields.sort')" />
-                    <x-text-input
-                        id="price_sort"
-                        name="sort"
-                        type="number"
-                        min="0"
-                        max="255"
-                        class="mt-1 block w-32"
-                        value="{{ $createErrors->isEmpty() ? $nextSort : old('sort', $nextSort) }}"
-                        required
-                    />
-                    <x-input-error class="mt-2" :messages="$createErrors->get('sort')" />
-                </div>
-
-                <div class="flex items-center">
+            <div class="flex items-center">
                     <input type="hidden" name="is_active" value="0" />
                     <input
                         id="price_is_active"
