@@ -33,6 +33,9 @@
                         <x-nav-link :href="route('admin.prices.index')" :active="request()->routeIs('admin.prices.*')">
                             {{ __('admin.prices.title') }}
                         </x-nav-link>
+                        <x-nav-link :href="route('admin.equipment.index')" :active="request()->routeIs('admin.equipment.*')">
+                            {{ __('admin.equipment.title') }}
+                        </x-nav-link>
                         <x-nav-link :href="route('admin.studio-rules.edit')" :active="request()->routeIs('admin.studio-rules.*')">
                             {{ __('admin.studio_rules.title') }}
                         </x-nav-link>
@@ -116,6 +119,9 @@
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('admin.prices.index')" :active="request()->routeIs('admin.prices.*')">
                     {{ __('admin.prices.title') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.equipment.index')" :active="request()->routeIs('admin.equipment.*')">
+                    {{ __('admin.equipment.title') }}
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('admin.studio-rules.edit')" :active="request()->routeIs('admin.studio-rules.*')">
                     {{ __('admin.studio_rules.title') }}
