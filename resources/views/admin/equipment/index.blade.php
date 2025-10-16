@@ -8,7 +8,7 @@
     @endphp
 
     @if ($status === 'equipment-created')
-        <x-alert-success>
+        <x-alert-success type="info">
             {{ __('admin.equipment.create_success') }}
         </x-alert-success>
 
@@ -20,7 +20,7 @@
 
         <br/>
     @elseif ($status === 'equipment-deleted')
-        <x-alert-success>
+        <x-alert-success type="danger">
             {{ __('admin.equipment.delete_success') }}
         </x-alert-success>
 

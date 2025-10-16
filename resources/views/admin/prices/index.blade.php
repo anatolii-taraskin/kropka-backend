@@ -8,7 +8,7 @@
     @endphp
 
     @if ($status === 'price-created')
-        <x-alert-success>
+        <x-alert-success type="info">
             {{ __('admin.prices.create_success') }}
         </x-alert-success>
 
@@ -20,7 +20,7 @@
 
         <br/>
     @elseif ($status === 'price-deleted')
-        <x-alert-success>
+        <x-alert-success type="danger">
             {{ __('admin.prices.delete_success') }}
         </x-alert-success>
 
