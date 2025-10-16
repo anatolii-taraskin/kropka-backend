@@ -47,7 +47,19 @@ const removeToast = (toast, { force = false } = {}) => {
     }, 350);
 };
 
-const showToast = (message) => {
+const TOAST_TYPES = new Set(['success', 'info', 'danger']);
+
+const normalizeToastType = (type) => {
+    if (typeof type !== 'string') {
+        return 'success';
+    }
+
+    const normalized = type.toLowerCase();
+
+    return TOAST_TYPES.has(normalized) ? normalized : 'success';
+};
+
+const showToast = (message, type = 'success') => {
     const body = document.body;
 
     if (! body) {
@@ -61,7 +73,8 @@ const showToast = (message) => {
     }
 
     const toast = document.createElement('div');
-    toast.className = 'toast-notification';
+    const toastType = normalizeToastType(type);
+    toast.className = `toast-notification toast-notification--${toastType}`;
     toast.textContent = message;
 
     container.appendChild(toast);
@@ -77,10 +90,12 @@ const showToast = (message) => {
 
 window.addEventListener('app:toast', (event) => {
     const detail = event.detail;
-    const message = typeof detail === 'string' ? detail : detail?.message;
+    const isStringDetail = typeof detail === 'string';
+    const message = isStringDetail ? detail : detail?.message;
+    const type = isStringDetail ? 'success' : detail?.type;
 
     if (message) {
-        showToast(message);
+        showToast(message, type);
     }
 });
 
@@ -151,11 +166,11 @@ const initSortableLists = () => {
 };
 
 const initFlashToasts = () => {
-    document.querySelectorAll('[data-success-message]').forEach((element) => {
-        const { successMessage } = element.dataset;
+    document.querySelectorAll('[data-toast-message]').forEach((element) => {
+        const { toastMessage, toastType } = element.dataset;
 
-        if (successMessage) {
-            showToast(successMessage);
+        if (toastMessage) {
+            showToast(toastMessage, toastType);
         }
 
         element.remove();
