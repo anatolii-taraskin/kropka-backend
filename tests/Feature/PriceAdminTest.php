@@ -43,7 +43,6 @@ class PriceAdminTest extends TestCase
             'col2' => 'Second line',
             'col3' => 'Third line',
             'is_active' => '1',
-            'sort' => 5,
         ];
 
         $response = $this->actingAs($admin)
@@ -59,7 +58,7 @@ class PriceAdminTest extends TestCase
             'col2' => 'Second line',
             'col3' => 'Third line',
             'is_active' => true,
-            'sort' => 5,
+            'sort' => 1,
         ]);
     }
 
@@ -82,7 +81,6 @@ class PriceAdminTest extends TestCase
             'col2' => '',
             'col3' => 'Updated Line 3',
             'is_active' => '0',
-            'sort' => 7,
         ];
 
         $response = $this->actingAs($admin)
@@ -99,7 +97,62 @@ class PriceAdminTest extends TestCase
             'col2' => null,
             'col3' => 'Updated Line 3',
             'is_active' => false,
-            'sort' => 7,
+            'sort' => 3,
+        ]);
+    }
+
+    public function test_admin_can_reorder_price_tiles(): void
+    {
+        $admin = $this->createAdminUser();
+
+        $first = Price::create([
+            'name' => 'First',
+            'col1' => null,
+            'col2' => null,
+            'col3' => null,
+            'is_active' => true,
+            'sort' => 1,
+        ]);
+
+        $second = Price::create([
+            'name' => 'Second',
+            'col1' => null,
+            'col2' => null,
+            'col3' => null,
+            'is_active' => true,
+            'sort' => 2,
+        ]);
+
+        $third = Price::create([
+            'name' => 'Third',
+            'col1' => null,
+            'col2' => null,
+            'col3' => null,
+            'is_active' => true,
+            'sort' => 3,
+        ]);
+
+        $response = $this->actingAs($admin)->postJson('/admin/prices/reorder', [
+            'order' => [$third->id, $first->id, $second->id],
+        ]);
+
+        $response
+            ->assertOk()
+            ->assertJson(['status' => 'ok']);
+
+        $this->assertDatabaseHas('prices', [
+            'id' => $third->id,
+            'sort' => 1,
+        ]);
+
+        $this->assertDatabaseHas('prices', [
+            'id' => $first->id,
+            'sort' => 2,
+        ]);
+
+        $this->assertDatabaseHas('prices', [
+            'id' => $second->id,
+            'sort' => 3,
         ]);
     }
 
@@ -135,7 +188,6 @@ class PriceAdminTest extends TestCase
         $payload = [
             'name' => '',
             'col1' => str_repeat('a', 260),
-            'sort' => -1,
         ];
 
         $response = $this->actingAs($admin)
@@ -143,7 +195,7 @@ class PriceAdminTest extends TestCase
             ->post('/admin/prices', $payload);
 
         $response->assertRedirect('/admin/prices');
-        $response->assertSessionHasErrors(['name', 'col1', 'sort'], null, 'createPrice');
+        $response->assertSessionHasErrors(['name', 'col1'], null, 'createPrice');
     }
 
     public function test_non_admin_cannot_access_prices_manager(): void

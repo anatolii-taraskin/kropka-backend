@@ -69,25 +69,7 @@
                 <x-input-error class="mt-2" :messages="$createErrors->get('photo')" />
             </div>
 
-            <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-                <div>
-                    <x-input-label for="equipment_sort" :value="__('admin.equipment.fields.sort')" />
-
-                    <x-text-input
-                        id="equipment_sort"
-                        name="sort"
-                        type="number"
-                        min="0"
-                        max="255"
-                        class="mt-1 block w-32"
-                        value="{{ $createErrors->isEmpty() ? $nextSort : old('sort', $nextSort) }}"
-                        required
-                    />
-
-                    <x-input-error class="mt-2" :messages="$createErrors->get('sort')" />
-                </div>
-
-                <div class="flex items-center">
+            <div class="flex items-center">
                     <input type="hidden" name="is_active" value="0" />
 
                     <input

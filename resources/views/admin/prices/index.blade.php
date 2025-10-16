@@ -37,10 +37,31 @@
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
+                            <tr>
+                                <th scope="col" class="w-12"></th>
+                                <th scope="col" class="sr-only">{{ __('admin.prices.fields.name') }}</th>
+                                <th scope="col" class="sr-only">{{ __('admin.prices.actions.edit') }}</th>
+                            </tr>
                         </thead>
-                        <tbody class="divide-y divide-gray-200 bg-white">
+                        <tbody
+                            class="divide-y divide-gray-200 bg-white"
+                            data-sortable-list
+                            data-sortable-endpoint="{{ route('admin.prices.reorder') }}"
+                        >
                         @foreach ($prices as $price)
-                            <tr class="border-b">
+                            <tr class="border-b" data-sortable-id="{{ $price->id }}">
+                                <td class="px-4 py-4 align-top text-gray-400">
+                                    <button
+                                        type="button"
+                                        class="cursor-grab rounded p-1 transition hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        data-sortable-handle
+                                        aria-label="{{ __('admin.prices.actions.reorder') }}"
+                                    >
+                                        <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                            <path d="M7 4a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm8 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM7 10a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm8 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM7 16a1 1 0 1 1-2 0 1 1 0 0 1 2 0Zm8 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z" />
+                                        </svg>
+                                    </button>
+                                </td>
                                 <td class="px-6 py-4 align-top">
                                     <div class="space-y-1">
                                         <div class="flex items-center gap-2">

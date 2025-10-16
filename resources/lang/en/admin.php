@@ -67,6 +67,7 @@ return [
         'actions' => [
             'edit' => 'Edit',
             'delete' => 'Delete',
+            'reorder' => 'Drag to reorder',
         ],
         'status' => [
             'inactive' => 'Inactive',
@@ -81,7 +82,6 @@ return [
             'col2' => 'Column 2',
             'col3' => 'Column 3',
             'is_active' => 'Prices are active',
-            'sort' => 'Order',
         ],
     ],
     'equipment' => [
@@ -102,6 +102,7 @@ return [
         'actions' => [
             'edit' => 'Edit',
             'delete' => 'Delete',
+            'reorder' => 'Drag to reorder',
         ],
         'modal' => [
             'confirm' => 'Yes',
@@ -115,7 +116,6 @@ return [
             'description' => 'Description',
             'photo' => 'Photo',
             'is_active' => 'Equipment is active',
-            'sort' => 'Order',
         ],
         'photo_help' => 'Upload a new image to replace the current one.',
         'updated_at' => 'Updated :date',

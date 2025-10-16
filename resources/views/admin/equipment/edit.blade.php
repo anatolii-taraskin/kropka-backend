@@ -100,25 +100,7 @@
                 <x-input-error class="mt-2" :messages="$updateErrors->get('photo')" />
             </div>
 
-            <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-                <div>
-                    <x-input-label for="equipment_{{ $equipment->id }}_sort" :value="__('admin.equipment.fields.sort')" />
-
-                    <x-text-input
-                        id="equipment_{{ $equipment->id }}_sort"
-                        name="sort"
-                        type="number"
-                        min="0"
-                        max="255"
-                        class="mt-1 block w-32"
-                        value="{{ $useOldValues ? old('sort') : $equipment->sort }}"
-                        required
-                    />
-
-                    <x-input-error class="mt-2" :messages="$updateErrors->get('sort')" />
-                </div>
-
-                <div class="flex items-center">
+            <div class="flex items-center">
                     <input type="hidden" name="is_active" value="0" />
 
                     <input
