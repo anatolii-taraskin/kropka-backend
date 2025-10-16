@@ -20,10 +20,14 @@ class ResolveRequestLocale
     public function handle(Request $request, Closure $next, ?string $context = null)
     {
         $supported = $this->supportedLocales($context);
-        $locale = $this->determineLocale($request, $supported);
+        $locale = $this->determineLocale($request, $supported, $context);
 
         App::setLocale($locale);
         $request->attributes->set('resolved_locale', $locale);
+
+        if ($request->hasSession()) {
+            $request->session()->put($this->sessionKey($context), $locale);
+        }
 
         return $next($request);
     }
@@ -31,11 +35,24 @@ class ResolveRequestLocale
     /**
      * Determine the locale for the request.
      */
-    protected function determineLocale(Request $request, array $supported): string
+    protected function determineLocale(Request $request, array $supported, ?string $context): string
     {
+        $sessionKey = $this->sessionKey($context);
         $queryLocale = $this->normalizeLocale($request->query('lang'));
         if ($queryLocale && in_array($queryLocale, $supported, true)) {
+            if ($request->hasSession()) {
+                $request->session()->put($sessionKey, $queryLocale);
+            }
+
             return $queryLocale;
+        }
+
+        if ($request->hasSession()) {
+            $sessionLocale = $this->normalizeLocale($request->session()->get($sessionKey));
+
+            if ($sessionLocale && in_array($sessionLocale, $supported, true)) {
+                return $sessionLocale;
+            }
         }
 
         $preferred = $request->getPreferredLanguage($supported);
@@ -84,5 +101,13 @@ class ResolveRequestLocale
         $normalized = strtolower(str_replace('_', '-', $locale));
 
         return explode('-', $normalized)[0];
+    }
+
+    /**
+     * Get the session key used for persisting locale preference.
+     */
+    protected function sessionKey(?string $context): string
+    {
+        return $context ? "preferred_locale.{$context}" : 'preferred_locale';
     }
 }
