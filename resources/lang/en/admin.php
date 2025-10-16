@@ -107,10 +107,15 @@ return [
             'confirm' => 'Yes',
             'cancel' => 'No',
         ],
+        'status' => [
+            'inactive' => 'Inactive',
+        ],
         'fields' => [
             'name' => 'Name',
             'description' => 'Description',
             'photo' => 'Photo',
+            'is_active' => 'Equipment is active',
+            'sort' => 'Order',
         ],
         'photo_help' => 'Upload a new image to replace the current one.',
         'updated_at' => 'Updated :date',

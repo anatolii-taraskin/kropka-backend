@@ -18,7 +18,7 @@ class EquipmentController extends Controller
     public function index(): View
     {
         $equipment = Equipment::query()
-            ->orderBy('name')
+            ->orderBy('sort')
             ->orderBy('id')
             ->get();
 
@@ -32,7 +32,11 @@ class EquipmentController extends Controller
      */
     public function create(): View
     {
-        return view('admin.equipment.create');
+        $nextSort = (Equipment::max('sort') ?? 0) + 1;
+
+        return view('admin.equipment.create', [
+            'nextSort' => $nextSort,
+        ]);
     }
 
     /**
@@ -124,6 +128,8 @@ class EquipmentController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'photo' => ['nullable', 'image', 'max:5120'],
+            'is_active' => ['sometimes', 'boolean'],
+            'sort' => ['required', 'integer', 'min:0', 'max:255'],
         ];
     }
 
@@ -136,6 +142,8 @@ class EquipmentController extends Controller
             'name' => __('admin.equipment.fields.name'),
             'description' => __('admin.equipment.fields.description'),
             'photo' => __('admin.equipment.fields.photo'),
+            'is_active' => __('admin.equipment.fields.is_active'),
+            'sort' => __('admin.equipment.fields.sort'),
         ];
     }
 
@@ -147,6 +155,8 @@ class EquipmentController extends Controller
         return [
             'name' => $this->sanitizeString($input['name'] ?? ''),
             'description' => $this->sanitizeNullableString($input['description'] ?? null),
+            'is_active' => array_key_exists('is_active', $input) ? (bool) $input['is_active'] : false,
+            'sort' => isset($input['sort']) ? (int) $input['sort'] : 0,
         ];
     }
 
