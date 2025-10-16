@@ -7,6 +7,7 @@
         $updateErrors = $errors->getBag('updateEquipment' . $equipment->id);
         $useOldValues = ! $updateErrors->isEmpty();
         $updatedAt = $equipment->updated_at ? $equipment->updated_at->format(__('admin.equipment.date_format')) : null;
+        $updateIsActive = $useOldValues ? (old('is_active', '0') === '1') : (bool) $equipment->is_active;
     @endphp
 
     <section class="bg-white shadow sm:rounded-lg overflow-hidden">
@@ -73,8 +74,8 @@
                 <x-input-label for="equipment_{{ $equipment->id }}_photo" :value="__('admin.equipment.fields.photo')" />
 
                 @if ($equipment->photo_path)
-                    <div class="flex items-center gap-4">
-                        <div class="h-20 w-20 overflow-hidden rounded-md border border-gray-200 bg-gray-50">
+                    <div class="flex items-start gap-4">
+                        <div class="h-40 w-40 overflow-hidden rounded-md border border-gray-200 bg-gray-50">
                             <img
                                 src="{{ $equipment->photoUrl() }}"
                                 alt="{{ $equipment->name }}"
@@ -97,6 +98,42 @@
                 />
 
                 <x-input-error class="mt-2" :messages="$updateErrors->get('photo')" />
+            </div>
+
+            <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+                <div>
+                    <x-input-label for="equipment_{{ $equipment->id }}_sort" :value="__('admin.equipment.fields.sort')" />
+
+                    <x-text-input
+                        id="equipment_{{ $equipment->id }}_sort"
+                        name="sort"
+                        type="number"
+                        min="0"
+                        max="255"
+                        class="mt-1 block w-32"
+                        value="{{ $useOldValues ? old('sort') : $equipment->sort }}"
+                        required
+                    />
+
+                    <x-input-error class="mt-2" :messages="$updateErrors->get('sort')" />
+                </div>
+
+                <div class="flex items-center">
+                    <input type="hidden" name="is_active" value="0" />
+
+                    <input
+                        id="equipment_{{ $equipment->id }}_is_active"
+                        name="is_active"
+                        type="checkbox"
+                        value="1"
+                        class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
+                        @checked($updateIsActive)
+                    />
+
+                    <label for="equipment_{{ $equipment->id }}_is_active" class="ms-2 text-sm text-gray-600">
+                        {{ __('admin.equipment.fields.is_active') }}
+                    </label>
+                </div>
             </div>
 
             <div class="flex items-center gap-3">

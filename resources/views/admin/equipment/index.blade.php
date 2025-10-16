@@ -54,9 +54,17 @@
                                         @endif
 
                                         <div class="space-y-2">
-                                            <span class="block text-sm font-medium text-gray-900">
-                                                {{ $item->name }}
-                                            </span>
+                                            <div class="flex items-center gap-2">
+                                                <span class="text-sm font-medium text-gray-900">
+                                                    {{ $item->name }}
+                                                </span>
+
+                                                @unless ($item->is_active)
+                                                    <span class="inline-flex items-center rounded-full bg-gray-200 px-2 py-0.5 text-xs font-medium text-gray-600">
+                                                        {{ __('admin.equipment.status.inactive') }}
+                                                    </span>
+                                                @endunless
+                                            </div>
 
                                             @if ($item->description)
                                                 <p class="text-sm text-gray-600 whitespace-pre-line">
