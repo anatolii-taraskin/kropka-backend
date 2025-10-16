@@ -7,6 +7,47 @@ window.Alpine = Alpine;
 
 Alpine.start();
 
+const showToast = (message) => {
+    const body = document.body;
+
+    if (! body) {
+        return;
+    }
+
+    const existing = document.querySelector('.toast-notification');
+
+    if (existing) {
+        existing.remove();
+    }
+
+    const toast = document.createElement('div');
+    toast.className = 'toast-notification';
+    toast.textContent = message;
+
+    body.appendChild(toast);
+
+    requestAnimationFrame(() => {
+        toast.classList.add('toast-notification--visible');
+    });
+
+    window.setTimeout(() => {
+        toast.classList.remove('toast-notification--visible');
+
+        const removeAfterTransition = () => {
+            toast.removeEventListener('transitionend', removeAfterTransition);
+            toast.remove();
+        };
+
+        toast.addEventListener('transitionend', removeAfterTransition, { once: true });
+
+        window.setTimeout(() => {
+            if (toast.isConnected) {
+                toast.remove();
+            }
+        }, 350);
+    }, 5000);
+};
+
 const initSortableLists = () => {
     const tokenElement = document.querySelector('meta[name="csrf-token"]');
 
@@ -59,6 +100,8 @@ const initSortableLists = () => {
                     if (! response.ok) {
                         throw new Error('Failed to update order');
                     }
+
+                    showToast('Порядок успешно сохранён.');
                 } catch (error) {
                     console.error(error);
                     window.alert('Не удалось сохранить порядок. Попробуйте ещё раз.');
