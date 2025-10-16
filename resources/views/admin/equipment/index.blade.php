@@ -29,7 +29,7 @@
 
     <section class="bg-white shadow sm:rounded-lg overflow-hidden">
         @if ($equipment->isEmpty())
-            <p class="px-6 pb-6 text-sm text-gray-500">
+            <p class="px-6 p-6 text-sm text-gray-500">
                 {{ __('admin.equipment.empty') }}
             </p>
         @else
