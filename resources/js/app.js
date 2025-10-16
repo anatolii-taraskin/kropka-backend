@@ -7,6 +7,46 @@ window.Alpine = Alpine;
 
 Alpine.start();
 
+const MAX_VISIBLE_TOASTS = 3;
+
+const getToastContainer = (body) => {
+    let container = document.querySelector('.toast-container');
+
+    if (! container) {
+        container = document.createElement('div');
+        container.className = 'toast-container';
+        body.appendChild(container);
+    }
+
+    return container;
+};
+
+const removeToast = (toast, { force = false } = {}) => {
+    if (! toast) {
+        return;
+    }
+
+    if (force) {
+        toast.remove();
+        return;
+    }
+
+    toast.classList.remove('toast-notification--visible');
+
+    const removeAfterTransition = () => {
+        toast.removeEventListener('transitionend', removeAfterTransition);
+        toast.remove();
+    };
+
+    toast.addEventListener('transitionend', removeAfterTransition, { once: true });
+
+    window.setTimeout(() => {
+        if (toast.isConnected) {
+            toast.remove();
+        }
+    }, 350);
+};
+
 const showToast = (message) => {
     const body = document.body;
 
@@ -14,39 +54,35 @@ const showToast = (message) => {
         return;
     }
 
-    const existing = document.querySelector('.toast-notification');
+    const container = getToastContainer(body);
 
-    if (existing) {
-        existing.remove();
+    if (container.children.length >= MAX_VISIBLE_TOASTS) {
+        removeToast(container.firstElementChild, { force: true });
     }
 
     const toast = document.createElement('div');
     toast.className = 'toast-notification';
     toast.textContent = message;
 
-    body.appendChild(toast);
+    container.appendChild(toast);
 
     requestAnimationFrame(() => {
         toast.classList.add('toast-notification--visible');
     });
 
     window.setTimeout(() => {
-        toast.classList.remove('toast-notification--visible');
-
-        const removeAfterTransition = () => {
-            toast.removeEventListener('transitionend', removeAfterTransition);
-            toast.remove();
-        };
-
-        toast.addEventListener('transitionend', removeAfterTransition, { once: true });
-
-        window.setTimeout(() => {
-            if (toast.isConnected) {
-                toast.remove();
-            }
-        }, 350);
+        removeToast(toast);
     }, 5000);
 };
+
+window.addEventListener('app:toast', (event) => {
+    const detail = event.detail;
+    const message = typeof detail === 'string' ? detail : detail?.message;
+
+    if (message) {
+        showToast(message);
+    }
+});
 
 const initSortableLists = () => {
     const tokenElement = document.querySelector('meta[name="csrf-token"]');
@@ -114,4 +150,19 @@ const initSortableLists = () => {
     });
 };
 
-document.addEventListener('DOMContentLoaded', initSortableLists);
+const initFlashToasts = () => {
+    document.querySelectorAll('[data-success-message]').forEach((element) => {
+        const { successMessage } = element.dataset;
+
+        if (successMessage) {
+            showToast(successMessage);
+        }
+
+        element.remove();
+    });
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+    initSortableLists();
+    initFlashToasts();
+});
