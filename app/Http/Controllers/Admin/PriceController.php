@@ -4,15 +4,22 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Price;
+use App\Services\SortOrderService;
+use App\Support\Concerns\SanitizesAttributes;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 
 class PriceController extends Controller
 {
+    use SanitizesAttributes;
+
+    public function __construct(private readonly SortOrderService $sortOrderService)
+    {
+    }
+
     /**
      * Display the list of prices.
      */
@@ -52,7 +59,7 @@ class PriceController extends Controller
 
         $data = $this->prepareData($validated);
 
-        $data['sort'] = min((Price::max('sort') ?? 0) + 1, 255);
+        $data['sort'] = $this->sortOrderService->nextSortValue(Price::class);
 
         Price::create($data);
 
@@ -139,15 +146,13 @@ class PriceController extends Controller
      */
     private function prepareData(array $input): array
     {
-        $data = [
+        return [
             'name' => $this->sanitizeString($input['name'] ?? ''),
             'col1' => $this->sanitizeNullableString($input['col1'] ?? null),
             'col2' => $this->sanitizeNullableString($input['col2'] ?? null),
             'col3' => $this->sanitizeNullableString($input['col3'] ?? null),
-            'is_active' => array_key_exists('is_active', $input) ? (bool) $input['is_active'] : false,
+            'is_active' => $this->sanitizeBoolean($input['is_active'] ?? null),
         ];
-
-        return $data;
     }
 
     /**
@@ -162,28 +167,8 @@ class PriceController extends Controller
 
         $ids = $data['order'];
 
-        DB::transaction(function () use ($ids) {
-            foreach ($ids as $index => $id) {
-                Price::whereKey($id)->update(['sort' => min($index + 1, 255)]);
-            }
-        });
+        $this->sortOrderService->reorder(Price::class, $ids);
 
         return response()->json(['status' => 'ok']);
-    }
-
-    private function sanitizeString(string $value): string
-    {
-        return trim($value);
-    }
-
-    private function sanitizeNullableString(?string $value): ?string
-    {
-        if ($value === null) {
-            return null;
-        }
-
-        $trimmed = trim($value);
-
-        return $trimmed === '' ? null : $trimmed;
     }
 }
