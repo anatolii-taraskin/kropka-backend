@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\EquipmentController;
 use App\Http\Controllers\Admin\PriceController;
 use App\Http\Controllers\Admin\StudioInfoController;
 use App\Http\Controllers\Admin\StudioRuleController;
+use App\Http\Controllers\Admin\TeacherController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -71,6 +72,27 @@ Route::middleware(['auth', 'admin', 'resolve.locale:admin'])->group(function () 
 
     Route::delete('/admin/equipment/{equipment}', [EquipmentController::class, 'destroy'])
         ->name('admin.equipment.destroy');
+
+    Route::get('/admin/teachers', [TeacherController::class, 'index'])
+        ->name('admin.teachers.index');
+
+    Route::get('/admin/teachers/create', [TeacherController::class, 'create'])
+        ->name('admin.teachers.create');
+
+    Route::post('/admin/teachers', [TeacherController::class, 'store'])
+        ->name('admin.teachers.store');
+
+    Route::post('/admin/teachers/reorder', [TeacherController::class, 'reorder'])
+        ->name('admin.teachers.reorder');
+
+    Route::get('/admin/teachers/{teacher}/edit', [TeacherController::class, 'edit'])
+        ->name('admin.teachers.edit');
+
+    Route::put('/admin/teachers/{teacher}', [TeacherController::class, 'update'])
+        ->name('admin.teachers.update');
+
+    Route::delete('/admin/teachers/{teacher}', [TeacherController::class, 'destroy'])
+        ->name('admin.teachers.destroy');
 
     Route::get('/admin/studio-rules', [StudioRuleController::class, 'edit'])
         ->name('admin.studio-rules.edit');
