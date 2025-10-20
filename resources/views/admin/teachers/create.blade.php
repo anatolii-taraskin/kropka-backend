@@ -84,7 +84,7 @@
                 <x-input-error class="mt-2" :messages="$createErrors->get('photo')" />
             </div>
 
-            <div class="flex items-center">
+            <div class="flex items-center gap-2">
                 <input type="hidden" name="is_active" value="0" />
 
                 <input
@@ -96,7 +96,7 @@
                     @checked($createIsActive)
                 />
 
-                <label for="teacher_is_active" class="ms-2 text-sm text-gray-600">
+                <label for="teacher_is_active" class="text-sm text-gray-600">
                     {{ __('admin.teachers.fields.is_active') }}
                 </label>
             </div>
