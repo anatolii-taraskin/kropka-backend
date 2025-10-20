@@ -12,13 +12,15 @@ class StudioRuleAdminTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_admin_can_view_studio_rules_edit_page(): void
+    public function test_admin_can_view_studio_rules_index_page(): void
     {
         $admin = $this->createAdminUser();
 
         StudioRule::create([
             'property' => 'rule_01',
             'value' => 'Existing rule text',
+            'is_active' => true,
+            'sort' => 1,
         ]);
 
         $response = $this->actingAs($admin)->get('/admin/studio-rules');
@@ -29,41 +31,128 @@ class StudioRuleAdminTest extends TestCase
             ->assertSee('Existing rule text');
     }
 
-    public function test_admin_can_update_studio_rules(): void
+    public function test_admin_can_create_studio_rule(): void
     {
         $admin = $this->createAdminUser();
 
-        $payload = [
-            'studio_rules' => [
-                'rule_01' => 'Rule 1 text',
-                'rule_02' => 'Rule 2 text',
-                'rule_03' => 'Rule 3 text',
-                'rule_04' => 'Rule 4 text',
-                'rule_05' => 'Rule 5 text',
-                'rule_06' => 'Rule 6 text',
-                'rule_07' => 'Rule 7 text',
-                'rule_08' => 'Rule 8 text',
-                'rule_09' => 'Rule 9 text',
-                'rule_10' => 'Rule 10 text',
-            ],
-        ];
+        $response = $this->actingAs($admin)
+            ->from('/admin/studio-rules')
+            ->post('/admin/studio-rules', [
+                'value' => 'New rule text',
+                'is_active' => '1',
+            ]);
+
+        $response->assertRedirect('/admin/studio-rules');
+        $response->assertSessionHas('status', 'studio-rule-created');
+
+        $this->assertDatabaseHas('studio_rules', [
+            'value' => 'New rule text',
+            'is_active' => true,
+            'sort' => 1,
+        ]);
+    }
+
+    public function test_admin_can_update_studio_rule(): void
+    {
+        $admin = $this->createAdminUser();
+
+        $rule = StudioRule::create([
+            'property' => 'rule_01',
+            'value' => 'Original text',
+            'is_active' => true,
+            'sort' => 1,
+        ]);
+
+        $response = $this->actingAs($admin)
+            ->from("/admin/studio-rules/{$rule->id}/edit")
+            ->put("/admin/studio-rules/{$rule->id}", [
+                'value' => 'Updated text',
+                'is_active' => '0',
+            ]);
+
+        $response->assertRedirect('/admin/studio-rules');
+        $response->assertSessionHas('status', 'studio-rule-updated');
+
+        $this->assertDatabaseHas('studio_rules', [
+            'id' => $rule->id,
+            'value' => 'Updated text',
+            'is_active' => false,
+        ]);
+    }
+
+    public function test_admin_can_delete_studio_rule(): void
+    {
+        $admin = $this->createAdminUser();
+
+        $rule = StudioRule::create([
+            'property' => 'rule_01',
+            'value' => 'Rule to delete',
+            'is_active' => true,
+            'sort' => 1,
+        ]);
 
         $response = $this->actingAs($admin)
             ->from('/admin/studio-rules')
-            ->put('/admin/studio-rules', $payload);
+            ->delete("/admin/studio-rules/{$rule->id}");
 
         $response->assertRedirect('/admin/studio-rules');
-        $response->assertSessionHas('status', 'studio-rules-updated');
+        $response->assertSessionHas('status', 'studio-rule-deleted');
 
-        foreach ($payload['studio_rules'] as $property => $value) {
-            $this->assertDatabaseHas('studio_rules', [
-                'property' => $property,
-                'value' => $value,
-            ]);
-        }
+        $this->assertDatabaseMissing('studio_rules', [
+            'id' => $rule->id,
+        ]);
     }
 
-    public function test_non_admin_cannot_access_studio_rules_editor(): void
+    public function test_admin_can_reorder_studio_rules(): void
+    {
+        $admin = $this->createAdminUser();
+
+        $first = StudioRule::create([
+            'property' => 'rule_01',
+            'value' => 'First',
+            'is_active' => true,
+            'sort' => 1,
+        ]);
+
+        $second = StudioRule::create([
+            'property' => 'rule_02',
+            'value' => 'Second',
+            'is_active' => true,
+            'sort' => 2,
+        ]);
+
+        $third = StudioRule::create([
+            'property' => 'rule_03',
+            'value' => 'Third',
+            'is_active' => true,
+            'sort' => 3,
+        ]);
+
+        $response = $this->actingAs($admin)->postJson('/admin/studio-rules/reorder', [
+            'order' => [$second->id, $third->id, $first->id],
+        ]);
+
+        $response
+            ->assertOk()
+            ->assertJson(['status' => 'ok']);
+
+        $this->assertDatabaseHas('studio_rules', [
+            'id' => $second->id,
+            'sort' => 1,
+        ]);
+
+        $this->assertDatabaseHas('studio_rules', [
+            'id' => $third->id,
+            'sort' => 2,
+        ]);
+
+        $this->assertDatabaseHas('studio_rules', [
+            'id' => $first->id,
+            'sort' => 3,
+        ]);
+    }
+
+    public function test_non_admin_cannot_access_studio_rules_index(): void
     {
         $user = User::factory()->create();
 

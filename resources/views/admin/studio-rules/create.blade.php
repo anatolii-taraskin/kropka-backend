@@ -4,25 +4,16 @@
     :content-class="null"
 >
     @php
-        $updateErrors = $errors->getBag('updateStudioRule' . $studioRule->id);
-        $useOldValues = ! $updateErrors->isEmpty();
-        $updatedAt = $studioRule->updated_at ? $studioRule->updated_at->format(__('admin.studio_rules.date_format')) : null;
-        $updateIsActive = $useOldValues ? (old('is_active', '0') === '1') : (bool) $studioRule->is_active;
+        $createErrors = $errors->getBag('createStudioRule');
+        $useOldValues = ! $createErrors->isEmpty();
+        $createIsActive = $createErrors->isEmpty() ? true : (old('is_active', '0') === '1');
     @endphp
 
     <section class="bg-white shadow sm:rounded-lg overflow-hidden">
         <div class="flex items-center justify-between border-b border-gray-200 px-6 py-4">
-            <div class="space-y-1">
-                <h2 class="text-lg font-medium text-gray-900">
-                    {{ __('admin.studio_rules.edit_title') }}
-                </h2>
-
-                @if ($updatedAt)
-                    <p class="text-xs text-gray-500">
-                        {{ __('admin.studio_rules.updated_at', ['date' => $updatedAt]) }}
-                    </p>
-                @endif
-            </div>
+            <h2 class="text-lg font-medium text-gray-900">
+                {{ __('admin.studio_rules.create_title') }}
+            </h2>
 
             <a
                 href="{{ route('admin.studio-rules.index') }}"
@@ -34,47 +25,46 @@
 
         <form
             method="post"
-            action="{{ route('admin.studio-rules.update', $studioRule) }}"
+            action="{{ route('admin.studio-rules.store') }}"
             class="border-t border-gray-200 p-6 space-y-6"
         >
             @csrf
-            @method('put')
 
             <div>
-                <x-input-label for="studio_rule_{{ $studioRule->id }}_value" :value="__('admin.studio_rules.fields.value')" />
+                <x-input-label for="studio_rule_value" :value="__('admin.studio_rules.fields.value')" />
 
                 <textarea
-                    id="studio_rule_{{ $studioRule->id }}_value"
+                    id="studio_rule_value"
                     name="value"
                     rows="5"
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                     required
                     maxlength="2000"
-                >{{ $useOldValues ? old('value') : $studioRule->value }}</textarea>
+                >{{ $useOldValues ? old('value') : '' }}</textarea>
 
-                <x-input-error class="mt-2" :messages="$updateErrors->get('value')" />
+                <x-input-error class="mt-2" :messages="$createErrors->get('value')" />
             </div>
 
             <div class="flex items-center gap-2 pb-3">
                 <input type="hidden" name="is_active" value="0" />
 
                 <input
-                    id="studio_rule_{{ $studioRule->id }}_is_active"
+                    id="studio_rule_is_active"
                     name="is_active"
                     type="checkbox"
                     value="1"
                     class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
-                    @checked($updateIsActive)
+                    @checked($createIsActive)
                 />
 
-                <label for="studio_rule_{{ $studioRule->id }}_is_active" class="text-sm text-gray-600">
+                <label for="studio_rule_is_active" class="text-sm text-gray-600">
                     {{ __('admin.studio_rules.fields.is_active') }}
                 </label>
             </div>
 
             <div class="flex items-center gap-3">
                 <x-primary-button>
-                    {{ __('admin.studio_rules.submit_update') }}
+                    {{ __('admin.studio_rules.submit_create') }}
                 </x-primary-button>
 
                 <a

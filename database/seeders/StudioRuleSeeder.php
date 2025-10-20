@@ -25,10 +25,16 @@ class StudioRuleSeeder extends Seeder
             'rule_10' => 'Будем рады, если отметите нас в соцсетях, расскажете друзьям и поделитесь идеями по улучшению студии.',
         ];
 
+        $position = 1;
+
         foreach ($rules as $property => $value) {
             StudioRule::query()->updateOrCreate(
                 ['property' => $property],
-                ['value' => $value]
+                [
+                    'value' => $value,
+                    'is_active' => true,
+                    'sort' => $position++,
+                ]
             );
         }
     }

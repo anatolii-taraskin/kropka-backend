@@ -94,11 +94,26 @@ Route::middleware(['auth', 'admin', 'resolve.locale:admin'])->group(function () 
     Route::delete('/admin/teachers/{teacher}', [TeacherController::class, 'destroy'])
         ->name('admin.teachers.destroy');
 
-    Route::get('/admin/studio-rules', [StudioRuleController::class, 'edit'])
+    Route::get('/admin/studio-rules', [StudioRuleController::class, 'index'])
+        ->name('admin.studio-rules.index');
+
+    Route::get('/admin/studio-rules/create', [StudioRuleController::class, 'create'])
+        ->name('admin.studio-rules.create');
+
+    Route::post('/admin/studio-rules', [StudioRuleController::class, 'store'])
+        ->name('admin.studio-rules.store');
+
+    Route::post('/admin/studio-rules/reorder', [StudioRuleController::class, 'reorder'])
+        ->name('admin.studio-rules.reorder');
+
+    Route::get('/admin/studio-rules/{studioRule}/edit', [StudioRuleController::class, 'edit'])
         ->name('admin.studio-rules.edit');
 
-    Route::put('/admin/studio-rules', [StudioRuleController::class, 'update'])
+    Route::put('/admin/studio-rules/{studioRule}', [StudioRuleController::class, 'update'])
         ->name('admin.studio-rules.update');
+
+    Route::delete('/admin/studio-rules/{studioRule}', [StudioRuleController::class, 'destroy'])
+        ->name('admin.studio-rules.destroy');
 
     Route::get('/admin/profile', [ProfileController::class, 'edit'])
         ->name('profile.edit');

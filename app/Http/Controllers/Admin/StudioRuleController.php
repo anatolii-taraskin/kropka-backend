@@ -4,152 +4,167 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\StudioRule;
+use App\Services\SortOrderService;
+use App\Support\Concerns\SanitizesAttributes;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\View\View;
 
 class StudioRuleController extends Controller
 {
-    /**
-     * Display the form for editing studio rules.
-     */
-    public function edit()
+    use SanitizesAttributes;
+
+    public function __construct(private readonly SortOrderService $sortOrderService)
     {
-        $storedValues = StudioRule::query()
-            ->orderBy('property')
-            ->pluck('value', 'property')
-            ->all();
+    }
 
-        $fields = [];
+    /**
+     * Display the list of studio rules.
+     */
+    public function index(): View
+    {
+        $rules = StudioRule::query()
+            ->orderBy('sort')
+            ->orderBy('id')
+            ->get();
 
-        foreach ($this->fields() as $property => $config) {
-            $fields[] = [
-                'property' => $property,
-                'label' => $config['label'],
-                'type' => $config['type'],
-                'required' => $config['required'],
-                'value' => $storedValues[$property] ?? '',
-            ];
-        }
-
-        return view('admin.studio-rules.edit', [
-            'fields' => $fields,
+        return view('admin.studio-rules.index', [
+            'rules' => $rules,
         ]);
     }
 
     /**
-     * Persist studio rule updates.
+     * Show the form for creating a new studio rule.
      */
-    public function update(Request $request)
+    public function create(): View
     {
-        $fields = $this->fields();
-
-        $input = $request->all();
-
-        if (isset($input['studio_rules']) && is_array($input['studio_rules'])) {
-            foreach ($input['studio_rules'] as $key => $value) {
-                if ($value === '') {
-                    $input['studio_rules'][$key] = null;
-                }
-            }
-        }
-
-        $rules = [
-            'studio_rules' => ['required', 'array'],
-        ];
-
-        $attributes = [];
-
-        foreach ($fields as $property => $config) {
-            $rules["studio_rules.{$property}"] = $config['rules'];
-            $attributes["studio_rules.{$property}"] = $config['label'];
-        }
-
-        $validated = Validator::make($input, $rules, [], $attributes)->validate();
-
-        foreach ($fields as $property => $config) {
-            $value = $validated['studio_rules'][$property] ?? '';
-
-            if ($value === null) {
-                $value = '';
-            }
-
-            StudioRule::query()->updateOrCreate(
-                ['property' => $property],
-                ['value' => $value]
-            );
-        }
-
-        return redirect()
-            ->route('admin.studio-rules.edit')
-            ->with('status', 'studio-rules-updated');
+        return view('admin.studio-rules.create');
     }
 
     /**
-     * Field configuration for studio rules.
+     * Store a newly created studio rule.
      */
-    private function fields(): array
+    public function store(Request $request): RedirectResponse
+    {
+        $validator = Validator::make(
+            $request->all(),
+            $this->rules(),
+            [],
+            $this->attributes(),
+        );
+
+        $validated = $validator->validateWithBag('createStudioRule');
+
+        $data = $this->prepareData($validated);
+        $data['sort'] = $this->sortOrderService->nextSortValue(StudioRule::class);
+        $data['property'] = $this->generateProperty();
+
+        StudioRule::create($data);
+
+        return redirect()
+            ->route('admin.studio-rules.index')
+            ->with('status', 'studio-rule-created');
+    }
+
+    /**
+     * Show the form for editing the specified studio rule.
+     */
+    public function edit(StudioRule $studioRule): View
+    {
+        return view('admin.studio-rules.edit', [
+            'studioRule' => $studioRule,
+        ]);
+    }
+
+    /**
+     * Update the specified studio rule.
+     */
+    public function update(Request $request, StudioRule $studioRule): RedirectResponse
+    {
+        $validator = Validator::make(
+            $request->all(),
+            $this->rules(),
+            [],
+            $this->attributes(),
+        );
+
+        $validated = $validator->validateWithBag('updateStudioRule' . $studioRule->id);
+
+        $data = $this->prepareData($validated);
+
+        $studioRule->update($data);
+
+        return redirect()
+            ->route('admin.studio-rules.index')
+            ->with('status', 'studio-rule-updated');
+    }
+
+    /**
+     * Remove the specified studio rule.
+     */
+    public function destroy(StudioRule $studioRule): RedirectResponse
+    {
+        $studioRule->delete();
+
+        return redirect()
+            ->route('admin.studio-rules.index')
+            ->with('status', 'studio-rule-deleted');
+    }
+
+    /**
+     * Update the sort order for studio rules.
+     */
+    public function reorder(Request $request): JsonResponse
+    {
+        $data = $request->validate([
+            'order' => ['required', 'array'],
+            'order.*' => ['integer', 'distinct', 'exists:studio_rules,id'],
+        ]);
+
+        $this->sortOrderService->reorder(StudioRule::class, $data['order']);
+
+        return response()->json(['status' => 'ok']);
+    }
+
+    /**
+     * Validation rules for studio rule forms.
+     */
+    private function rules(): array
     {
         return [
-            'rule_01' => [
-                'label' => __('admin.studio_rules.fields.rule_01'),
-                'rules' => ['required', 'string', 'max:2000'],
-                'type' => 'textarea',
-                'required' => true,
-            ],
-            'rule_02' => [
-                'label' => __('admin.studio_rules.fields.rule_02'),
-                'rules' => ['required', 'string', 'max:2000'],
-                'type' => 'textarea',
-                'required' => true,
-            ],
-            'rule_03' => [
-                'label' => __('admin.studio_rules.fields.rule_03'),
-                'rules' => ['required', 'string', 'max:2000'],
-                'type' => 'textarea',
-                'required' => true,
-            ],
-            'rule_04' => [
-                'label' => __('admin.studio_rules.fields.rule_04'),
-                'rules' => ['required', 'string', 'max:2000'],
-                'type' => 'textarea',
-                'required' => true,
-            ],
-            'rule_05' => [
-                'label' => __('admin.studio_rules.fields.rule_05'),
-                'rules' => ['required', 'string', 'max:2000'],
-                'type' => 'textarea',
-                'required' => true,
-            ],
-            'rule_06' => [
-                'label' => __('admin.studio_rules.fields.rule_06'),
-                'rules' => ['required', 'string', 'max:2000'],
-                'type' => 'textarea',
-                'required' => true,
-            ],
-            'rule_07' => [
-                'label' => __('admin.studio_rules.fields.rule_07'),
-                'rules' => ['required', 'string', 'max:2000'],
-                'type' => 'textarea',
-                'required' => true,
-            ],
-            'rule_08' => [
-                'label' => __('admin.studio_rules.fields.rule_08'),
-                'rules' => ['required', 'string', 'max:2000'],
-                'type' => 'textarea',
-                'required' => true,
-            ],
-            'rule_09' => [
-                'label' => __('admin.studio_rules.fields.rule_09'),
-                'rules' => ['required', 'string', 'max:2000'],
-                'type' => 'textarea',
-                'required' => true,
-            ],
-            'rule_10' => [
-                'label' => __('admin.studio_rules.fields.rule_10'),
-                'rules' => ['required', 'string', 'max:2000'],
-                'type' => 'textarea',
-                'required' => true,
-            ],
+            'value' => ['required', 'string', 'max:2000'],
+            'is_active' => ['sometimes', 'boolean'],
         ];
+    }
+
+    /**
+     * Human readable attribute names.
+     */
+    private function attributes(): array
+    {
+        return [
+            'value' => __('admin.studio_rules.fields.value'),
+            'is_active' => __('admin.studio_rules.fields.is_active'),
+        ];
+    }
+
+    /**
+     * Prepare sanitized data for persistence.
+     */
+    private function prepareData(array $input): array
+    {
+        return [
+            'value' => $this->sanitizeString($input['value'] ?? ''),
+            'is_active' => $this->sanitizeBoolean($input['is_active'] ?? null, true),
+        ];
+    }
+
+    private function generateProperty(): string
+    {
+        $nextNumber = (StudioRule::max('id') ?? 0) + 1;
+
+        return sprintf('rule_%02d', $nextNumber);
     }
 }
