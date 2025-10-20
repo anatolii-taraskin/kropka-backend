@@ -88,17 +88,7 @@
 
                                             @if ($teacher->telegram_url)
                                                 <div>
-                                                    <a
-                                                        href="{{ $teacher->telegram_url }}"
-                                                        class="inline-flex items-center gap-1 text-sm font-medium text-blue-600 transition hover:text-blue-500"
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                    >
-                                                        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                                                            <path d="M9.197 15.59 8.99 19.38a.75.75 0 0 0 1.255.585l2.027-1.845 3.67 2.742c.677.506 1.64.126 1.808-.726l3.25-16.25a1 1 0 0 0-1.374-1.1L2.322 10.084c-.897.36-.832 1.652.093 1.91l4.978 1.36 11.54-7.26-9.736 9.496Z" />
-                                                        </svg>
-                                                        <span>{{ __('admin.teachers.telegram_link_label') }}</span>
-                                                    </a>
+                                                    <span>{{ $teacher->telegram_url }}</span>
                                                 </div>
                                             @endif
                                         </div>
