@@ -6,7 +6,7 @@
             </x-alert-success>
         @endif
 
-        <form method="post" action="{{ route('admin.studio-infos.update') }}" class="mt-6 space-y-6">
+        <form method="post" action="{{ route('admin.studio-infos.update') }}" class="form-first-child-tight mt-6 space-y-6">
             @csrf
             @method('put')
 

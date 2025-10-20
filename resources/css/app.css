@@ -50,3 +50,8 @@
     transform: translateY(0);
 }
 
+.form-first-child-tight > :first-child {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
