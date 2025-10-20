@@ -10,15 +10,15 @@
         $updatedAt = $price->updated_at ? $price->updated_at->format(__('admin.prices.date_format')) : null;
     @endphp
 
-    <section class="bg-white shadow sm:rounded-lg">
-        <div class="flex flex-col gap-4 p-6 sm:flex-row sm:items-start sm:justify-between">
-            <div>
+    <section class="bg-white shadow sm:rounded-lg overflow-hidden">
+        <div class="flex items-center justify-between border-b border-gray-200 px-6 py-4">
+            <div class="space-y-1">
                 <h2 class="text-lg font-medium text-gray-900">
                     {{ __('admin.prices.edit_title') }}
                 </h2>
 
                 @if ($updatedAt)
-                    <p class="mt-3 text-xs text-gray-500">
+                    <p class="text-xs text-gray-500">
                         {{ __('admin.prices.updated_at', ['date' => $updatedAt]) }}
                     </p>
                 @endif
@@ -26,13 +26,17 @@
 
             <a
                 href="{{ route('admin.prices.index') }}"
-                class="inline-flex items-center rounded-md bg-white px-3 py-2 text-xs font-semibold uppercase tracking-widest text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                class="inline-flex items-center gap-2 rounded-md border border-transparent bg-gray-100 px-3 py-2 text-xs font-semibold uppercase tracking-widest text-gray-700 transition ease-in-out duration-150 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2"
             >
                 {{ __('admin.prices.back_to_list') }}
             </a>
         </div>
 
-        <form method="post" action="{{ route('admin.prices.update', $price) }}" class="border-t border-gray-200 px-6 space-y-6">
+        <form
+            method="post"
+            action="{{ route('admin.prices.update', $price) }}"
+            class="border-t border-gray-200 p-6 space-y-6"
+        >
             @csrf
             @method('put')
 
@@ -92,19 +96,20 @@
             </div>
 
             <div class="flex items-center gap-2 pb-3">
-                    <input type="hidden" name="is_active" value="0" />
-                    <input
-                        id="price_{{ $price->id }}_is_active"
-                        name="is_active"
-                        type="checkbox"
-                        value="1"
-                        class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
-                        @checked($updateIsActive)
-                    />
-                    <label for="price_{{ $price->id }}_is_active" class="text-sm text-gray-600">
-                        {{ __('admin.prices.fields.is_active') }}
-                    </label>
-                </div>
+                <input type="hidden" name="is_active" value="0" />
+
+                <input
+                    id="price_{{ $price->id }}_is_active"
+                    name="is_active"
+                    type="checkbox"
+                    value="1"
+                    class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
+                    @checked($updateIsActive)
+                />
+
+                <label for="price_{{ $price->id }}_is_active" class="text-sm text-gray-600">
+                    {{ __('admin.prices.fields.is_active') }}
+                </label>
             </div>
 
             <div class="flex items-center gap-3">
@@ -114,7 +119,7 @@
 
                 <a
                     href="{{ route('admin.prices.index') }}"
-                    class="text-sm text-gray-500 transition duration-150 ease-in-out hover:text-gray-700"
+                    class="inline-flex items-center gap-2 rounded-md border border-transparent bg-gray-100 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-gray-700 transition ease-in-out duration-150 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2"
                 >
                     {{ __('admin.prices.cancel') }}
                 </a>

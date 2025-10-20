@@ -36,7 +36,7 @@
             method="post"
             action="{{ route('admin.equipment.update', $equipment) }}"
             enctype="multipart/form-data"
-            class="border-t border-gray-200 px-6 space-y-6"
+            class="border-t border-gray-200 p-6 space-y-6"
         >
             @csrf
             @method('put')
@@ -101,21 +101,20 @@
             </div>
 
             <div class="flex items-center gap-2 pb-3">
-                    <input type="hidden" name="is_active" value="0" />
+                <input type="hidden" name="is_active" value="0" />
 
-                    <input
-                        id="equipment_{{ $equipment->id }}_is_active"
-                        name="is_active"
-                        type="checkbox"
-                        value="1"
-                        class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
-                        @checked($updateIsActive)
-                    />
+                <input
+                    id="equipment_{{ $equipment->id }}_is_active"
+                    name="is_active"
+                    type="checkbox"
+                    value="1"
+                    class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
+                    @checked($updateIsActive)
+                />
 
-                    <label for="equipment_{{ $equipment->id }}_is_active" class="text-sm text-gray-600">
-                        {{ __('admin.equipment.fields.is_active') }}
-                    </label>
-                </div>
+                <label for="equipment_{{ $equipment->id }}_is_active" class="text-sm text-gray-600">
+                    {{ __('admin.equipment.fields.is_active') }}
+                </label>
             </div>
 
             <div class="flex items-center gap-3">
