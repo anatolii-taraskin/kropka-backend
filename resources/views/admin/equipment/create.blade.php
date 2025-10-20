@@ -23,7 +23,12 @@
             </a>
         </div>
 
-        <form method="post" action="{{ route('admin.equipment.store') }}" enctype="multipart/form-data" class="border-t border-gray-200 px-6 py-4 space-y-6">
+        <form
+            method="post"
+            action="{{ route('admin.equipment.store') }}"
+            enctype="multipart/form-data"
+            class="border-t border-gray-200 p-6 space-y-6"
+        >
             @csrf
 
             <div>
@@ -69,22 +74,21 @@
                 <x-input-error class="mt-2" :messages="$createErrors->get('photo')" />
             </div>
 
-            <div class="flex items-center gap-2">
-                    <input type="hidden" name="is_active" value="0" />
+            <div class="flex items-center gap-2 pb-3">
+                <input type="hidden" name="is_active" value="0" />
 
-                    <input
-                        id="equipment_is_active"
-                        name="is_active"
-                        type="checkbox"
-                        value="1"
-                        class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
-                        @checked($createIsActive)
-                    />
+                <input
+                    id="equipment_is_active"
+                    name="is_active"
+                    type="checkbox"
+                    value="1"
+                    class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
+                    @checked($createIsActive)
+                />
 
-                    <label for="equipment_is_active" class="text-sm text-gray-600">
-                        {{ __('admin.equipment.fields.is_active') }}
-                    </label>
-                </div>
+                <label for="equipment_is_active" class="text-sm text-gray-600">
+                    {{ __('admin.equipment.fields.is_active') }}
+                </label>
             </div>
 
             <div class="flex items-center gap-3">

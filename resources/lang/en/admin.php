@@ -6,7 +6,7 @@ return [
     'studio_infos' => [
         'title' => 'Studio information',
         'description' => '',
-        'submit' => 'Save changes',
+        'submit' => 'Save',
         'success' => 'Studio information has been updated.',
         'fields' => [
             'name' => 'Studio name',
@@ -22,7 +22,7 @@ return [
     'studio_rules' => [
         'title' => 'Studio rules',
         'description' => 'Update the studio rules that are shown to your guests.',
-        'submit' => 'Save rules',
+        'submit' => 'Save',
         'success' => 'Studio rules have been updated.',
         'fields' => [
             'rule_01' => 'Rule #1',
@@ -43,7 +43,7 @@ return [
         'list_title' => 'Existing prices',
         'list_description' => 'Manage the prices that are shown to guests.',
         'submit_create' => 'Create prices',
-        'submit_update' => 'Save changes',
+        'submit_update' => 'Save',
         'delete' => 'Delete',
         'delete_confirm' => 'Are you sure you want to delete the ":name" prices?',
         'create_success' => 'The prices have been created.',
@@ -98,7 +98,7 @@ return [
         'back_to_list' => 'Back to list',
         'cancel' => 'Cancel',
         'submit_create' => 'Add equipment',
-        'submit_update' => 'Save changes',
+        'submit_update' => 'Save',
         'actions' => [
             'edit' => 'Edit',
             'delete' => 'Delete',
@@ -135,7 +135,7 @@ return [
         'back_to_list' => 'Back to list',
         'cancel' => 'Cancel',
         'submit_create' => 'Add teacher',
-        'submit_update' => 'Save changes',
+        'submit_update' => 'Save',
         'actions' => [
             'edit' => 'Edit',
             'delete' => 'Delete',
