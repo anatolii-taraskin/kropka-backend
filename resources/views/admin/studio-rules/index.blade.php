@@ -28,16 +28,6 @@
     @endif
 
     <section class="bg-white shadow sm:rounded-lg overflow-hidden">
-        <div class="border-b border-gray-200 px-6 py-4">
-            <h2 class="text-lg font-medium text-gray-900">
-                {{ __('admin.studio_rules.list_title') }}
-            </h2>
-
-            <p class="mt-1 text-sm text-gray-500">
-                {{ __('admin.studio_rules.list_description') }}
-            </p>
-        </div>
-
         @if ($rules->isEmpty())
             <p class="px-6 pb-6 text-sm text-gray-500">
                 {{ __('admin.studio_rules.empty') }}
@@ -67,10 +57,10 @@
                                 </td>
                                 <td class="px-6 py-4 align-top">
                                     <div class="space-y-2">
-                                        <div class="flex items-center gap-2">
-                                            <span class="text-sm font-medium text-gray-900">
-                                                {{ __('admin.studio_rules.fields.value') }}
-                                            </span>
+                                        <div class="flex items-start justify-between gap-3">
+                                            <p class="text-sm text-gray-600 whitespace-pre-line flex-1">
+                                                {{ $rule->value }}
+                                            </p>
 
                                             @unless ($rule->is_active)
                                                 <span class="inline-flex items-center rounded-full bg-gray-200 px-2 py-0.5 text-xs font-medium text-gray-600">
@@ -78,10 +68,6 @@
                                                 </span>
                                             @endunless
                                         </div>
-
-                                        <p class="text-sm text-gray-600 whitespace-pre-line">
-                                            {{ $rule->value }}
-                                        </p>
 
                                         @if ($rule->updated_at)
                                             <p class="text-xs text-gray-400">
