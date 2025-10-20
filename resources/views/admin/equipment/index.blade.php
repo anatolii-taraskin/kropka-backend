@@ -36,13 +36,6 @@
             <div class="border-t border-gray-200">
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th scope="col" class="w-12"></th>
-                                <th scope="col" class="sr-only">{{ __('admin.equipment.fields.name') }}</th>
-                                <th scope="col" class="sr-only">{{ __('admin.equipment.actions.edit') }}</th>
-                            </tr>
-                        </thead>
                         <tbody
                             class="divide-y divide-gray-200 bg-white"
                             data-sortable-list
