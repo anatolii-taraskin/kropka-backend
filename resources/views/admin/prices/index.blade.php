@@ -69,26 +69,17 @@
                                             @endunless
                                         </div>
 
-                                        <div class="flex flex-wrap gap-x-4 gap-y-1 text-xs text-gray-500">
+                                        <div class="flex flex-col gap-1 text-xs text-gray-500">
                                             @if ($price->col1)
-                                                <span>
-                                                    <span class="font-medium">{{ __('admin.prices.fields.col1') }}:</span>
-                                                        {{ $price->col1 }}
-                                                </span>
+                                                <span>{{ $price->col1 }}</span>
                                             @endif
 
                                             @if ($price->col2)
-                                                <span>
-                                                    <span class="font-medium">{{ __('admin.prices.fields.col2') }}:</span>
-                                                        {{ $price->col2 }}
-                                                </span>
+                                                <span>{{ $price->col2 }}</span>
                                             @endif
 
                                             @if ($price->col3)
-                                                <span>
-                                                    <span class="font-medium">{{ __('admin.prices.fields.col3') }}:</span>
-                                                        {{ $price->col3 }}
-                                                </span>
+                                                <span>{{ $price->col3 }}</span>
                                             @endif
                                         </div>
                                     </div>
