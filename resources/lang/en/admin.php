@@ -78,9 +78,9 @@ return [
         ],
         'fields' => [
             'name' => 'Title',
-            'col1' => 'Column 1',
-            'col2' => 'Column 2',
-            'col3' => 'Column 3',
+            'col1' => 'Price 1',
+            'col2' => 'Price 2',
+            'col3' => 'Price 3',
             'is_active' => 'Prices are active',
         ],
     ],
