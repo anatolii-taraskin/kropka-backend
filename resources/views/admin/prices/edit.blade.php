@@ -32,7 +32,7 @@
             </a>
         </div>
 
-        <form method="post" action="{{ route('admin.prices.update', $price) }}" class="border-t border-gray-200 px-6 py-4 space-y-6">
+        <form method="post" action="{{ route('admin.prices.update', $price) }}" class="border-t border-gray-200 px-6 space-y-6">
             @csrf
             @method('put')
 
