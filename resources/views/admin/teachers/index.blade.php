@@ -56,9 +56,9 @@
                                     </button>
                                 </td>
                                 <td class="px-6 py-4 align-top">
-                                    <div class="flex items-start gap-4">
+                                    <div class="flex items-center gap-6">
                                         @if ($teacher->photo_path)
-                                            <div class="h-16 w-16 flex-shrink-0 overflow-hidden rounded-md border border-gray-200 bg-gray-50">
+                                            <div class="flex h-24 w-24 flex-shrink-0 items-center justify-center overflow-hidden rounded-md border border-gray-200 bg-gray-50">
                                                 <img
                                                     src="{{ $teacher->photoUrl() }}"
                                                     alt="{{ $teacher->name }}"
