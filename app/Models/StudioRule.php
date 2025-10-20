@@ -17,5 +17,17 @@ class StudioRule extends Model
     protected $fillable = [
         'property',
         'value',
+        'is_active',
+        'sort',
+    ];
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'is_active' => 'boolean',
+        'sort' => 'integer',
     ];
 }

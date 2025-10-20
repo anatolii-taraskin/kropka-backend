@@ -39,7 +39,7 @@
                         <x-nav-link :href="route('admin.teachers.index')" :active="request()->routeIs('admin.teachers.*')">
                             {{ __('admin.teachers.title') }}
                         </x-nav-link>
-                        <x-nav-link :href="route('admin.studio-rules.edit')" :active="request()->routeIs('admin.studio-rules.*')">
+                        <x-nav-link :href="route('admin.studio-rules.index')" :active="request()->routeIs('admin.studio-rules.*')">
                             {{ __('admin.studio_rules.title') }}
                         </x-nav-link>
                     </div>
@@ -129,7 +129,7 @@
                 <x-responsive-nav-link :href="route('admin.teachers.index')" :active="request()->routeIs('admin.teachers.*')">
                     {{ __('admin.teachers.title') }}
                 </x-responsive-nav-link>
-                <x-responsive-nav-link :href="route('admin.studio-rules.edit')" :active="request()->routeIs('admin.studio-rules.*')">
+                <x-responsive-nav-link :href="route('admin.studio-rules.index')" :active="request()->routeIs('admin.studio-rules.*')">
                     {{ __('admin.studio_rules.title') }}
                 </x-responsive-nav-link>
             </div>
