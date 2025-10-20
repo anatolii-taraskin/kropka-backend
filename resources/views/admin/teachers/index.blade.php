@@ -43,7 +43,7 @@
                         >
                         @foreach ($teachers as $teacher)
                             <tr class="border-b" data-sortable-id="{{ $teacher->id }}">
-                                <td class="px-4 py-4 align-top text-gray-400">
+                                <td class="px-2 py-4 align-top text-gray-400" style="width: 28px">
                                     <button
                                         type="button"
                                         class="cursor-grab rounded p-1 transition hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
