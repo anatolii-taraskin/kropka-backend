@@ -100,7 +100,7 @@
                 <x-input-error class="mt-2" :messages="$updateErrors->get('photo')" />
             </div>
 
-            <div class="flex items-center">
+            <div class="flex items-center gap-2">
                     <input type="hidden" name="is_active" value="0" />
 
                     <input
@@ -112,7 +112,7 @@
                         @checked($updateIsActive)
                     />
 
-                    <label for="equipment_{{ $equipment->id }}_is_active" class="ms-2 text-sm text-gray-600">
+                    <label for="equipment_{{ $equipment->id }}_is_active" class="text-sm text-gray-600">
                         {{ __('admin.equipment.fields.is_active') }}
                     </label>
                 </div>

@@ -82,7 +82,7 @@
                 </div>
             </div>
 
-            <div class="flex items-center">
+            <div class="flex items-center gap-2">
                     <input type="hidden" name="is_active" value="0" />
                     <input
                         id="price_is_active"
@@ -92,7 +92,7 @@
                         class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500"
                         @checked($createIsActive)
                     />
-                    <label for="price_is_active" class="ms-2 text-sm text-gray-600">
+                    <label for="price_is_active" class="text-sm text-gray-600">
                         {{ __('admin.prices.fields.is_active') }}
                     </label>
                 </div>
