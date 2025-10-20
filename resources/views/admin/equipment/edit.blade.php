@@ -36,7 +36,7 @@
             method="post"
             action="{{ route('admin.equipment.update', $equipment) }}"
             enctype="multipart/form-data"
-            class="border-t border-gray-200 p-6 space-y-6"
+            class="border-t border-gray-200 px-6 py-4 space-y-6"
         >
             @csrf
             @method('put')
