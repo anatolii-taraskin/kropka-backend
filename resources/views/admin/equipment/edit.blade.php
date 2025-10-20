@@ -100,7 +100,7 @@
                 <x-input-error class="mt-2" :messages="$updateErrors->get('photo')" />
             </div>
 
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-2 pb-3">
                     <input type="hidden" name="is_active" value="0" />
 
                     <input

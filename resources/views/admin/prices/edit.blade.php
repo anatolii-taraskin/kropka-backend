@@ -91,7 +91,7 @@
                 </div>
             </div>
 
-            <div class="flex items-center gap-2">
+            <div class="flex items-center gap-2 pb-3">
                     <input type="hidden" name="is_active" value="0" />
                     <input
                         id="price_{{ $price->id }}_is_active"
