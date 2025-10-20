@@ -24,7 +24,7 @@
             </a>
         </div>
 
-        <form method="post" action="{{ route('admin.prices.store') }}" class="border-t border-gray-200 p-6 space-y-6">
+        <form method="post" action="{{ route('admin.prices.store') }}" class="border-t border-gray-200 px-6 py-4 space-y-6">
             @csrf
 
             <div>
