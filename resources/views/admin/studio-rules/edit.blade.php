@@ -35,7 +35,7 @@
         <form
             method="post"
             action="{{ route('admin.studio-rules.update', $studioRule) }}"
-            class="border-t border-gray-200 p-6 space-y-6"
+            class="form-first-child-tight border-t border-gray-200 p-6 space-y-6"
         >
             @csrf
             @method('put')
