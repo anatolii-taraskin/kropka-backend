@@ -43,7 +43,7 @@
                 <x-input-error class="mt-2" :messages="$createErrors->get('name')" />
             </div>
 
-            <div class="grid gap-6 md:grid-cols-3">
+            <div class="space-y-6">
                 <div>
                     <x-input-label for="price_col1" :value="__('admin.prices.fields.col1')" />
                     <x-text-input
