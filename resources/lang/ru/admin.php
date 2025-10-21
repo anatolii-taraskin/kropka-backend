@@ -9,14 +9,21 @@ return [
         'submit' => 'Сохранить',
         'success' => 'Информация о студии успешно обновлена.',
         'fields' => [
-            'name' => 'Название студии',
             'phone' => 'Контактный телефон',
-            'address' => 'Адрес',
             'email' => 'Email',
             'instagram_url' => 'Ссылка на Instagram',
             'facebook_url' => 'Ссылка на Facebook',
             'telegram_channel_url' => 'Ссылка на канал в Telegram',
             'telegram_admin_url' => 'Ссылка для связи в Telegram',
+            'name_ru' => 'Название студии',
+            'name_en' => 'Название студии',
+            'address_ru' => 'Адрес',
+            'address_en' => 'Адрес',
+        ],
+        'sections' => [
+            'shared' => 'Общие данные',
+            'ru' => 'Контент для русского языка',
+            'en' => 'Контент для английского языка',
         ],
     ],
     'studio_rules' => [
