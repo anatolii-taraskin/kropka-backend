@@ -41,6 +41,10 @@
                             data-sortable-list
                             data-sortable-endpoint="{{ route('admin.equipment.reorder') }}"
                         >
+                        @php
+                            $locale = app()->getLocale();
+                        @endphp
+
                         @foreach ($equipment as $item)
                             <tr class="border-b" data-sortable-id="{{ $item->id }}">
                                 <td class="px-2 py-4 align-top text-gray-400" style="width: 28px">
@@ -61,7 +65,7 @@
                                             <div class="flex h-24 w-24 flex-shrink-0 items-center justify-center overflow-hidden rounded-md border border-gray-200 bg-gray-50">
                                                 <img
                                                     src="{{ $item->photoUrl() }}"
-                                                    alt="{{ $item->name }}"
+                                                    alt="{{ $item->localizedName($locale) }}"
                                                     class="h-full w-full object-cover"
                                                 />
                                             </div>
@@ -70,7 +74,7 @@
                                         <div class="space-y-2">
                                             <div class="flex items-center gap-2">
                                                 <span class="text-sm font-medium text-gray-900">
-                                                    {{ $item->name }}
+                                                    {{ $item->localizedName($locale) }}
                                                 </span>
 
                                                 @unless ($item->is_active)
@@ -80,9 +84,13 @@
                                                 @endunless
                                             </div>
 
-                                            @if ($item->description)
+                                            @php
+                                                $description = $item->localizedDescription($locale);
+                                            @endphp
+
+                                            @if ($description)
                                                 <p class="text-sm text-gray-600 whitespace-pre-line">
-                                                    {{ $item->description }}
+                                                    {{ $description }}
                                                 </p>
                                             @endif
                                         </div>

@@ -41,33 +41,92 @@
             @csrf
             @method('put')
 
-            <div class="first-element">
-                <x-input-label for="equipment_{{ $equipment->id }}_name" :value="__('admin.equipment.fields.name')" />
+            <div class="space-y-6">
+                <section class="first-element rounded-xl border border-gray-200 bg-white/40 p-6 shadow-sm space-y-6">
+                    <header class="mb-2">
+                        <h3 class="text-base font-semibold text-gray-900">
+                            {{ __('admin.equipment.sections.ru') }}
+                        </h3>
+                    </header>
 
-                <x-text-input
-                    id="equipment_{{ $equipment->id }}_name"
-                    name="name"
-                    type="text"
-                    class="mt-1 block w-full"
-                    value="{{ $useOldValues ? old('name') : $equipment->name }}"
-                    required
-                    maxlength="255"
-                />
+                    <div>
+                        <x-input-label
+                            for="equipment_{{ $equipment->id }}_name_ru"
+                            :value="__('admin.equipment.fields.name_ru')"
+                        />
 
-                <x-input-error class="mt-2" :messages="$updateErrors->get('name')" />
-            </div>
+                        <x-text-input
+                            id="equipment_{{ $equipment->id }}_name_ru"
+                            name="name_ru"
+                            type="text"
+                            class="mt-1 block w-full"
+                            value="{{ $useOldValues ? old('name_ru') : $equipment->name_ru }}"
+                            required
+                            maxlength="255"
+                        />
 
-            <div>
-                <x-input-label for="equipment_{{ $equipment->id }}_description" :value="__('admin.equipment.fields.description')" />
+                        <x-input-error class="mt-2" :messages="$updateErrors->get('name_ru')" />
+                    </div>
 
-                <textarea
-                    id="equipment_{{ $equipment->id }}_description"
-                    name="description"
-                    rows="5"
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                >{{ $useOldValues ? old('description') : $equipment->description }}</textarea>
+                    <div>
+                        <x-input-label
+                            for="equipment_{{ $equipment->id }}_description_ru"
+                            :value="__('admin.equipment.fields.description_ru')"
+                        />
 
-                <x-input-error class="mt-2" :messages="$updateErrors->get('description')" />
+                        <textarea
+                            id="equipment_{{ $equipment->id }}_description_ru"
+                            name="description_ru"
+                            rows="5"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                        >{{ $useOldValues ? old('description_ru') : $equipment->description_ru }}</textarea>
+
+                        <x-input-error class="mt-2" :messages="$updateErrors->get('description_ru')" />
+                    </div>
+                </section>
+
+                <section class="rounded-xl border border-gray-200 bg-white/40 p-6 shadow-sm space-y-6">
+                    <header class="mb-2">
+                        <h3 class="text-base font-semibold text-gray-900">
+                            {{ __('admin.equipment.sections.en') }}
+                        </h3>
+                    </header>
+
+                    <div>
+                        <x-input-label
+                            for="equipment_{{ $equipment->id }}_name_en"
+                            :value="__('admin.equipment.fields.name_en')"
+                        />
+
+                        <x-text-input
+                            id="equipment_{{ $equipment->id }}_name_en"
+                            name="name_en"
+                            type="text"
+                            class="mt-1 block w-full"
+                            value="{{ $useOldValues ? old('name_en') : $equipment->name_en }}"
+                            required
+                            maxlength="255"
+                        />
+
+                        <x-input-error class="mt-2" :messages="$updateErrors->get('name_en')" />
+                    </div>
+
+                    <div>
+                        <x-input-label
+                            for="equipment_{{ $equipment->id }}_description_en"
+                            :value="__('admin.equipment.fields.description_en')"
+                        />
+
+                        <textarea
+                            id="equipment_{{ $equipment->id }}_description_en"
+                            name="description_en"
+                            rows="5"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                        >{{ $useOldValues ? old('description_en') : $equipment->description_en }}</textarea>
+
+                        <x-input-error class="mt-2" :messages="$updateErrors->get('description_en')" />
+                    </div>
+                </section>
             </div>
 
             <div class="space-y-3">
@@ -78,7 +137,7 @@
                         <div class="h-40 w-40 overflow-hidden rounded-md border border-gray-200 bg-gray-50">
                             <img
                                 src="{{ $equipment->photoUrl() }}"
-                                alt="{{ $equipment->name }}"
+                                alt="{{ $equipment->localizedName() }}"
                                 class="h-full w-full object-cover"
                             />
                         </div>
