@@ -50,7 +50,7 @@
     transform: translateY(0);
 }
 
-.form-first-child-tight > :first-child {
+.form-first-child-tight > .first-element {
     margin-top: 0 !important;
     padding-top: 0 !important;
 }
