@@ -17,10 +17,14 @@ class PriceAdminTest extends TestCase
         $admin = $this->createAdminUser();
 
         Price::create([
-            'name' => 'Existing Tile',
-            'col1' => 'Line 1',
-            'col2' => 'Line 2',
-            'col3' => 'Line 3',
+            'name_ru' => 'Существующий блок',
+            'name_en' => 'Existing Tile',
+            'col1_ru' => 'Строка 1',
+            'col1_en' => 'Line 1',
+            'col2_ru' => 'Строка 2',
+            'col2_en' => 'Line 2',
+            'col3_ru' => 'Строка 3',
+            'col3_en' => 'Line 3',
             'is_active' => true,
             'sort' => 1,
         ]);
@@ -30,6 +34,7 @@ class PriceAdminTest extends TestCase
         $response
             ->assertOk()
             ->assertSee(__('admin.prices.title'))
+            ->assertSee('Существующий блок')
             ->assertSee('Existing Tile');
     }
 
@@ -38,10 +43,14 @@ class PriceAdminTest extends TestCase
         $admin = $this->createAdminUser();
 
         $payload = [
-            'name' => 'New Tile',
-            'col1' => 'First line',
-            'col2' => 'Second line',
-            'col3' => 'Third line',
+            'name_ru' => 'Новый блок',
+            'name_en' => 'New Tile',
+            'col1_ru' => 'Первая строка',
+            'col1_en' => 'First line',
+            'col2_ru' => 'Вторая строка',
+            'col2_en' => 'Second line',
+            'col3_ru' => 'Третья строка',
+            'col3_en' => 'Third line',
             'is_active' => '1',
         ];
 
@@ -53,10 +62,14 @@ class PriceAdminTest extends TestCase
         $response->assertSessionHas('status', 'price-created');
 
         $this->assertDatabaseHas('prices', [
-            'name' => 'New Tile',
-            'col1' => 'First line',
-            'col2' => 'Second line',
-            'col3' => 'Third line',
+            'name_ru' => 'Новый блок',
+            'name_en' => 'New Tile',
+            'col1_ru' => 'Первая строка',
+            'col1_en' => 'First line',
+            'col2_ru' => 'Вторая строка',
+            'col2_en' => 'Second line',
+            'col3_ru' => 'Третья строка',
+            'col3_en' => 'Third line',
             'is_active' => true,
             'sort' => 1,
         ]);
@@ -67,19 +80,27 @@ class PriceAdminTest extends TestCase
         $admin = $this->createAdminUser();
 
         $price = Price::create([
-            'name' => 'Initial Tile',
-            'col1' => 'Line 1',
-            'col2' => 'Line 2',
-            'col3' => null,
+            'name_ru' => 'Исходный блок',
+            'name_en' => 'Initial Tile',
+            'col1_ru' => 'Строка 1',
+            'col1_en' => 'Line 1',
+            'col2_ru' => 'Строка 2',
+            'col2_en' => 'Line 2',
+            'col3_ru' => null,
+            'col3_en' => null,
             'is_active' => true,
             'sort' => 3,
         ]);
 
         $payload = [
-            'name' => 'Updated Tile',
-            'col1' => 'Updated Line 1',
-            'col2' => '',
-            'col3' => 'Updated Line 3',
+            'name_ru' => 'Обновлённый блок',
+            'name_en' => 'Updated Tile',
+            'col1_ru' => 'Обновлённая строка 1',
+            'col1_en' => 'Updated Line 1',
+            'col2_ru' => '',
+            'col2_en' => '',
+            'col3_ru' => 'Обновлённая строка 3',
+            'col3_en' => 'Updated Line 3',
             'is_active' => '0',
         ];
 
@@ -92,10 +113,14 @@ class PriceAdminTest extends TestCase
 
         $this->assertDatabaseHas('prices', [
             'id' => $price->id,
-            'name' => 'Updated Tile',
-            'col1' => 'Updated Line 1',
-            'col2' => null,
-            'col3' => 'Updated Line 3',
+            'name_ru' => 'Обновлённый блок',
+            'name_en' => 'Updated Tile',
+            'col1_ru' => 'Обновлённая строка 1',
+            'col1_en' => 'Updated Line 1',
+            'col2_ru' => null,
+            'col2_en' => null,
+            'col3_ru' => 'Обновлённая строка 3',
+            'col3_en' => 'Updated Line 3',
             'is_active' => false,
             'sort' => 3,
         ]);
@@ -106,28 +131,40 @@ class PriceAdminTest extends TestCase
         $admin = $this->createAdminUser();
 
         $first = Price::create([
-            'name' => 'First',
-            'col1' => null,
-            'col2' => null,
-            'col3' => null,
+            'name_ru' => 'Первый',
+            'name_en' => 'First',
+            'col1_ru' => null,
+            'col1_en' => null,
+            'col2_ru' => null,
+            'col2_en' => null,
+            'col3_ru' => null,
+            'col3_en' => null,
             'is_active' => true,
             'sort' => 1,
         ]);
 
         $second = Price::create([
-            'name' => 'Second',
-            'col1' => null,
-            'col2' => null,
-            'col3' => null,
+            'name_ru' => 'Второй',
+            'name_en' => 'Second',
+            'col1_ru' => null,
+            'col1_en' => null,
+            'col2_ru' => null,
+            'col2_en' => null,
+            'col3_ru' => null,
+            'col3_en' => null,
             'is_active' => true,
             'sort' => 2,
         ]);
 
         $third = Price::create([
-            'name' => 'Third',
-            'col1' => null,
-            'col2' => null,
-            'col3' => null,
+            'name_ru' => 'Третий',
+            'name_en' => 'Third',
+            'col1_ru' => null,
+            'col1_en' => null,
+            'col2_ru' => null,
+            'col2_en' => null,
+            'col3_ru' => null,
+            'col3_en' => null,
             'is_active' => true,
             'sort' => 3,
         ]);
@@ -161,10 +198,14 @@ class PriceAdminTest extends TestCase
         $admin = $this->createAdminUser();
 
         $price = Price::create([
-            'name' => 'Tile to Delete',
-            'col1' => 'Line 1',
-            'col2' => null,
-            'col3' => null,
+            'name_ru' => 'Блок для удаления',
+            'name_en' => 'Tile to Delete',
+            'col1_ru' => 'Строка 1',
+            'col1_en' => 'Line 1',
+            'col2_ru' => null,
+            'col2_en' => null,
+            'col3_ru' => null,
+            'col3_en' => null,
             'is_active' => true,
             'sort' => 2,
         ]);
@@ -186,8 +227,9 @@ class PriceAdminTest extends TestCase
         $admin = $this->createAdminUser();
 
         $payload = [
-            'name' => '',
-            'col1' => str_repeat('a', 260),
+            'name_ru' => '',
+            'name_en' => '',
+            'col1_ru' => str_repeat('a', 260),
         ];
 
         $response = $this->actingAs($admin)
@@ -195,7 +237,7 @@ class PriceAdminTest extends TestCase
             ->post('/admin/prices', $payload);
 
         $response->assertRedirect('/admin/prices');
-        $response->assertSessionHasErrors(['name', 'col1'], null, 'createPrice');
+        $response->assertSessionHasErrors(['name_ru', 'name_en', 'col1_ru'], null, 'createPrice');
     }
 
     public function test_non_admin_cannot_access_prices_manager(): void

@@ -119,10 +119,14 @@ class PriceController extends Controller
     private function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
-            'col1' => ['nullable', 'string', 'max:255'],
-            'col2' => ['nullable', 'string', 'max:255'],
-            'col3' => ['nullable', 'string', 'max:255'],
+            'name_ru' => ['required', 'string', 'max:255'],
+            'name_en' => ['required', 'string', 'max:255'],
+            'col1_ru' => ['nullable', 'string', 'max:255'],
+            'col1_en' => ['nullable', 'string', 'max:255'],
+            'col2_ru' => ['nullable', 'string', 'max:255'],
+            'col2_en' => ['nullable', 'string', 'max:255'],
+            'col3_ru' => ['nullable', 'string', 'max:255'],
+            'col3_en' => ['nullable', 'string', 'max:255'],
             'is_active' => ['sometimes', 'boolean'],
         ];
     }
@@ -133,10 +137,14 @@ class PriceController extends Controller
     private function attributes(): array
     {
         return [
-            'name' => __('admin.prices.fields.name'),
-            'col1' => __('admin.prices.fields.col1'),
-            'col2' => __('admin.prices.fields.col2'),
-            'col3' => __('admin.prices.fields.col3'),
+            'name_ru' => __('admin.prices.fields.name_ru'),
+            'name_en' => __('admin.prices.fields.name_en'),
+            'col1_ru' => __('admin.prices.fields.col1_ru'),
+            'col1_en' => __('admin.prices.fields.col1_en'),
+            'col2_ru' => __('admin.prices.fields.col2_ru'),
+            'col2_en' => __('admin.prices.fields.col2_en'),
+            'col3_ru' => __('admin.prices.fields.col3_ru'),
+            'col3_en' => __('admin.prices.fields.col3_en'),
             'is_active' => __('admin.prices.fields.is_active'),
         ];
     }
@@ -147,10 +155,14 @@ class PriceController extends Controller
     private function prepareData(array $input): array
     {
         return [
-            'name' => $this->sanitizeString($input['name'] ?? ''),
-            'col1' => $this->sanitizeNullableString($input['col1'] ?? null),
-            'col2' => $this->sanitizeNullableString($input['col2'] ?? null),
-            'col3' => $this->sanitizeNullableString($input['col3'] ?? null),
+            'name_ru' => $this->sanitizeString($input['name_ru'] ?? ''),
+            'name_en' => $this->sanitizeString($input['name_en'] ?? ''),
+            'col1_ru' => $this->sanitizeNullableString($input['col1_ru'] ?? null),
+            'col1_en' => $this->sanitizeNullableString($input['col1_en'] ?? null),
+            'col2_ru' => $this->sanitizeNullableString($input['col2_ru'] ?? null),
+            'col2_en' => $this->sanitizeNullableString($input['col2_en'] ?? null),
+            'col3_ru' => $this->sanitizeNullableString($input['col3_ru'] ?? null),
+            'col3_en' => $this->sanitizeNullableString($input['col3_en'] ?? null),
             'is_active' => $this->sanitizeBoolean($input['is_active'] ?? null),
         ];
     }

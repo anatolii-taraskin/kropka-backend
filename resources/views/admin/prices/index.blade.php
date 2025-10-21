@@ -57,29 +57,59 @@
                                 </td>
                                 <td class="px-6 py-4 align-top">
                                     <div class="space-y-1">
-                                        <div class="flex items-center gap-2">
+                                        <div class="flex flex-col gap-1">
+                                            <div class="flex items-center gap-2">
                                                 <span class="text-sm font-medium text-gray-900">
-                                                    {{ $price->name }}
+                                                    {{ $price->name_ru }}
                                                 </span>
 
-                                            @unless ($price->is_active)
-                                                <span class="inline-flex items-center rounded-full bg-gray-200 px-2 py-0.5 text-xs font-medium text-gray-600">
+                                                @unless ($price->is_active)
+                                                    <span class="inline-flex items-center rounded-full bg-gray-200 px-2 py-0.5 text-xs font-medium text-gray-600">
                                                         {{ __('admin.prices.status.inactive') }}
-                                                </span>
-                                            @endunless
+                                                    </span>
+                                                @endunless
+                                            </div>
+
+                                            @if ($price->name_en)
+                                                <span class="text-xs text-gray-500">{{ $price->name_en }}</span>
+                                            @endif
                                         </div>
 
-                                        <div class="flex flex-col gap-1 text-xs text-gray-500">
-                                            @if ($price->col1)
-                                                <span>{{ $price->col1 }}</span>
+                                        <div class="flex flex-col gap-3 text-xs text-gray-500">
+                                            @if ($price->col1_ru || $price->col1_en)
+                                                <div class="flex flex-col">
+                                                    @if ($price->col1_ru)
+                                                        <span>{{ $price->col1_ru }}</span>
+                                                    @endif
+
+                                                    @if ($price->col1_en)
+                                                        <span class="text-[11px] text-gray-400">{{ $price->col1_en }}</span>
+                                                    @endif
+                                                </div>
                                             @endif
 
-                                            @if ($price->col2)
-                                                <span>{{ $price->col2 }}</span>
+                                            @if ($price->col2_ru || $price->col2_en)
+                                                <div class="flex flex-col">
+                                                    @if ($price->col2_ru)
+                                                        <span>{{ $price->col2_ru }}</span>
+                                                    @endif
+
+                                                    @if ($price->col2_en)
+                                                        <span class="text-[11px] text-gray-400">{{ $price->col2_en }}</span>
+                                                    @endif
+                                                </div>
                                             @endif
 
-                                            @if ($price->col3)
-                                                <span>{{ $price->col3 }}</span>
+                                            @if ($price->col3_ru || $price->col3_en)
+                                                <div class="flex flex-col">
+                                                    @if ($price->col3_ru)
+                                                        <span>{{ $price->col3_ru }}</span>
+                                                    @endif
+
+                                                    @if ($price->col3_en)
+                                                        <span class="text-[11px] text-gray-400">{{ $price->col3_en }}</span>
+                                                    @endif
+                                                </div>
                                             @endif
                                         </div>
                                     </div>

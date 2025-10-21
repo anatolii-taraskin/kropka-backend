@@ -41,57 +41,120 @@
             @method('put')
 
             <div class="first-element">
-                <x-input-label for="price_{{ $price->id }}_name" :value="__('admin.prices.fields.name')" />
-                <x-text-input
-                    id="price_{{ $price->id }}_name"
-                    name="name"
-                    type="text"
-                    class="mt-1 block w-full"
-                    value="{{ $useOldValues ? old('name') : $price->name }}"
-                    required
-                    maxlength="255"
-                />
-                <x-input-error class="mt-2" :messages="$updateErrors->get('name')" />
+                <div class="grid gap-6 md:grid-cols-2">
+                    <div>
+                        <x-input-label for="price_{{ $price->id }}_name_ru" :value="__('admin.prices.fields.name_ru')" />
+                        <x-text-input
+                            id="price_{{ $price->id }}_name_ru"
+                            name="name_ru"
+                            type="text"
+                            class="mt-1 block w-full"
+                            value="{{ $useOldValues ? old('name_ru') : $price->name_ru }}"
+                            required
+                            maxlength="255"
+                        />
+                        <x-input-error class="mt-2" :messages="$updateErrors->get('name_ru')" />
+                    </div>
+
+                    <div>
+                        <x-input-label for="price_{{ $price->id }}_name_en" :value="__('admin.prices.fields.name_en')" />
+                        <x-text-input
+                            id="price_{{ $price->id }}_name_en"
+                            name="name_en"
+                            type="text"
+                            class="mt-1 block w-full"
+                            value="{{ $useOldValues ? old('name_en') : $price->name_en }}"
+                            required
+                            maxlength="255"
+                        />
+                        <x-input-error class="mt-2" :messages="$updateErrors->get('name_en')" />
+                    </div>
+                </div>
             </div>
 
             <div class="space-y-6">
-                <div>
-                    <x-input-label for="price_{{ $price->id }}_col1" :value="__('admin.prices.fields.col1')" />
-                    <x-text-input
-                        id="price_{{ $price->id }}_col1"
-                        name="col1"
-                        type="text"
-                        class="mt-1 block w-full"
-                        value="{{ $useOldValues ? old('col1') : $price->col1 }}"
-                        maxlength="255"
-                    />
-                    <x-input-error class="mt-2" :messages="$updateErrors->get('col1')" />
+                <div class="grid gap-6 md:grid-cols-2">
+                    <div>
+                        <x-input-label for="price_{{ $price->id }}_col1_ru" :value="__('admin.prices.fields.col1_ru')" />
+                        <x-text-input
+                            id="price_{{ $price->id }}_col1_ru"
+                            name="col1_ru"
+                            type="text"
+                            class="mt-1 block w-full"
+                            value="{{ $useOldValues ? old('col1_ru') : $price->col1_ru }}"
+                            maxlength="255"
+                        />
+                        <x-input-error class="mt-2" :messages="$updateErrors->get('col1_ru')" />
+                    </div>
+
+                    <div>
+                        <x-input-label for="price_{{ $price->id }}_col1_en" :value="__('admin.prices.fields.col1_en')" />
+                        <x-text-input
+                            id="price_{{ $price->id }}_col1_en"
+                            name="col1_en"
+                            type="text"
+                            class="mt-1 block w-full"
+                            value="{{ $useOldValues ? old('col1_en') : $price->col1_en }}"
+                            maxlength="255"
+                        />
+                        <x-input-error class="mt-2" :messages="$updateErrors->get('col1_en')" />
+                    </div>
                 </div>
 
-                <div>
-                    <x-input-label for="price_{{ $price->id }}_col2" :value="__('admin.prices.fields.col2')" />
-                    <x-text-input
-                        id="price_{{ $price->id }}_col2"
-                        name="col2"
-                        type="text"
-                        class="mt-1 block w-full"
-                        value="{{ $useOldValues ? old('col2') : $price->col2 }}"
-                        maxlength="255"
-                    />
-                    <x-input-error class="mt-2" :messages="$updateErrors->get('col2')" />
+                <div class="grid gap-6 md:grid-cols-2">
+                    <div>
+                        <x-input-label for="price_{{ $price->id }}_col2_ru" :value="__('admin.prices.fields.col2_ru')" />
+                        <x-text-input
+                            id="price_{{ $price->id }}_col2_ru"
+                            name="col2_ru"
+                            type="text"
+                            class="mt-1 block w-full"
+                            value="{{ $useOldValues ? old('col2_ru') : $price->col2_ru }}"
+                            maxlength="255"
+                        />
+                        <x-input-error class="mt-2" :messages="$updateErrors->get('col2_ru')" />
+                    </div>
+
+                    <div>
+                        <x-input-label for="price_{{ $price->id }}_col2_en" :value="__('admin.prices.fields.col2_en')" />
+                        <x-text-input
+                            id="price_{{ $price->id }}_col2_en"
+                            name="col2_en"
+                            type="text"
+                            class="mt-1 block w-full"
+                            value="{{ $useOldValues ? old('col2_en') : $price->col2_en }}"
+                            maxlength="255"
+                        />
+                        <x-input-error class="mt-2" :messages="$updateErrors->get('col2_en')" />
+                    </div>
                 </div>
 
-                <div>
-                    <x-input-label for="price_{{ $price->id }}_col3" :value="__('admin.prices.fields.col3')" />
-                    <x-text-input
-                        id="price_{{ $price->id }}_col3"
-                        name="col3"
-                        type="text"
-                        class="mt-1 block w-full"
-                        value="{{ $useOldValues ? old('col3') : $price->col3 }}"
-                        maxlength="255"
-                    />
-                    <x-input-error class="mt-2" :messages="$updateErrors->get('col3')" />
+                <div class="grid gap-6 md:grid-cols-2">
+                    <div>
+                        <x-input-label for="price_{{ $price->id }}_col3_ru" :value="__('admin.prices.fields.col3_ru')" />
+                        <x-text-input
+                            id="price_{{ $price->id }}_col3_ru"
+                            name="col3_ru"
+                            type="text"
+                            class="mt-1 block w-full"
+                            value="{{ $useOldValues ? old('col3_ru') : $price->col3_ru }}"
+                            maxlength="255"
+                        />
+                        <x-input-error class="mt-2" :messages="$updateErrors->get('col3_ru')" />
+                    </div>
+
+                    <div>
+                        <x-input-label for="price_{{ $price->id }}_col3_en" :value="__('admin.prices.fields.col3_en')" />
+                        <x-text-input
+                            id="price_{{ $price->id }}_col3_en"
+                            name="col3_en"
+                            type="text"
+                            class="mt-1 block w-full"
+                            value="{{ $useOldValues ? old('col3_en') : $price->col3_en }}"
+                            maxlength="255"
+                        />
+                        <x-input-error class="mt-2" :messages="$updateErrors->get('col3_en')" />
+                    </div>
                 </div>
             </div>
 

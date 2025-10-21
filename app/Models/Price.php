@@ -15,10 +15,14 @@ class Price extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'col1',
-        'col2',
-        'col3',
+        'name_ru',
+        'name_en',
+        'col1_ru',
+        'col1_en',
+        'col2_ru',
+        'col2_en',
+        'col3_ru',
+        'col3_en',
         'is_active',
         'sort',
     ];
