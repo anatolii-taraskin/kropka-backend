@@ -139,9 +139,15 @@ return [
         'status' => [
             'inactive' => 'Неактивно',
         ],
+        'sections' => [
+            'ru' => 'Русский',
+            'en' => 'Английский',
+        ],
         'fields' => [
-            'name' => 'Название',
-            'description' => 'Описание',
+            'name_ru' => 'Название (RU)',
+            'name_en' => 'Название (EN)',
+            'description_ru' => 'Описание (RU)',
+            'description_en' => 'Описание (EN)',
             'photo' => 'Фотография',
             'is_active' => 'Оборудование активно',
         ],

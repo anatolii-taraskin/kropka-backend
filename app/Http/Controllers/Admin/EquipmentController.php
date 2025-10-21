@@ -149,8 +149,10 @@ class EquipmentController extends Controller
     private function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
+            'name_ru' => ['required', 'string', 'max:255'],
+            'name_en' => ['required', 'string', 'max:255'],
+            'description_ru' => ['nullable', 'string'],
+            'description_en' => ['nullable', 'string'],
             'photo' => ['nullable', 'image', 'max:5120'],
             'is_active' => ['sometimes', 'boolean'],
         ];
@@ -162,8 +164,10 @@ class EquipmentController extends Controller
     private function attributes(): array
     {
         return [
-            'name' => __('admin.equipment.fields.name'),
-            'description' => __('admin.equipment.fields.description'),
+            'name_ru' => __('admin.equipment.fields.name_ru'),
+            'name_en' => __('admin.equipment.fields.name_en'),
+            'description_ru' => __('admin.equipment.fields.description_ru'),
+            'description_en' => __('admin.equipment.fields.description_en'),
             'photo' => __('admin.equipment.fields.photo'),
             'is_active' => __('admin.equipment.fields.is_active'),
         ];
@@ -175,8 +179,10 @@ class EquipmentController extends Controller
     private function prepareData(array $input): array
     {
         return [
-            'name' => $this->sanitizeString($input['name'] ?? ''),
-            'description' => $this->sanitizeNullableString($input['description'] ?? null),
+            'name_ru' => $this->sanitizeString($input['name_ru'] ?? ''),
+            'name_en' => $this->sanitizeString($input['name_en'] ?? ''),
+            'description_ru' => $this->sanitizeNullableString($input['description_ru'] ?? null),
+            'description_en' => $this->sanitizeNullableString($input['description_en'] ?? null),
             'is_active' => $this->sanitizeBoolean($input['is_active'] ?? null),
         ];
     }

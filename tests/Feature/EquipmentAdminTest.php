@@ -23,8 +23,10 @@ class EquipmentAdminTest extends TestCase
         $response = $this->actingAs($admin)
             ->from('/admin/equipment')
             ->post('/admin/equipment', [
-                'name' => 'New Equipment',
-                'description' => 'Description',
+                'name_ru' => 'Новое оборудование',
+                'name_en' => 'New Equipment',
+                'description_ru' => 'Описание',
+                'description_en' => 'Description',
                 'is_active' => '1',
                 'photo' => UploadedFile::fake()->image('photo.jpg'),
             ]);
@@ -33,8 +35,10 @@ class EquipmentAdminTest extends TestCase
         $response->assertSessionHas('status', 'equipment-created');
 
         $this->assertDatabaseHas('equipment', [
-            'name' => 'New Equipment',
-            'description' => 'Description',
+            'name_ru' => 'Новое оборудование',
+            'name_en' => 'New Equipment',
+            'description_ru' => 'Описание',
+            'description_en' => 'Description',
             'is_active' => true,
             'sort' => 1,
         ]);
@@ -45,24 +49,30 @@ class EquipmentAdminTest extends TestCase
         $admin = $this->createAdminUser();
 
         $first = Equipment::create([
-            'name' => 'First',
-            'description' => null,
+            'name_ru' => 'Первое',
+            'name_en' => 'First',
+            'description_ru' => null,
+            'description_en' => null,
             'photo_path' => null,
             'is_active' => true,
             'sort' => 1,
         ]);
 
         $second = Equipment::create([
-            'name' => 'Second',
-            'description' => null,
+            'name_ru' => 'Второе',
+            'name_en' => 'Second',
+            'description_ru' => null,
+            'description_en' => null,
             'photo_path' => null,
             'is_active' => true,
             'sort' => 2,
         ]);
 
         $third = Equipment::create([
-            'name' => 'Third',
-            'description' => null,
+            'name_ru' => 'Третье',
+            'name_en' => 'Third',
+            'description_ru' => null,
+            'description_en' => null,
             'photo_path' => null,
             'is_active' => true,
             'sort' => 3,
