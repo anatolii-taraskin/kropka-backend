@@ -40,7 +40,7 @@
             @csrf
             @method('put')
 
-            <div>
+            <div class="first-element">
                 <x-input-label for="price_{{ $price->id }}_name" :value="__('admin.prices.fields.name')" />
                 <x-text-input
                     id="price_{{ $price->id }}_name"
