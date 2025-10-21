@@ -29,38 +29,28 @@
         >
             @csrf
 
-            <div class="grid gap-6 md:grid-cols-2">
-                <div>
-                    <x-input-label for="price_name_ru" :value="__('admin.prices.fields.name_ru')" />
-                    <x-text-input
-                        id="price_name_ru"
-                        name="name_ru"
-                        type="text"
-                        class="mt-1 block w-full"
-                        value="{{ $createErrors->isEmpty() ? '' : old('name_ru') }}"
-                        required
-                        maxlength="255"
-                    />
-                    <x-input-error class="mt-2" :messages="$createErrors->get('name_ru')" />
-                </div>
-
-                <div>
-                    <x-input-label for="price_name_en" :value="__('admin.prices.fields.name_en')" />
-                    <x-text-input
-                        id="price_name_en"
-                        name="name_en"
-                        type="text"
-                        class="mt-1 block w-full"
-                        value="{{ $createErrors->isEmpty() ? '' : old('name_en') }}"
-                        required
-                        maxlength="255"
-                    />
-                    <x-input-error class="mt-2" :messages="$createErrors->get('name_en')" />
-                </div>
-            </div>
-
             <div class="space-y-6">
-                <div class="grid gap-6 md:grid-cols-2">
+                <section class="first-element rounded-xl border border-gray-200 bg-white/40 p-6 shadow-sm space-y-6">
+                    <header class="mb-2">
+                        <h3 class="text-base font-semibold text-gray-900">
+                            {{ __('admin.prices.sections.ru') }}
+                        </h3>
+                    </header>
+
+                    <div>
+                        <x-input-label for="price_name_ru" :value="__('admin.prices.fields.name_ru')" />
+                        <x-text-input
+                            id="price_name_ru"
+                            name="name_ru"
+                            type="text"
+                            class="mt-1 block w-full"
+                            value="{{ $createErrors->isEmpty() ? '' : old('name_ru') }}"
+                            required
+                            maxlength="255"
+                        />
+                        <x-input-error class="mt-2" :messages="$createErrors->get('name_ru')" />
+                    </div>
+
                     <div>
                         <x-input-label for="price_col1_ru" :value="__('admin.prices.fields.col1_ru')" />
                         <x-text-input
@@ -75,21 +65,6 @@
                     </div>
 
                     <div>
-                        <x-input-label for="price_col1_en" :value="__('admin.prices.fields.col1_en')" />
-                        <x-text-input
-                            id="price_col1_en"
-                            name="col1_en"
-                            type="text"
-                            class="mt-1 block w-full"
-                            value="{{ $createErrors->isEmpty() ? '' : old('col1_en') }}"
-                            maxlength="255"
-                        />
-                        <x-input-error class="mt-2" :messages="$createErrors->get('col1_en')" />
-                    </div>
-                </div>
-
-                <div class="grid gap-6 md:grid-cols-2">
-                    <div>
                         <x-input-label for="price_col2_ru" :value="__('admin.prices.fields.col2_ru')" />
                         <x-text-input
                             id="price_col2_ru"
@@ -100,6 +75,54 @@
                             maxlength="255"
                         />
                         <x-input-error class="mt-2" :messages="$createErrors->get('col2_ru')" />
+                    </div>
+
+                    <div>
+                        <x-input-label for="price_col3_ru" :value="__('admin.prices.fields.col3_ru')" />
+                        <x-text-input
+                            id="price_col3_ru"
+                            name="col3_ru"
+                            type="text"
+                            class="mt-1 block w-full"
+                            value="{{ $createErrors->isEmpty() ? '' : old('col3_ru') }}"
+                            maxlength="255"
+                        />
+                        <x-input-error class="mt-2" :messages="$createErrors->get('col3_ru')" />
+                    </div>
+                </section>
+
+                <section class="rounded-xl border border-gray-200 bg-white/40 p-6 shadow-sm space-y-6">
+                    <header class="mb-2">
+                        <h3 class="text-base font-semibold text-gray-900">
+                            {{ __('admin.prices.sections.en') }}
+                        </h3>
+                    </header>
+
+                    <div>
+                        <x-input-label for="price_name_en" :value="__('admin.prices.fields.name_en')" />
+                        <x-text-input
+                            id="price_name_en"
+                            name="name_en"
+                            type="text"
+                            class="mt-1 block w-full"
+                            value="{{ $createErrors->isEmpty() ? '' : old('name_en') }}"
+                            required
+                            maxlength="255"
+                        />
+                        <x-input-error class="mt-2" :messages="$createErrors->get('name_en')" />
+                    </div>
+
+                    <div>
+                        <x-input-label for="price_col1_en" :value="__('admin.prices.fields.col1_en')" />
+                        <x-text-input
+                            id="price_col1_en"
+                            name="col1_en"
+                            type="text"
+                            class="mt-1 block w-full"
+                            value="{{ $createErrors->isEmpty() ? '' : old('col1_en') }}"
+                            maxlength="255"
+                        />
+                        <x-input-error class="mt-2" :messages="$createErrors->get('col1_en')" />
                     </div>
 
                     <div>
@@ -114,21 +137,6 @@
                         />
                         <x-input-error class="mt-2" :messages="$createErrors->get('col2_en')" />
                     </div>
-                </div>
-
-                <div class="grid gap-6 md:grid-cols-2">
-                    <div>
-                        <x-input-label for="price_col3_ru" :value="__('admin.prices.fields.col3_ru')" />
-                        <x-text-input
-                            id="price_col3_ru"
-                            name="col3_ru"
-                            type="text"
-                            class="mt-1 block w-full"
-                            value="{{ $createErrors->isEmpty() ? '' : old('col3_ru') }}"
-                            maxlength="255"
-                        />
-                        <x-input-error class="mt-2" :messages="$createErrors->get('col3_ru')" />
-                    </div>
 
                     <div>
                         <x-input-label for="price_col3_en" :value="__('admin.prices.fields.col3_en')" />
@@ -142,7 +150,7 @@
                         />
                         <x-input-error class="mt-2" :messages="$createErrors->get('col3_en')" />
                     </div>
-                </div>
+                </section>
             </div>
 
             <div class="flex items-center gap-2 pb-3">
