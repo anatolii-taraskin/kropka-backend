@@ -113,6 +113,10 @@ return [
             'col3_en' => 'Price 3',
             'is_active' => 'Prices are active',
         ],
+        'sections' => [
+            'ru' => 'Russian version',
+            'en' => 'English version',
+        ],
     ],
     'equipment' => [
         'title' => 'Equipment',
