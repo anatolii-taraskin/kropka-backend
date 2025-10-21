@@ -13,9 +13,13 @@ return new class extends Migration
     {
         Schema::create('equipment', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->text('description')->nullable();
+            $table->string('name_ru');
+            $table->string('name_en');
+            $table->text('description_ru')->nullable();
+            $table->text('description_en')->nullable();
             $table->string('photo_path')->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->unsignedInteger('sort')->default(0);
             $table->timestamps();
         });
     }
