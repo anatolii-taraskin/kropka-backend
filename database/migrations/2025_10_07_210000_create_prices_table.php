@@ -13,10 +13,14 @@ return new class extends Migration
     {
         Schema::create('prices', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('col1')->nullable();
-            $table->string('col2')->nullable();
-            $table->string('col3')->nullable();
+            $table->string('name_ru');
+            $table->string('name_en');
+            $table->string('col1_ru')->nullable();
+            $table->string('col1_en')->nullable();
+            $table->string('col2_ru')->nullable();
+            $table->string('col2_en')->nullable();
+            $table->string('col3_ru')->nullable();
+            $table->string('col3_en')->nullable();
             $table->boolean('is_active')->default(true);
             $table->unsignedTinyInteger('sort');
             $table->timestamps();
