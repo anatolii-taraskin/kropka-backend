@@ -15,7 +15,7 @@
                     $inputValue = old('studio_infos.' . $field['property'], $field['value']);
                 @endphp
 
-                <div>
+                <div @class(['first-element' => $loop->first])>
                     <x-input-label
                         :for="'studio_infos_' . $field['property']"
                         :value="$field['label']"

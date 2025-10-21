@@ -40,7 +40,7 @@
             @csrf
             @method('put')
 
-            <div>
+            <div class="first-element">
                 <x-input-label for="studio_rule_{{ $studioRule->id }}_value" :value="__('admin.studio_rules.fields.value')" />
 
                 <textarea
