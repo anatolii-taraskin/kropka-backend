@@ -17,7 +17,12 @@ class StudioInfoAdminTest extends TestCase
         $admin = $this->createAdminUser();
 
         StudioInfo::create([
-            'property' => 'name',
+            'property' => 'name_ru',
+            'value' => 'Моя тестовая студия',
+        ]);
+
+        StudioInfo::create([
+            'property' => 'name_en',
             'value' => 'My Test Studio',
         ]);
 
@@ -26,6 +31,7 @@ class StudioInfoAdminTest extends TestCase
         $response
             ->assertOk()
             ->assertSee(__('admin.studio_infos.title'))
+            ->assertSee('value="Моя тестовая студия"', false)
             ->assertSee('value="My Test Studio"', false);
     }
 
@@ -35,9 +41,11 @@ class StudioInfoAdminTest extends TestCase
 
         $payload = [
             'studio_infos' => [
-                'name' => 'Updated Studio',
+                'name_ru' => 'Обновленная студия',
+                'name_en' => 'Updated Studio',
                 'phone' => '+1234567890',
-                'address' => '123 Main Street',
+                'address_ru' => '123 Главная улица',
+                'address_en' => '123 Main Street',
                 'email' => 'studio@example.com',
                 'instagram_url' => 'https://instagram.com/example',
                 'facebook_url' => 'https://facebook.com/example',
@@ -74,9 +82,11 @@ class StudioInfoAdminTest extends TestCase
 
         $payload = [
             'studio_infos' => [
-                'name' => 'Studio',
+                'name_ru' => 'Студия',
+                'name_en' => 'Studio',
                 'phone' => '+1234567890',
-                'address' => '123 Main Street',
+                'address_ru' => '123 Главная улица',
+                'address_en' => '123 Main Street',
                 'email' => 'studio@example.com',
                 'instagram_url' => 'not-a-url',
                 'facebook_url' => '',

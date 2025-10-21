@@ -10,38 +10,58 @@
             @csrf
             @method('put')
 
-            @foreach ($fields as $field)
-                @php
-                    $inputValue = old('studio_infos.' . $field['property'], $field['value']);
-                @endphp
+            @php
+                $isFirstField = true;
+            @endphp
 
-                <div @class(['first-element' => $loop->first])>
-                    <x-input-label
-                        :for="'studio_infos_' . $field['property']"
-                        :value="$field['label']"
-                    />
+            @foreach ($fieldGroups as $section => $fields)
+                <section class="rounded-xl border border-gray-200 bg-white/40 p-6 shadow-sm">
+                    <header class="mb-4">
+                        <h2 class="text-lg font-semibold text-gray-900">
+                            {{ __('admin.studio_infos.sections.' . $section) }}
+                        </h2>
+                    </header>
 
-                    @if ($field['type'] === 'textarea')
-                        <textarea
-                            id="studio_infos_{{ $field['property'] }}"
-                            name="studio_infos[{{ $field['property'] }}]"
-                            rows="4"
-                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
-                            @if ($field['required']) required @endif
-                        >{{ $inputValue }}</textarea>
-                    @else
-                        <input
-                            id="studio_infos_{{ $field['property'] }}"
-                            name="studio_infos[{{ $field['property'] }}]"
-                            type="{{ $field['type'] }}"
-                            class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
-                            value="{{ $inputValue }}"
-                            @if ($field['required']) required @endif
-                        />
-                    @endif
+                    <div class="space-y-6">
+                        @foreach ($fields as $field)
+                            @php
+                                $inputValue = old('studio_infos.' . $field['property'], $field['value']);
+                            @endphp
 
-                    <x-input-error class="mt-2" :messages="$errors->get('studio_infos.' . $field['property'])" />
-                </div>
+                            <div @class(['first-element' => $isFirstField])>
+                                <x-input-label
+                                    :for="'studio_infos_' . $field['property']"
+                                    :value="$field['label']"
+                                />
+
+                                @if ($field['type'] === 'textarea')
+                                    <textarea
+                                        id="studio_infos_{{ $field['property'] }}"
+                                        name="studio_infos[{{ $field['property'] }}]"
+                                        rows="4"
+                                        class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
+                                        @if ($field['required']) required @endif
+                                    >{{ $inputValue }}</textarea>
+                                @else
+                                    <input
+                                        id="studio_infos_{{ $field['property'] }}"
+                                        name="studio_infos[{{ $field['property'] }}]"
+                                        type="{{ $field['type'] }}"
+                                        class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
+                                        value="{{ $inputValue }}"
+                                        @if ($field['required']) required @endif
+                                    />
+                                @endif
+
+                                <x-input-error class="mt-2" :messages="$errors->get('studio_infos.' . $field['property'])" />
+                            </div>
+
+                            @php
+                                $isFirstField = false;
+                            @endphp
+                        @endforeach
+                    </div>
+                </section>
             @endforeach
 
             <div class="flex items-center gap-4">

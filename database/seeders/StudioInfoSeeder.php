@@ -12,10 +12,19 @@ class StudioInfoSeeder extends Seeder
      */
     public function run(): void
     {
-        $entries = [
-            'name' => 'Репетиционная студия в Батуми',
+        $localizedEntries = [
+            'name' => [
+                'ru' => 'Репетиционная студия в Батуми',
+                'en' => 'Rehearsal studio in Batumi',
+            ],
+            'address' => [
+                'ru' => 'ул. Агмашенебели, 13т, Батуми, Грузия',
+                'en' => '13t Agmashenebeli St., Batumi, Georgia',
+            ],
+        ];
+
+        $sharedEntries = [
             'phone' => '+995 596 173 001',
-            'address' => '13t Agmashenebeli st., Batumi, Georgia',
             'email' => 'kropka.batumi@gmail.com',
             'instagram_url' => 'https://www.instagram.com/kropka_batumi/',
             'facebook_url' => 'https://www.facebook.com/Kropka.Batumi',
@@ -23,11 +32,22 @@ class StudioInfoSeeder extends Seeder
             'telegram_admin_url' => 'https://t.me/kropka_batumi_admin',
         ];
 
-        foreach ($entries as $property => $value) {
-            StudioInfo::query()->updateOrCreate(
-                ['property' => $property],
-                ['value' => $value]
-            );
+        foreach ($localizedEntries as $property => $translations) {
+            foreach ($translations as $locale => $value) {
+                $this->storeValue("{$property}_{$locale}", $value);
+            }
         }
+
+        foreach ($sharedEntries as $property => $value) {
+            $this->storeValue($property, $value);
+        }
+    }
+
+    private function storeValue(string $property, string $value): void
+    {
+        StudioInfo::query()->updateOrCreate(
+            ['property' => $property],
+            ['value' => $value]
+        );
     }
 }

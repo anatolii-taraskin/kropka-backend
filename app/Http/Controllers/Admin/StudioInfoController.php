@@ -16,20 +16,24 @@ class StudioInfoController extends Controller
     {
         $storedValues = StudioInfo::query()->pluck('value', 'property')->all();
 
-        $fields = [];
+        $fieldGroups = [];
 
-        foreach ($this->fields() as $property => $config) {
-            $fields[] = [
-                'property' => $property,
-                'label' => $config['label'],
-                'type' => $config['type'],
-                'required' => $config['required'],
-                'value' => $storedValues[$property] ?? '',
-            ];
+        foreach ($this->fields() as $section => $fields) {
+            $fieldGroups[$section] = [];
+
+            foreach ($fields as $property => $config) {
+                $fieldGroups[$section][] = [
+                    'property' => $property,
+                    'label' => $config['label'],
+                    'type' => $config['type'],
+                    'required' => $config['required'],
+                    'value' => $storedValues[$property] ?? '',
+                ];
+            }
         }
 
         return view('admin.studio-infos.edit', [
-            'fields' => $fields,
+            'fieldGroups' => $fieldGroups,
         ]);
     }
 
@@ -38,7 +42,7 @@ class StudioInfoController extends Controller
      */
     public function update(Request $request)
     {
-        $fields = $this->fields();
+        $fields = $this->flattenedFields();
 
         $input = $request->all();
 
@@ -86,54 +90,103 @@ class StudioInfoController extends Controller
      */
     private function fields(): array
     {
+        $definitions = [
+            'shared' => [],
+        ];
+
+        foreach ($this->sharedFields() as $property => $config) {
+            $definitions['shared'][$property] = [
+                'label' => __('admin.studio_infos.fields.' . $property),
+                'rules' => $config['rules'],
+                'type' => $config['type'],
+                'required' => $config['required'],
+            ];
+        }
+
+        foreach ($this->locales() as $locale) {
+            $definitions[$locale] = [];
+
+            foreach ($this->localizedFields() as $key => $config) {
+                $property = sprintf('%s_%s', $key, $locale);
+
+                $definitions[$locale][$property] = [
+                    'label' => __('admin.studio_infos.fields.' . $property),
+                    'rules' => $config['rules'],
+                    'type' => $config['type'],
+                    'required' => $config['required'],
+                ];
+            }
+        }
+
+        return $definitions;
+    }
+
+    private function flattenedFields(): array
+    {
+        $flattened = [];
+
+        foreach ($this->fields() as $fields) {
+            foreach ($fields as $property => $config) {
+                $flattened[$property] = $config;
+            }
+        }
+
+        return $flattened;
+    }
+
+    private function locales(): array
+    {
+        return ['ru', 'en'];
+    }
+
+    private function sharedFields(): array
+    {
         return [
-            'name' => [
-                'label' => __('admin.studio_infos.fields.name'),
-                'rules' => ['required', 'string', 'max:255'],
-                'type' => 'text',
-                'required' => true,
-            ],
             'phone' => [
-                'label' => __('admin.studio_infos.fields.phone'),
                 'rules' => ['required', 'string', 'max:255'],
                 'type' => 'text',
-                'required' => true,
-            ],
-            'address' => [
-                'label' => __('admin.studio_infos.fields.address'),
-                'rules' => ['required', 'string', 'max:1000'],
-                'type' => 'textarea',
                 'required' => true,
             ],
             'email' => [
-                'label' => __('admin.studio_infos.fields.email'),
                 'rules' => ['required', 'email', 'max:255'],
                 'type' => 'email',
                 'required' => true,
             ],
             'instagram_url' => [
-                'label' => __('admin.studio_infos.fields.instagram_url'),
                 'rules' => ['nullable', 'url', 'max:255'],
                 'type' => 'url',
                 'required' => false,
             ],
             'facebook_url' => [
-                'label' => __('admin.studio_infos.fields.facebook_url'),
                 'rules' => ['nullable', 'url', 'max:255'],
                 'type' => 'url',
                 'required' => false,
             ],
             'telegram_channel_url' => [
-                'label' => __('admin.studio_infos.fields.telegram_channel_url'),
                 'rules' => ['nullable', 'url', 'max:255'],
                 'type' => 'url',
                 'required' => false,
             ],
             'telegram_admin_url' => [
-                'label' => __('admin.studio_infos.fields.telegram_admin_url'),
                 'rules' => ['nullable', 'url', 'max:255'],
                 'type' => 'url',
                 'required' => false,
+            ],
+        ];
+    }
+
+    private function localizedFields(): array
+    {
+        return [
+            'name' => [
+                'rules' => ['required', 'string', 'max:255'],
+                'type' => 'text',
+                'required' => true,
+            ],
+            'address' => [
+                'rules' => ['required', 'string', 'max:1000'],
+                'type' => 'textarea',
+                'required' => true,
             ],
         ];
     }

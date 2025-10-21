@@ -9,14 +9,21 @@ return [
         'submit' => 'Save',
         'success' => 'Studio information has been updated.',
         'fields' => [
-            'name' => 'Studio name',
             'phone' => 'Phone number',
-            'address' => 'Address',
             'email' => 'Email address',
             'instagram_url' => 'Instagram URL',
             'facebook_url' => 'Facebook URL',
             'telegram_channel_url' => 'Telegram channel URL',
             'telegram_admin_url' => 'Telegram admin URL',
+            'name_ru' => 'Studio name',
+            'name_en' => 'Studio name',
+            'address_ru' => 'Address',
+            'address_en' => 'Address',
+        ],
+        'sections' => [
+            'shared' => 'General information',
+            'ru' => 'Russian language content',
+            'en' => 'English language content',
         ],
     ],
     'studio_rules' => [
