@@ -40,19 +40,52 @@
             @csrf
             @method('put')
 
-            <div class="first-element">
-                <x-input-label for="studio_rule_{{ $studioRule->id }}_value" :value="__('admin.studio_rules.fields.value')" />
+            <div class="space-y-6">
+                <section class="first-element rounded-xl border border-gray-200 bg-white/40 p-6 shadow-sm space-y-6">
+                    <header class="mb-2">
+                        <h3 class="text-base font-semibold text-gray-900">
+                            {{ __('admin.studio_rules.sections.ru') }}
+                        </h3>
+                    </header>
 
-                <textarea
-                    id="studio_rule_{{ $studioRule->id }}_value"
-                    name="value"
-                    rows="5"
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                    required
-                    maxlength="2000"
-                >{{ $useOldValues ? old('value') : $studioRule->value }}</textarea>
+                    <div>
+                        <x-input-label for="studio_rule_{{ $studioRule->id }}_value_ru" :value="__('admin.studio_rules.fields.value_ru')" />
 
-                <x-input-error class="mt-2" :messages="$updateErrors->get('value')" />
+                        <textarea
+                            id="studio_rule_{{ $studioRule->id }}_value_ru"
+                            name="value_ru"
+                            rows="5"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                            required
+                            maxlength="2000"
+                        >{{ $useOldValues ? old('value_ru') : $studioRule->value_ru }}</textarea>
+
+                        <x-input-error class="mt-2" :messages="$updateErrors->get('value_ru')" />
+                    </div>
+                </section>
+
+                <section class="rounded-xl border border-gray-200 bg-white/40 p-6 shadow-sm space-y-6">
+                    <header class="mb-2">
+                        <h3 class="text-base font-semibold text-gray-900">
+                            {{ __('admin.studio_rules.sections.en') }}
+                        </h3>
+                    </header>
+
+                    <div>
+                        <x-input-label for="studio_rule_{{ $studioRule->id }}_value_en" :value="__('admin.studio_rules.fields.value_en')" />
+
+                        <textarea
+                            id="studio_rule_{{ $studioRule->id }}_value_en"
+                            name="value_en"
+                            rows="5"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                            required
+                            maxlength="2000"
+                        >{{ $useOldValues ? old('value_en') : $studioRule->value_en }}</textarea>
+
+                        <x-input-error class="mt-2" :messages="$updateErrors->get('value_en')" />
+                    </div>
+                </section>
             </div>
 
             <div class="flex items-center gap-2 pb-3">

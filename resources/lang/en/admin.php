@@ -57,8 +57,13 @@ return [
             'inactive' => 'Inactive',
         ],
         'fields' => [
-            'value' => 'Rule text',
+            'value_ru' => 'Rule text (RU)',
+            'value_en' => 'Rule text (EN)',
             'is_active' => 'Rule is active',
+        ],
+        'sections' => [
+            'ru' => 'Russian version',
+            'en' => 'English version',
         ],
         'updated_at' => 'Updated :date',
         'date_format' => 'm/d/Y H:i',

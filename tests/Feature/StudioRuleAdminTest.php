@@ -18,17 +18,35 @@ class StudioRuleAdminTest extends TestCase
 
         StudioRule::create([
             'property' => 'rule_01',
-            'value' => 'Existing rule text',
+            'value_ru' => 'Existing rule text RU',
+            'value_en' => 'Existing rule text EN',
             'is_active' => true,
             'sort' => 1,
         ]);
+
+        app()->setLocale('ru');
+        session()->put('preferred_locale.admin', 'ru');
 
         $response = $this->actingAs($admin)->get('/admin/studio-rules');
 
         $response
             ->assertOk()
             ->assertSee(__('admin.studio_rules.title'))
-            ->assertSee('Existing rule text');
+            ->assertSee('Existing rule text RU')
+            ->assertDontSee('Existing rule text EN');
+
+        app()->setLocale('en');
+        session()->put('preferred_locale.admin', 'en');
+
+        $response = $this->actingAs($admin)->get('/admin/studio-rules');
+
+        $response
+            ->assertOk()
+            ->assertSee('Existing rule text EN')
+            ->assertDontSee('Existing rule text RU');
+
+        session()->put('preferred_locale.admin', 'ru');
+        app()->setLocale('ru');
     }
 
     public function test_admin_can_create_studio_rule(): void
@@ -38,7 +56,8 @@ class StudioRuleAdminTest extends TestCase
         $response = $this->actingAs($admin)
             ->from('/admin/studio-rules')
             ->post('/admin/studio-rules', [
-                'value' => 'New rule text',
+                'value_ru' => 'New rule text RU',
+                'value_en' => 'New rule text EN',
                 'is_active' => '1',
             ]);
 
@@ -46,7 +65,8 @@ class StudioRuleAdminTest extends TestCase
         $response->assertSessionHas('status', 'studio-rule-created');
 
         $this->assertDatabaseHas('studio_rules', [
-            'value' => 'New rule text',
+            'value_ru' => 'New rule text RU',
+            'value_en' => 'New rule text EN',
             'is_active' => true,
             'sort' => 1,
         ]);
@@ -58,7 +78,8 @@ class StudioRuleAdminTest extends TestCase
 
         $rule = StudioRule::create([
             'property' => 'rule_01',
-            'value' => 'Original text',
+            'value_ru' => 'Original text RU',
+            'value_en' => 'Original text EN',
             'is_active' => true,
             'sort' => 1,
         ]);
@@ -66,7 +87,8 @@ class StudioRuleAdminTest extends TestCase
         $response = $this->actingAs($admin)
             ->from("/admin/studio-rules/{$rule->id}/edit")
             ->put("/admin/studio-rules/{$rule->id}", [
-                'value' => 'Updated text',
+                'value_ru' => 'Updated text RU',
+                'value_en' => 'Updated text EN',
                 'is_active' => '0',
             ]);
 
@@ -75,7 +97,8 @@ class StudioRuleAdminTest extends TestCase
 
         $this->assertDatabaseHas('studio_rules', [
             'id' => $rule->id,
-            'value' => 'Updated text',
+            'value_ru' => 'Updated text RU',
+            'value_en' => 'Updated text EN',
             'is_active' => false,
         ]);
     }
@@ -86,7 +109,8 @@ class StudioRuleAdminTest extends TestCase
 
         $rule = StudioRule::create([
             'property' => 'rule_01',
-            'value' => 'Rule to delete',
+            'value_ru' => 'Rule to delete RU',
+            'value_en' => 'Rule to delete EN',
             'is_active' => true,
             'sort' => 1,
         ]);
@@ -109,21 +133,24 @@ class StudioRuleAdminTest extends TestCase
 
         $first = StudioRule::create([
             'property' => 'rule_01',
-            'value' => 'First',
+            'value_ru' => 'First RU',
+            'value_en' => 'First EN',
             'is_active' => true,
             'sort' => 1,
         ]);
 
         $second = StudioRule::create([
             'property' => 'rule_02',
-            'value' => 'Second',
+            'value_ru' => 'Second RU',
+            'value_en' => 'Second EN',
             'is_active' => true,
             'sort' => 2,
         ]);
 
         $third = StudioRule::create([
             'property' => 'rule_03',
-            'value' => 'Third',
+            'value_ru' => 'Third RU',
+            'value_en' => 'Third EN',
             'is_active' => true,
             'sort' => 3,
         ]);
