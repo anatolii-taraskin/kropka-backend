@@ -35,7 +35,39 @@ class PriceAdminTest extends TestCase
             ->assertOk()
             ->assertSee(__('admin.prices.title'))
             ->assertSee('Существующий блок')
-            ->assertSee('Existing Tile');
+            ->assertSee('Строка 1')
+            ->assertDontSee('Existing Tile')
+            ->assertDontSee('Line 1');
+    }
+
+    public function test_admin_can_view_prices_page_in_english_locale(): void
+    {
+        $admin = $this->createAdminUser();
+
+        Price::create([
+            'name_ru' => 'Существующий блок',
+            'name_en' => 'Existing Tile',
+            'col1_ru' => 'Строка 1',
+            'col1_en' => 'Line 1',
+            'col2_ru' => 'Строка 2',
+            'col2_en' => 'Line 2',
+            'col3_ru' => 'Строка 3',
+            'col3_en' => 'Line 3',
+            'is_active' => true,
+            'sort' => 1,
+        ]);
+
+        app()->setLocale('en');
+
+        $response = $this->actingAs($admin)->get('/admin/prices');
+
+        $response
+            ->assertOk()
+            ->assertSee(__('admin.prices.title'))
+            ->assertSee('Existing Tile')
+            ->assertSee('Line 1')
+            ->assertDontSee('Существующий блок')
+            ->assertDontSee('Строка 1');
     }
 
     public function test_admin_can_create_price_tile(): void

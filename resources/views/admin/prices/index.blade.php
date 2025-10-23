@@ -41,6 +41,9 @@
                             data-sortable-list
                             data-sortable-endpoint="{{ route('admin.prices.reorder') }}"
                         >
+                        @php
+                            $locale = app()->getLocale();
+                        @endphp
                         @foreach ($prices as $price)
                             <tr class="border-b" data-sortable-id="{{ $price->id }}">
                                 <td class="px-2 py-4 align-top text-gray-400" style="width: 28px">
@@ -60,7 +63,7 @@
                                         <div class="flex flex-col gap-1">
                                             <div class="flex items-center gap-2">
                                                 <span class="text-sm font-medium text-gray-900">
-                                                    {{ $price->name_ru }}
+                                                    {{ $price->localizedName($locale) }}
                                                 </span>
 
                                                 @unless ($price->is_active)
@@ -69,48 +72,20 @@
                                                     </span>
                                                 @endunless
                                             </div>
-
-                                            @if ($price->name_en)
-                                                <span class="text-xs text-gray-500">{{ $price->name_en }}</span>
-                                            @endif
                                         </div>
 
                                         <div class="flex flex-col gap-3 text-xs text-gray-500">
-                                            @if ($price->col1_ru || $price->col1_en)
-                                                <div class="flex flex-col">
-                                                    @if ($price->col1_ru)
-                                                        <span>{{ $price->col1_ru }}</span>
-                                                    @endif
+                                            @for ($i = 1; $i <= 3; $i++)
+                                                @php
+                                                    $value = $price->localizedColumn($i, $locale);
+                                                @endphp
 
-                                                    @if ($price->col1_en)
-                                                        <span class="text-[11px] text-gray-400">{{ $price->col1_en }}</span>
-                                                    @endif
-                                                </div>
-                                            @endif
-
-                                            @if ($price->col2_ru || $price->col2_en)
-                                                <div class="flex flex-col">
-                                                    @if ($price->col2_ru)
-                                                        <span>{{ $price->col2_ru }}</span>
-                                                    @endif
-
-                                                    @if ($price->col2_en)
-                                                        <span class="text-[11px] text-gray-400">{{ $price->col2_en }}</span>
-                                                    @endif
-                                                </div>
-                                            @endif
-
-                                            @if ($price->col3_ru || $price->col3_en)
-                                                <div class="flex flex-col">
-                                                    @if ($price->col3_ru)
-                                                        <span>{{ $price->col3_ru }}</span>
-                                                    @endif
-
-                                                    @if ($price->col3_en)
-                                                        <span class="text-[11px] text-gray-400">{{ $price->col3_en }}</span>
-                                                    @endif
-                                                </div>
-                                            @endif
+                                                @if ($value)
+                                                    <div class="flex flex-col">
+                                                        <span>{{ $value }}</span>
+                                                    </div>
+                                                @endif
+                                            @endfor
                                         </div>
                                     </div>
                                 </td>
