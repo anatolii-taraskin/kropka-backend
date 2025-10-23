@@ -14,7 +14,10 @@ return new class extends Migration
         Schema::create('studio_rules', function (Blueprint $table) {
             $table->id();
             $table->string('property')->unique();
-            $table->text('value')->nullable();
+            $table->text('value_ru')->nullable();
+            $table->text('value_en')->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->unsignedTinyInteger('sort')->default(0);
             $table->timestamps();
         });
     }
