@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
             StudioInfoSeeder::class,
             StudioRuleSeeder::class,
             PriceSeeder::class,
+            TeacherSeeder::class,
         ]);
     }
 }
