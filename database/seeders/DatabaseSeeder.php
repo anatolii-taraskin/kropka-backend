@@ -34,6 +34,7 @@ class DatabaseSeeder extends Seeder
             StudioRuleSeeder::class,
             PriceSeeder::class,
             TeacherSeeder::class,
+            EquipmentSeeder::class,
         ]);
     }
 }
