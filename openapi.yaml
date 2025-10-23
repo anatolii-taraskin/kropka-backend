@@ -1,0 +1,262 @@
+openapi: 3.1.0
+info:
+  title: Kropka Public API
+  version: 1.0.0
+  description: |
+    REST API that exposes public studio data (general information, prices, equipment,
+    teachers, and studio rules). Responses can be localized by passing the optional
+    `lang` query parameter with the values `ru` or `en`.
+servers:
+  - url: https://api.kropka.example
+paths:
+  /api/v1/studio:
+    get:
+      summary: Get localized studio information
+      parameters:
+        - $ref: '#/components/parameters/LangParam'
+      responses:
+        '200':
+          description: Studio information successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudioInfoResponse'
+  /api/v1/prices:
+    get:
+      summary: List active price plans
+      parameters:
+        - $ref: '#/components/parameters/LangParam'
+      responses:
+        '200':
+          description: List of active price plans
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PriceListResponse'
+  /api/v1/equipment:
+    get:
+      summary: List active equipment
+      parameters:
+        - $ref: '#/components/parameters/LangParam'
+      responses:
+        '200':
+          description: List of active equipment items
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EquipmentListResponse'
+  /api/v1/teachers:
+    get:
+      summary: List active teachers
+      parameters:
+        - $ref: '#/components/parameters/LangParam'
+      responses:
+        '200':
+          description: List of active teachers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeacherListResponse'
+  /api/v1/rules:
+    get:
+      summary: List active studio rules
+      parameters:
+        - $ref: '#/components/parameters/LangParam'
+      responses:
+        '200':
+          description: List of active studio rules
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudioRuleListResponse'
+components:
+  parameters:
+    LangParam:
+      name: lang
+      in: query
+      description: Preferred response language (overrides Accept-Language)
+      required: false
+      schema:
+        type: string
+        enum: [ru, en]
+  schemas:
+    Meta:
+      type: object
+      required:
+        - locale
+      properties:
+        locale:
+          type: string
+          description: Locale that was resolved for the response
+          example: ru
+    StudioInfoResponse:
+      type: object
+      required:
+        - data
+        - meta
+      properties:
+        data:
+          type: object
+          additionalProperties:
+            type: string
+            nullable: true
+          description: Key-value pairs containing studio information
+          example:
+            name: Репетиционная студия в Батуми
+            address: ул. Агмашенебели, 13т, Батуми, Грузия
+            phone: +995 596 173 001
+            instagram_url: https://www.instagram.com/kropka_batumi/
+        meta:
+          $ref: '#/components/schemas/Meta'
+    PriceListResponse:
+      type: object
+      required:
+        - data
+        - meta
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PriceItem'
+        meta:
+          $ref: '#/components/schemas/Meta'
+    PriceItem:
+      type: object
+      required:
+        - id
+        - name
+        - columns
+        - sort
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        columns:
+          type: array
+          description: Ordered list of localized price lines
+          items:
+            $ref: '#/components/schemas/PriceColumn'
+        sort:
+          type: integer
+          format: int32
+    PriceColumn:
+      type: object
+      required:
+        - position
+      properties:
+        position:
+          type: integer
+          format: int32
+          description: Column order starting at 1
+        value:
+          type: string
+          nullable: true
+          description: Localized column text
+    EquipmentListResponse:
+      type: object
+      required:
+        - data
+        - meta
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/EquipmentItem'
+        meta:
+          $ref: '#/components/schemas/Meta'
+    EquipmentItem:
+      type: object
+      required:
+        - id
+        - name
+        - description
+        - photo_url
+        - sort
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        photo_url:
+          type: string
+          nullable: true
+          description: Absolute URL to the equipment image when available
+        sort:
+          type: integer
+          format: int32
+    TeacherListResponse:
+      type: object
+      required:
+        - data
+        - meta
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TeacherItem'
+        meta:
+          $ref: '#/components/schemas/Meta'
+    TeacherItem:
+      type: object
+      required:
+        - id
+        - name
+        - description
+        - telegram_url
+        - photo_url
+        - sort
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        description:
+          type: string
+          nullable: true
+        telegram_url:
+          type: string
+          nullable: true
+        photo_url:
+          type: string
+          nullable: true
+        sort:
+          type: integer
+          format: int32
+    StudioRuleListResponse:
+      type: object
+      required:
+        - data
+        - meta
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/StudioRuleItem'
+        meta:
+          $ref: '#/components/schemas/Meta'
+    StudioRuleItem:
+      type: object
+      required:
+        - id
+        - property
+        - text
+        - sort
+      properties:
+        id:
+          type: integer
+          format: int64
+        property:
+          type: string
+          description: Stable key of the rule
+        text:
+          type: string
+        sort:
+          type: integer
+          format: int32
