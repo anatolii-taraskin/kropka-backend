@@ -41,6 +41,9 @@
                             data-sortable-list
                             data-sortable-endpoint="{{ route('admin.studio-rules.reorder') }}"
                         >
+                        @php
+                            $locale = app()->getLocale();
+                        @endphp
                         @foreach ($rules as $rule)
                             <tr class="border-b" data-sortable-id="{{ $rule->id }}">
                                 <td class="px-2 py-4 align-top text-gray-400" style="width: 28px">
@@ -59,7 +62,7 @@
                                     <div class="space-y-2">
                                         <div class="flex items-start justify-between gap-3">
                                             <p class="text-sm text-gray-600 whitespace-pre-line flex-1">
-                                                {{ $rule->value }}
+                                                {{ $rule->localizedValue($locale) }}
                                             </p>
 
                                             @unless ($rule->is_active)

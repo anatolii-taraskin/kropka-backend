@@ -29,6 +29,9 @@ class PriceAdminTest extends TestCase
             'sort' => 1,
         ]);
 
+        session()->put('preferred_locale.admin', 'ru');
+        app()->setLocale('ru');
+
         $response = $this->actingAs($admin)->get('/admin/prices');
 
         $response
@@ -58,6 +61,7 @@ class PriceAdminTest extends TestCase
         ]);
 
         app()->setLocale('en');
+        session()->put('preferred_locale.admin', 'en');
 
         $response = $this->actingAs($admin)->get('/admin/prices');
 
