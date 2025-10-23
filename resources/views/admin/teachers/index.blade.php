@@ -41,6 +41,9 @@
                             data-sortable-list
                             data-sortable-endpoint="{{ route('admin.teachers.reorder') }}"
                         >
+                        @php
+                            $locale = app()->getLocale();
+                        @endphp
                         @foreach ($teachers as $teacher)
                             <tr class="border-b" data-sortable-id="{{ $teacher->id }}">
                                 <td class="px-2 py-4 align-top text-gray-400" style="width: 28px">
@@ -61,7 +64,7 @@
                                             <div class="flex h-24 w-24 flex-shrink-0 items-center justify-center overflow-hidden rounded-md border border-gray-200 bg-gray-50">
                                                 <img
                                                     src="{{ $teacher->photoUrl() }}"
-                                                    alt="{{ $teacher->name }}"
+                                                    alt="{{ $teacher->localizedName($locale) }}"
                                                     class="h-full w-full object-cover"
                                                 />
                                             </div>
@@ -70,7 +73,7 @@
                                         <div class="space-y-2">
                                             <div class="flex items-center gap-2">
                                                 <span class="text-sm font-medium text-gray-900">
-                                                    {{ $teacher->name }}
+                                                    {{ $teacher->localizedName($locale) }}
                                                 </span>
 
                                                 @unless ($teacher->is_active)
@@ -80,9 +83,13 @@
                                                 @endunless
                                             </div>
 
-                                            @if ($teacher->description)
+                                            @php
+                                                $description = $teacher->localizedDescription($locale);
+                                            @endphp
+
+                                            @if ($description)
                                                 <p class="text-sm text-gray-600 whitespace-pre-line">
-                                                    {{ $teacher->description }}
+                                                    {{ $description }}
                                                 </p>
                                             @endif
 

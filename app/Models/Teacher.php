@@ -16,8 +16,10 @@ class Teacher extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'description',
+        'name_ru',
+        'name_en',
+        'description_ru',
+        'description_en',
         'telegram_url',
         'photo_path',
         'is_active',
@@ -44,5 +46,57 @@ class Teacher extends Model
         }
 
         return Storage::disk('public')->url($this->photo_path);
+    }
+
+    /**
+     * Get the localized name for the current or provided locale.
+     */
+    public function localizedName(?string $locale = null): string
+    {
+        $locale = $this->normalizeLocale($locale);
+
+        return match ($locale) {
+            'en' => $this->name_en ?: ($this->name_ru ?? ''),
+            default => $this->name_ru ?: ($this->name_en ?? ''),
+        };
+    }
+
+    /**
+     * Get the localized description for the current or provided locale.
+     */
+    public function localizedDescription(?string $locale = null): ?string
+    {
+        $locale = $this->normalizeLocale($locale);
+
+        return match ($locale) {
+            'en' => $this->description_en ?: $this->description_ru,
+            default => $this->description_ru ?: $this->description_en,
+        };
+    }
+
+    /**
+     * Accessor to expose the localized name via the legacy "name" attribute.
+     */
+    public function getNameAttribute(): string
+    {
+        return $this->localizedName();
+    }
+
+    /**
+     * Accessor to expose the localized description via the legacy "description" attribute.
+     */
+    public function getDescriptionAttribute(): ?string
+    {
+        return $this->localizedDescription();
+    }
+
+    private function normalizeLocale(?string $locale): string
+    {
+        $locale = $locale
+            ?? app()->getLocale()
+            ?? config('app.fallback_locale')
+            ?? config('app.locale');
+
+        return strtolower($locale ?? '');
     }
 }

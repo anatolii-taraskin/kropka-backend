@@ -182,9 +182,15 @@ return [
         'status' => [
             'inactive' => 'Неактивен',
         ],
+        'sections' => [
+            'ru' => 'Русский',
+            'en' => 'Английский',
+        ],
         'fields' => [
-            'name' => 'Имя',
-            'description' => 'Описание',
+            'name_ru' => 'Имя (RU)',
+            'name_en' => 'Имя (EN)',
+            'description_ru' => 'Описание (RU)',
+            'description_en' => 'Описание (EN)',
             'telegram_url' => 'Ссылка на Telegram',
             'photo' => 'Фотография',
             'is_active' => 'Преподаватель активен',
