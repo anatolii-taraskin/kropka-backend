@@ -16,7 +16,7 @@ Route::prefix('{locale}')
     ->name('localized.')
     ->group(function () {
         Route::get('/', function () {
-            return view('welcome');
+            abort(404);
         })->name('welcome');
     });
 
@@ -119,8 +119,6 @@ Route::middleware(['auth', 'admin', 'resolve.locale:admin'])->group(function () 
         ->name('profile.edit');
     Route::patch('/admin/profile', [ProfileController::class, 'update'])
         ->name('profile.update');
-    Route::delete('/admin/profile', [ProfileController::class, 'destroy'])
-        ->name('profile.destroy');
 });
 
 Route::middleware('resolve.locale')->group(function () {
