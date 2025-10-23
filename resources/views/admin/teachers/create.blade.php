@@ -23,36 +23,88 @@
             </a>
         </div>
 
-        <form method="post" action="{{ route('admin.teachers.store') }}" enctype="multipart/form-data" class="border-t border-gray-200 p-6 space-y-6">
+        <form
+            method="post"
+            action="{{ route('admin.teachers.store') }}"
+            enctype="multipart/form-data"
+            class="border-t border-gray-200 p-6 space-y-6"
+        >
             @csrf
 
-            <div>
-                <x-input-label for="teacher_name" :value="__('admin.teachers.fields.name')" />
+            <div class="space-y-6">
+                <section class="first-element rounded-xl border border-gray-200 bg-white/40 p-6 shadow-sm space-y-6">
+                    <header class="mb-2">
+                        <h3 class="text-base font-semibold text-gray-900">
+                            {{ __('admin.teachers.sections.ru') }}
+                        </h3>
+                    </header>
 
-                <x-text-input
-                    id="teacher_name"
-                    name="name"
-                    type="text"
-                    class="mt-1 block w-full"
-                    value="{{ $useOldValues ? old('name') : '' }}"
-                    required
-                    maxlength="255"
-                />
+                    <div>
+                        <x-input-label for="teacher_name_ru" :value="__('admin.teachers.fields.name_ru')" />
 
-                <x-input-error class="mt-2" :messages="$createErrors->get('name')" />
-            </div>
+                        <x-text-input
+                            id="teacher_name_ru"
+                            name="name_ru"
+                            type="text"
+                            class="mt-1 block w-full"
+                            value="{{ $useOldValues ? old('name_ru') : '' }}"
+                            required
+                            maxlength="255"
+                        />
 
-            <div>
-                <x-input-label for="teacher_description" :value="__('admin.teachers.fields.description')" />
+                        <x-input-error class="mt-2" :messages="$createErrors->get('name_ru')" />
+                    </div>
 
-                <textarea
-                    id="teacher_description"
-                    name="description"
-                    rows="5"
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                >{{ $useOldValues ? old('description') : '' }}</textarea>
+                    <div>
+                        <x-input-label for="teacher_description_ru" :value="__('admin.teachers.fields.description_ru')" />
 
-                <x-input-error class="mt-2" :messages="$createErrors->get('description')" />
+                        <textarea
+                            id="teacher_description_ru"
+                            name="description_ru"
+                            rows="5"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                        >{{ $useOldValues ? old('description_ru') : '' }}</textarea>
+
+                        <x-input-error class="mt-2" :messages="$createErrors->get('description_ru')" />
+                    </div>
+                </section>
+
+                <section class="rounded-xl border border-gray-200 bg-white/40 p-6 shadow-sm space-y-6">
+                    <header class="mb-2">
+                        <h3 class="text-base font-semibold text-gray-900">
+                            {{ __('admin.teachers.sections.en') }}
+                        </h3>
+                    </header>
+
+                    <div>
+                        <x-input-label for="teacher_name_en" :value="__('admin.teachers.fields.name_en')" />
+
+                        <x-text-input
+                            id="teacher_name_en"
+                            name="name_en"
+                            type="text"
+                            class="mt-1 block w-full"
+                            value="{{ $useOldValues ? old('name_en') : '' }}"
+                            required
+                            maxlength="255"
+                        />
+
+                        <x-input-error class="mt-2" :messages="$createErrors->get('name_en')" />
+                    </div>
+
+                    <div>
+                        <x-input-label for="teacher_description_en" :value="__('admin.teachers.fields.description_en')" />
+
+                        <textarea
+                            id="teacher_description_en"
+                            name="description_en"
+                            rows="5"
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                        >{{ $useOldValues ? old('description_en') : '' }}</textarea>
+
+                        <x-input-error class="mt-2" :messages="$createErrors->get('description_en')" />
+                    </div>
+                </section>
             </div>
 
             <div>

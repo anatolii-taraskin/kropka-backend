@@ -188,9 +188,15 @@ return [
         'status' => [
             'inactive' => 'Inactive',
         ],
+        'sections' => [
+            'ru' => 'Russian',
+            'en' => 'English',
+        ],
         'fields' => [
-            'name' => 'Name',
-            'description' => 'Description',
+            'name_ru' => 'Name (RU)',
+            'name_en' => 'Name (EN)',
+            'description_ru' => 'Description (RU)',
+            'description_en' => 'Description (EN)',
             'telegram_url' => 'Telegram link',
             'photo' => 'Photo',
             'is_active' => 'Teacher is active',
