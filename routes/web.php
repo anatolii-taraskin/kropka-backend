@@ -20,7 +20,7 @@ Route::prefix('{locale}')
         })->name('welcome');
     });
 
-Route::middleware(['auth', 'admin', 'resolve.locale:admin'])->group(function () {
+Route::middleware(['auth', 'admin', 'resolve.locale:admin', 'no-store'])->group(function () {
     Route::get('/admin', function () {
         return view('admin.panel');
     })->name('admin.panel');
