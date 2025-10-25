@@ -2,23 +2,19 @@
 
 namespace App\Services;
 
-use App\Models\StudioInfo;
-
-class StudioInfoService
+class StudioInfoFieldFactory
 {
-    public function __construct(private readonly StudioInfo $studioInfo)
+    public function fieldGroups(array $storedValues = []): array
     {
-    }
-
-    public function fieldGroups(): array
-    {
-        $storedValues = $this->studioInfo->newQuery()->pluck('value', 'property')->all();
-
         $groups = [];
 
         $groups['shared'] = collect($this->sharedFields())
             ->map(function (array $config, string $property) use ($storedValues) {
-                return $this->buildFieldDefinition($property, $config, $storedValues[$property] ?? '');
+                return $this->buildFieldDefinition(
+                    $property,
+                    $config,
+                    $storedValues[$property] ?? ''
+                );
             })
             ->values()
             ->all();
@@ -28,7 +24,11 @@ class StudioInfoService
                 ->map(function (array $config, string $key) use ($locale, $storedValues) {
                     $property = sprintf('%s_%s', $key, $locale);
 
-                    return $this->buildFieldDefinition($property, $config, $storedValues[$property] ?? '');
+                    return $this->buildFieldDefinition(
+                        $property,
+                        $config,
+                        $storedValues[$property] ?? ''
+                    );
                 })
                 ->values()
                 ->all();
@@ -43,7 +43,7 @@ class StudioInfoService
             'studio_infos' => ['required', 'array'],
         ];
 
-        foreach ($this->flattenedFields() as $property => $config) {
+        foreach ($this->fields() as $property => $config) {
             $rules["studio_infos.{$property}"] = $config['rules'];
         }
 
@@ -54,27 +54,19 @@ class StudioInfoService
     {
         $attributes = [];
 
-        foreach (array_keys($this->flattenedFields()) as $property) {
+        foreach (array_keys($this->fields()) as $property) {
             $attributes["studio_infos.{$property}"] = __('admin.studio_infos.fields.' . $property);
         }
 
         return $attributes;
     }
 
-    public function save(array $values): void
+    public function properties(): array
     {
-        foreach (array_keys($this->flattenedFields()) as $property) {
-            $value = $values[$property] ?? '';
-            $value = $value ?? '';
-
-            $this->studioInfo->newQuery()->updateOrCreate(
-                ['property' => $property],
-                ['value' => $value]
-            );
-        }
+        return array_keys($this->fields());
     }
 
-    public function flattenedFields(): array
+    public function fields(): array
     {
         $fields = [];
 
@@ -92,14 +84,14 @@ class StudioInfoService
         return $fields;
     }
 
-    private function buildFieldDefinition(string $property, array $config, string $value): array
+    private function buildFieldDefinition(string $property, array $config, mixed $value): array
     {
         return [
             'property' => $property,
             'label' => __('admin.studio_infos.fields.' . $property),
             'type' => $config['type'],
             'required' => (bool) ($config['required'] ?? false),
-            'value' => $value,
+            'value' => $value ?? '',
         ];
     }
 
@@ -118,4 +110,3 @@ class StudioInfoService
         return config('studio-info.locales', []);
     }
 }
-

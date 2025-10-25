@@ -2,18 +2,18 @@
 
 namespace App\Services\Api\Public;
 
-use App\Models\StudioInfo;
+use App\Services\StudioInfoRepository;
 use Illuminate\Support\Arr;
 
 class StudioService
 {
-    public function __construct(private readonly StudioInfo $studioInfo)
+    public function __construct(private readonly StudioInfoRepository $repository)
     {
     }
 
     public function details(string $locale): array
     {
-        $entries = $this->studioInfo->newQuery()->pluck('value', 'property');
+        $entries = $this->repository->all();
 
         $data = [];
         $localized = [];
