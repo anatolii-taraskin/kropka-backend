@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Support\Concerns\HasLocalizedAttributes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Price extends Model
 {
     use HasFactory;
+    use HasLocalizedAttributes;
 
     /**
      * The attributes that are mass assignable.
@@ -42,9 +44,7 @@ class Price extends Model
      */
     public function localizedName(?string $locale = null): string
     {
-        $locale = $this->normalizeLocale($locale);
-
-        return $this->attributeForLocale('name', $locale) ?? '';
+        return $this->localizedAttribute('name', $locale) ?? '';
     }
 
     /**
@@ -52,9 +52,7 @@ class Price extends Model
      */
     public function localizedColumn(int $index, ?string $locale = null): ?string
     {
-        $locale = $this->normalizeLocale($locale);
-
-        return $this->attributeForLocale('col' . $index, $locale);
+        return $this->localizedAttribute('col' . $index, $locale);
     }
 
     /**
@@ -64,7 +62,7 @@ class Price extends Model
      */
     public function localizedColumns(?string $locale = null): array
     {
-        $locale = $this->normalizeLocale($locale);
+        $locale = $this->resolveLocale($locale);
 
         return collect([1, 2, 3])
             ->map(fn (int $index) => $this->localizedColumn($index, $locale))
@@ -81,32 +79,4 @@ class Price extends Model
         return $this->localizedName();
     }
 
-    private function attributeForLocale(string $attribute, string $locale): ?string
-    {
-        $primaryAttribute = $attribute . '_' . $locale;
-
-        $value = $this->{$primaryAttribute} ?? null;
-
-        if (filled($value)) {
-            return $value;
-        }
-
-        $fallbackAttribute = $locale === 'en'
-            ? $attribute . '_ru'
-            : $attribute . '_en';
-
-        $fallbackValue = $this->{$fallbackAttribute} ?? null;
-
-        return filled($fallbackValue) ? $fallbackValue : null;
-    }
-
-    private function normalizeLocale(?string $locale): string
-    {
-        $locale = $locale
-            ?? app()->getLocale()
-            ?? config('app.fallback_locale')
-            ?? config('app.locale');
-
-        return strtolower($locale ?? '');
-    }
 }

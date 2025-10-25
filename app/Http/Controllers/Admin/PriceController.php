@@ -2,21 +2,23 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Actions\Admin\Price\PriceManager;
+use App\Actions\Admin\ReorderRecords;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Price\ReorderPriceRequest;
+use App\Http\Requests\Admin\Price\StorePriceRequest;
+use App\Http\Requests\Admin\Price\UpdatePriceRequest;
 use App\Models\Price;
-use App\Services\SortOrderService;
-use App\Support\Concerns\SanitizesAttributes;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 
 class PriceController extends Controller
 {
-    use SanitizesAttributes;
-
-    public function __construct(private readonly SortOrderService $sortOrderService)
+    public function __construct(
+        private readonly PriceManager $priceManager,
+        private readonly ReorderRecords $reorderRecords,
+    )
     {
     }
 
@@ -46,22 +48,9 @@ class PriceController extends Controller
     /**
      * Store a newly created price entry.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(StorePriceRequest $request): RedirectResponse
     {
-        $validator = Validator::make(
-            $request->all(),
-            $this->rules(),
-            [],
-            $this->attributes(),
-        );
-
-        $validated = $validator->validateWithBag('createPrice');
-
-        $data = $this->prepareData($validated);
-
-        $data['sort'] = $this->sortOrderService->nextSortValue(Price::class);
-
-        Price::create($data);
+        $this->priceManager->create($request);
 
         return redirect()
             ->route('admin.prices.index')
@@ -81,20 +70,9 @@ class PriceController extends Controller
     /**
      * Update the specified price entry.
      */
-    public function update(Request $request, Price $price): RedirectResponse
+    public function update(UpdatePriceRequest $request, Price $price): RedirectResponse
     {
-        $validator = Validator::make(
-            $request->all(),
-            $this->rules(),
-            [],
-            $this->attributes(),
-        );
-
-        $validated = $validator->validateWithBag('updatePrice' . $price->id);
-
-        $data = $this->prepareData($validated);
-
-        $price->update($data);
+        $this->priceManager->update($request, $price);
 
         return redirect()
             ->route('admin.prices.index')
@@ -106,7 +84,7 @@ class PriceController extends Controller
      */
     public function destroy(Price $price): RedirectResponse
     {
-        $price->delete();
+        $this->priceManager->delete($price);
 
         return redirect()
             ->route('admin.prices.index')
@@ -114,72 +92,11 @@ class PriceController extends Controller
     }
 
     /**
-     * Validation rules for price forms.
-     */
-    private function rules(): array
-    {
-        return [
-            'name_ru' => ['required', 'string', 'max:255'],
-            'name_en' => ['required', 'string', 'max:255'],
-            'col1_ru' => ['nullable', 'string', 'max:255'],
-            'col1_en' => ['nullable', 'string', 'max:255'],
-            'col2_ru' => ['nullable', 'string', 'max:255'],
-            'col2_en' => ['nullable', 'string', 'max:255'],
-            'col3_ru' => ['nullable', 'string', 'max:255'],
-            'col3_en' => ['nullable', 'string', 'max:255'],
-            'is_active' => ['sometimes', 'boolean'],
-        ];
-    }
-
-    /**
-     * Human readable attribute names.
-     */
-    private function attributes(): array
-    {
-        return [
-            'name_ru' => __('admin.prices.fields.name_ru'),
-            'name_en' => __('admin.prices.fields.name_en'),
-            'col1_ru' => __('admin.prices.fields.col1_ru'),
-            'col1_en' => __('admin.prices.fields.col1_en'),
-            'col2_ru' => __('admin.prices.fields.col2_ru'),
-            'col2_en' => __('admin.prices.fields.col2_en'),
-            'col3_ru' => __('admin.prices.fields.col3_ru'),
-            'col3_en' => __('admin.prices.fields.col3_en'),
-            'is_active' => __('admin.prices.fields.is_active'),
-        ];
-    }
-
-    /**
-     * Prepare sanitized data for persistence.
-     */
-    private function prepareData(array $input): array
-    {
-        return [
-            'name_ru' => $this->sanitizeString($input['name_ru'] ?? ''),
-            'name_en' => $this->sanitizeString($input['name_en'] ?? ''),
-            'col1_ru' => $this->sanitizeNullableString($input['col1_ru'] ?? null),
-            'col1_en' => $this->sanitizeNullableString($input['col1_en'] ?? null),
-            'col2_ru' => $this->sanitizeNullableString($input['col2_ru'] ?? null),
-            'col2_en' => $this->sanitizeNullableString($input['col2_en'] ?? null),
-            'col3_ru' => $this->sanitizeNullableString($input['col3_ru'] ?? null),
-            'col3_en' => $this->sanitizeNullableString($input['col3_en'] ?? null),
-            'is_active' => $this->sanitizeBoolean($input['is_active'] ?? null),
-        ];
-    }
-
-    /**
      * Update the sort order for price tiles.
      */
-    public function reorder(Request $request): JsonResponse
+    public function reorder(ReorderPriceRequest $request): JsonResponse
     {
-        $data = $request->validate([
-            'order' => ['required', 'array'],
-            'order.*' => ['integer', 'distinct', 'exists:prices,id'],
-        ]);
-
-        $ids = $data['order'];
-
-        $this->sortOrderService->reorder(Price::class, $ids);
+        $this->reorderRecords->handle(Price::class, $request->ids());
 
         return response()->json(['status' => 'ok']);
     }
