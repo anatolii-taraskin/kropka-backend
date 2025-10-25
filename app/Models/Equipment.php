@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\Concerns\HasLocalizedAttributes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
@@ -9,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 class Equipment extends Model
 {
     use HasFactory;
+    use HasLocalizedAttributes;
 
     protected $table = 'equipment';
 
@@ -42,12 +44,7 @@ class Equipment extends Model
      */
     public function localizedName(?string $locale = null): string
     {
-        $locale = $this->normalizeLocale($locale);
-
-        return match ($locale) {
-            'en' => $this->name_en ?: ($this->name_ru ?? ''),
-            default => $this->name_ru ?: ($this->name_en ?? ''),
-        };
+        return $this->localizedAttribute('name', $locale) ?? '';
     }
 
     /**
@@ -55,12 +52,7 @@ class Equipment extends Model
      */
     public function localizedDescription(?string $locale = null): ?string
     {
-        $locale = $this->normalizeLocale($locale);
-
-        return match ($locale) {
-            'en' => $this->description_en ?: $this->description_ru,
-            default => $this->description_ru ?: $this->description_en,
-        };
+        return $this->localizedAttribute('description', $locale);
     }
 
     /**
@@ -91,13 +83,4 @@ class Equipment extends Model
         return Storage::disk('public')->url($this->photo_path);
     }
 
-    private function normalizeLocale(?string $locale): string
-    {
-        $locale = $locale
-            ?? app()->getLocale()
-            ?? config('app.fallback_locale')
-            ?? config('app.locale');
-
-        return strtolower($locale ?? '');
-    }
 }

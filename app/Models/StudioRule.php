@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Support\Concerns\HasLocalizedAttributes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class StudioRule extends Model
 {
     use HasFactory;
+    use HasLocalizedAttributes;
 
     /**
      * The attributes that are mass assignable.
@@ -37,21 +39,7 @@ class StudioRule extends Model
      */
     public function localizedValue(?string $locale = null): string
     {
-        $locale = $this->normalizeLocale($locale);
-
-        if ($locale === 'en') {
-            if (filled($this->value_en)) {
-                return $this->value_en;
-            }
-
-            return $this->value_ru ?? '';
-        }
-
-        if (filled($this->value_ru)) {
-            return $this->value_ru;
-        }
-
-        return $this->value_en ?? '';
+        return $this->localizedAttribute('value', $locale) ?? '';
     }
 
     /**
@@ -62,13 +50,4 @@ class StudioRule extends Model
         return $this->localizedValue();
     }
 
-    private function normalizeLocale(?string $locale): string
-    {
-        $locale = $locale
-            ?? app()->getLocale()
-            ?? config('app.fallback_locale')
-            ?? config('app.locale');
-
-        return strtolower($locale ?? '');
-    }
 }

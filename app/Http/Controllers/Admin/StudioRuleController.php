@@ -2,21 +2,23 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Actions\Admin\ReorderRecords;
+use App\Actions\Admin\StudioRule\StudioRuleManager;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\StudioRule\ReorderStudioRuleRequest;
+use App\Http\Requests\Admin\StudioRule\StoreStudioRuleRequest;
+use App\Http\Requests\Admin\StudioRule\UpdateStudioRuleRequest;
 use App\Models\StudioRule;
-use App\Services\SortOrderService;
-use App\Support\Concerns\SanitizesAttributes;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 
 class StudioRuleController extends Controller
 {
-    use SanitizesAttributes;
-
-    public function __construct(private readonly SortOrderService $sortOrderService)
+    public function __construct(
+        private readonly StudioRuleManager $studioRuleManager,
+        private readonly ReorderRecords $reorderRecords,
+    )
     {
     }
 
@@ -46,22 +48,9 @@ class StudioRuleController extends Controller
     /**
      * Store a newly created studio rule.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(StoreStudioRuleRequest $request): RedirectResponse
     {
-        $validator = Validator::make(
-            $request->all(),
-            $this->rules(),
-            [],
-            $this->attributes(),
-        );
-
-        $validated = $validator->validateWithBag('createStudioRule');
-
-        $data = $this->prepareData($validated);
-        $data['sort'] = $this->sortOrderService->nextSortValue(StudioRule::class);
-        $data['property'] = $this->generateProperty();
-
-        StudioRule::create($data);
+        $this->studioRuleManager->create($request);
 
         return redirect()
             ->route('admin.studio-rules.index')
@@ -81,20 +70,9 @@ class StudioRuleController extends Controller
     /**
      * Update the specified studio rule.
      */
-    public function update(Request $request, StudioRule $studioRule): RedirectResponse
+    public function update(UpdateStudioRuleRequest $request, StudioRule $studioRule): RedirectResponse
     {
-        $validator = Validator::make(
-            $request->all(),
-            $this->rules(),
-            [],
-            $this->attributes(),
-        );
-
-        $validated = $validator->validateWithBag('updateStudioRule' . $studioRule->id);
-
-        $data = $this->prepareData($validated);
-
-        $studioRule->update($data);
+        $this->studioRuleManager->update($request, $studioRule);
 
         return redirect()
             ->route('admin.studio-rules.index')
@@ -106,7 +84,7 @@ class StudioRuleController extends Controller
      */
     public function destroy(StudioRule $studioRule): RedirectResponse
     {
-        $studioRule->delete();
+        $this->studioRuleManager->delete($studioRule);
 
         return redirect()
             ->route('admin.studio-rules.index')
@@ -116,58 +94,10 @@ class StudioRuleController extends Controller
     /**
      * Update the sort order for studio rules.
      */
-    public function reorder(Request $request): JsonResponse
+    public function reorder(ReorderStudioRuleRequest $request): JsonResponse
     {
-        $data = $request->validate([
-            'order' => ['required', 'array'],
-            'order.*' => ['integer', 'distinct', 'exists:studio_rules,id'],
-        ]);
-
-        $this->sortOrderService->reorder(StudioRule::class, $data['order']);
+        $this->reorderRecords->handle(StudioRule::class, $request->ids());
 
         return response()->json(['status' => 'ok']);
-    }
-
-    /**
-     * Validation rules for studio rule forms.
-     */
-    private function rules(): array
-    {
-        return [
-            'value_ru' => ['required', 'string', 'max:2000'],
-            'value_en' => ['required', 'string', 'max:2000'],
-            'is_active' => ['sometimes', 'boolean'],
-        ];
-    }
-
-    /**
-     * Human readable attribute names.
-     */
-    private function attributes(): array
-    {
-        return [
-            'value_ru' => __('admin.studio_rules.fields.value_ru'),
-            'value_en' => __('admin.studio_rules.fields.value_en'),
-            'is_active' => __('admin.studio_rules.fields.is_active'),
-        ];
-    }
-
-    /**
-     * Prepare sanitized data for persistence.
-     */
-    private function prepareData(array $input): array
-    {
-        return [
-            'value_ru' => $this->sanitizeString($input['value_ru'] ?? ''),
-            'value_en' => $this->sanitizeString($input['value_en'] ?? ''),
-            'is_active' => $this->sanitizeBoolean($input['is_active'] ?? null, true),
-        ];
-    }
-
-    private function generateProperty(): string
-    {
-        $nextNumber = (StudioRule::max('id') ?? 0) + 1;
-
-        return sprintf('rule_%02d', $nextNumber);
     }
 }
