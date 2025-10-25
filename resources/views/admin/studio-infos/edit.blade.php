@@ -25,35 +25,35 @@
                     <div class="space-y-6">
                         @foreach ($fields as $field)
                             @php
-                                $inputValue = old('studio_infos.' . $field['property'], $field['value']);
+                                $inputValue = old('studio_infos.' . $field->property(), $field->value());
                             @endphp
 
                             <div @class(['first-element' => $isFirstField])>
                                 <x-input-label
-                                    :for="'studio_infos_' . $field['property']"
-                                    :value="$field['label']"
+                                    :for="'studio_infos_' . $field->property()"
+                                    :value="$field->label()"
                                 />
 
-                                @if ($field['type'] === 'textarea')
+                                @if ($field->type() === 'textarea')
                                     <textarea
-                                        id="studio_infos_{{ $field['property'] }}"
-                                        name="studio_infos[{{ $field['property'] }}]"
+                                        id="studio_infos_{{ $field->property() }}"
+                                        name="studio_infos[{{ $field->property() }}]"
                                         rows="4"
                                         class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
-                                        @if ($field['required']) required @endif
+                                        @if ($field->required()) required @endif
                                     >{{ $inputValue }}</textarea>
                                 @else
                                     <input
-                                        id="studio_infos_{{ $field['property'] }}"
-                                        name="studio_infos[{{ $field['property'] }}]"
-                                        type="{{ $field['type'] }}"
+                                        id="studio_infos_{{ $field->property() }}"
+                                        name="studio_infos[{{ $field->property() }}]"
+                                        type="{{ $field->type() }}"
                                         class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
                                         value="{{ $inputValue }}"
-                                        @if ($field['required']) required @endif
+                                        @if ($field->required()) required @endif
                                     />
                                 @endif
 
-                                <x-input-error class="mt-2" :messages="$errors->get('studio_infos.' . $field['property'])" />
+                                <x-input-error class="mt-2" :messages="$errors->get('studio_infos.' . $field->property())" />
                             </div>
 
                             @php
