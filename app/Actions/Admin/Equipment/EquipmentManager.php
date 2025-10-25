@@ -2,58 +2,50 @@
 
 namespace App\Actions\Admin\Equipment;
 
+use App\Actions\Admin\PhotoEntityService;
 use App\Http\Requests\Admin\Equipment\EquipmentRequest;
 use App\Models\Equipment;
-use App\Services\SortOrderService;
-use Illuminate\Support\Facades\Storage;
 
 class EquipmentManager
 {
-    public function __construct(private readonly SortOrderService $sortOrderService)
+    public function __construct(private readonly PhotoEntityService $photoEntityService)
     {
     }
 
     public function create(EquipmentRequest $request): Equipment
     {
         $data = $request->sanitized();
-        $data['sort'] = $this->sortOrderService->nextSortValue(Equipment::class);
 
-        if ($request->hasFile('photo')) {
-            $data['photo_path'] = $request->file('photo')->store('equipment', 'public');
-        }
+        /** @var Equipment $equipment */
+        $equipment = $this->photoEntityService->create(
+            Equipment::class,
+            $data,
+            $request->file('photo'),
+            'public',
+            'equipment'
+        );
 
-        return Equipment::create($data);
+        return $equipment;
     }
 
     public function update(EquipmentRequest $request, Equipment $equipment): Equipment
     {
         $data = $request->sanitized();
 
-        if ($request->hasFile('photo')) {
-            $newPhotoPath = $request->file('photo')->store('equipment', 'public');
-            $this->deletePhoto($equipment->photo_path);
-            $data['photo_path'] = $newPhotoPath;
-        }
-
-        $equipment->update($data);
+        /** @var Equipment $equipment */
+        $equipment = $this->photoEntityService->update(
+            $equipment,
+            $data,
+            $request->file('photo'),
+            'public',
+            'equipment'
+        );
 
         return $equipment;
     }
 
     public function delete(Equipment $equipment): void
     {
-        $this->deletePhoto($equipment->photo_path);
-
-        $equipment->delete();
-    }
-
-    private function deletePhoto(?string $path): void
-    {
-        if (! $path) {
-            return;
-        }
-
-        Storage::disk('public')->delete($path);
+        $this->photoEntityService->delete($equipment, 'public');
     }
 }
-
