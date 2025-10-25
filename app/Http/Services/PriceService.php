@@ -1,15 +1,18 @@
 <?php
 
-namespace App\Actions\Admin\Price;
+namespace App\Http\Services;
 
+use App\Actions\Admin\ReorderRecords;
 use App\Http\Requests\Admin\Price\PriceRequest;
 use App\Models\Price;
 use App\Services\SortOrderService;
 
-class PriceManager
+class PriceService
 {
-    public function __construct(private readonly SortOrderService $sortOrderService)
-    {
+    public function __construct(
+        private readonly SortOrderService $sortOrderService,
+        private readonly ReorderRecords $reorderRecords,
+    ) {
     }
 
     public function create(PriceRequest $request): Price
@@ -33,5 +36,9 @@ class PriceManager
     {
         $price->delete();
     }
-}
 
+    public function reorder(array $ids): void
+    {
+        $this->reorderRecords->handle(Price::class, $ids);
+    }
+}

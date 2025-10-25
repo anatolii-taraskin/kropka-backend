@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Actions\Admin\Price\PriceManager;
-use App\Actions\Admin\ReorderRecords;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Price\ReorderPriceRequest;
 use App\Http\Requests\Admin\Price\StorePriceRequest;
 use App\Http\Requests\Admin\Price\UpdatePriceRequest;
+use App\Http\Services\PriceService;
 use App\Models\Price;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -16,8 +15,7 @@ use Illuminate\View\View;
 class PriceController extends Controller
 {
     public function __construct(
-        private readonly PriceManager $priceManager,
-        private readonly ReorderRecords $reorderRecords,
+        private readonly PriceService $priceService,
     )
     {
     }
@@ -50,7 +48,7 @@ class PriceController extends Controller
      */
     public function store(StorePriceRequest $request): RedirectResponse
     {
-        $this->priceManager->create($request);
+        $this->priceService->create($request);
 
         return redirect()
             ->route('admin.prices.index')
@@ -72,7 +70,7 @@ class PriceController extends Controller
      */
     public function update(UpdatePriceRequest $request, Price $price): RedirectResponse
     {
-        $this->priceManager->update($request, $price);
+        $this->priceService->update($request, $price);
 
         return redirect()
             ->route('admin.prices.index')
@@ -84,7 +82,7 @@ class PriceController extends Controller
      */
     public function destroy(Price $price): RedirectResponse
     {
-        $this->priceManager->delete($price);
+        $this->priceService->delete($price);
 
         return redirect()
             ->route('admin.prices.index')
@@ -96,7 +94,7 @@ class PriceController extends Controller
      */
     public function reorder(ReorderPriceRequest $request): JsonResponse
     {
-        $this->reorderRecords->handle(Price::class, $request->ids());
+        $this->priceService->reorder($request->ids());
 
         return response()->json(['status' => 'ok']);
     }

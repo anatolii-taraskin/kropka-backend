@@ -1,15 +1,18 @@
 <?php
 
-namespace App\Actions\Admin\StudioRule;
+namespace App\Http\Services;
 
+use App\Actions\Admin\ReorderRecords;
 use App\Http\Requests\Admin\StudioRule\StudioRuleRequest;
 use App\Models\StudioRule;
 use App\Services\SortOrderService;
 
-class StudioRuleManager
+class StudioRuleService
 {
-    public function __construct(private readonly SortOrderService $sortOrderService)
-    {
+    public function __construct(
+        private readonly SortOrderService $sortOrderService,
+        private readonly ReorderRecords $reorderRecords,
+    ) {
     }
 
     public function create(StudioRuleRequest $request): StudioRule
@@ -35,6 +38,11 @@ class StudioRuleManager
         $studioRule->delete();
     }
 
+    public function reorder(array $ids): void
+    {
+        $this->reorderRecords->handle(StudioRule::class, $ids);
+    }
+
     private function generateProperty(): string
     {
         $nextNumber = (StudioRule::max('id') ?? 0) + 1;
@@ -42,4 +50,3 @@ class StudioRuleManager
         return sprintf('rule_%02d', $nextNumber);
     }
 }
-
