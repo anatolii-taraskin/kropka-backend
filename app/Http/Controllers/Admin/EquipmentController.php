@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Actions\Admin\Equipment\EquipmentManager;
-use App\Actions\Admin\ReorderRecords;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Equipment\ReorderEquipmentRequest;
 use App\Http\Requests\Admin\Equipment\StoreEquipmentRequest;
 use App\Http\Requests\Admin\Equipment\UpdateEquipmentRequest;
+use App\Http\Services\EquipmentService;
 use App\Models\Equipment;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -16,8 +15,7 @@ use Illuminate\View\View;
 class EquipmentController extends Controller
 {
     public function __construct(
-        private readonly EquipmentManager $equipmentManager,
-        private readonly ReorderRecords $reorderRecords,
+        private readonly EquipmentService $equipmentService,
     )
     {
     }
@@ -50,7 +48,7 @@ class EquipmentController extends Controller
      */
     public function store(StoreEquipmentRequest $request): RedirectResponse
     {
-        $this->equipmentManager->create($request);
+        $this->equipmentService->create($request);
 
         return redirect()
             ->route('admin.equipment.index')
@@ -72,7 +70,7 @@ class EquipmentController extends Controller
      */
     public function update(UpdateEquipmentRequest $request, Equipment $equipment): RedirectResponse
     {
-        $this->equipmentManager->update($request, $equipment);
+        $this->equipmentService->update($request, $equipment);
 
         return redirect()
             ->route('admin.equipment.index')
@@ -84,7 +82,7 @@ class EquipmentController extends Controller
      */
     public function destroy(Equipment $equipment): RedirectResponse
     {
-        $this->equipmentManager->delete($equipment);
+        $this->equipmentService->delete($equipment);
 
         return redirect()
             ->route('admin.equipment.index')
@@ -96,7 +94,7 @@ class EquipmentController extends Controller
      */
     public function reorder(ReorderEquipmentRequest $request): JsonResponse
     {
-        $this->reorderRecords->handle(Equipment::class, $request->ids());
+        $this->equipmentService->reorder($request->ids());
 
         return response()->json(['status' => 'ok']);
     }

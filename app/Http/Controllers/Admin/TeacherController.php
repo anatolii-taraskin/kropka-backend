@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Actions\Admin\ReorderRecords;
-use App\Actions\Admin\Teacher\TeacherManager;
+use App\Http\Services\TeacherService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Teacher\ReorderTeacherRequest;
 use App\Http\Requests\Admin\Teacher\StoreTeacherRequest;
@@ -16,8 +15,7 @@ use Illuminate\View\View;
 class TeacherController extends Controller
 {
     public function __construct(
-        private readonly TeacherManager $teacherManager,
-        private readonly ReorderRecords $reorderRecords,
+        private readonly TeacherService $teacherService,
     )
     {
     }
@@ -50,7 +48,7 @@ class TeacherController extends Controller
      */
     public function store(StoreTeacherRequest $request): RedirectResponse
     {
-        $this->teacherManager->create($request);
+        $this->teacherService->create($request);
 
         return redirect()
             ->route('admin.teachers.index')
@@ -72,7 +70,7 @@ class TeacherController extends Controller
      */
     public function update(UpdateTeacherRequest $request, Teacher $teacher): RedirectResponse
     {
-        $this->teacherManager->update($request, $teacher);
+        $this->teacherService->update($request, $teacher);
 
         return redirect()
             ->route('admin.teachers.index')
@@ -84,7 +82,7 @@ class TeacherController extends Controller
      */
     public function destroy(Teacher $teacher): RedirectResponse
     {
-        $this->teacherManager->delete($teacher);
+        $this->teacherService->delete($teacher);
 
         return redirect()
             ->route('admin.teachers.index')
@@ -96,7 +94,7 @@ class TeacherController extends Controller
      */
     public function reorder(ReorderTeacherRequest $request): JsonResponse
     {
-        $this->reorderRecords->handle(Teacher::class, $request->ids());
+        $this->teacherService->reorder($request->ids());
 
         return response()->json(['status' => 'ok']);
     }

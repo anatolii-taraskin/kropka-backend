@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Actions\Admin\ReorderRecords;
-use App\Actions\Admin\StudioRule\StudioRuleManager;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StudioRule\ReorderStudioRuleRequest;
 use App\Http\Requests\Admin\StudioRule\StoreStudioRuleRequest;
 use App\Http\Requests\Admin\StudioRule\UpdateStudioRuleRequest;
+use App\Http\Services\StudioRuleService;
 use App\Models\StudioRule;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -16,8 +15,7 @@ use Illuminate\View\View;
 class StudioRuleController extends Controller
 {
     public function __construct(
-        private readonly StudioRuleManager $studioRuleManager,
-        private readonly ReorderRecords $reorderRecords,
+        private readonly StudioRuleService $studioRuleService,
     )
     {
     }
@@ -50,7 +48,7 @@ class StudioRuleController extends Controller
      */
     public function store(StoreStudioRuleRequest $request): RedirectResponse
     {
-        $this->studioRuleManager->create($request);
+        $this->studioRuleService->create($request);
 
         return redirect()
             ->route('admin.studio-rules.index')
@@ -72,7 +70,7 @@ class StudioRuleController extends Controller
      */
     public function update(UpdateStudioRuleRequest $request, StudioRule $studioRule): RedirectResponse
     {
-        $this->studioRuleManager->update($request, $studioRule);
+        $this->studioRuleService->update($request, $studioRule);
 
         return redirect()
             ->route('admin.studio-rules.index')
@@ -84,7 +82,7 @@ class StudioRuleController extends Controller
      */
     public function destroy(StudioRule $studioRule): RedirectResponse
     {
-        $this->studioRuleManager->delete($studioRule);
+        $this->studioRuleService->delete($studioRule);
 
         return redirect()
             ->route('admin.studio-rules.index')
@@ -96,7 +94,7 @@ class StudioRuleController extends Controller
      */
     public function reorder(ReorderStudioRuleRequest $request): JsonResponse
     {
-        $this->reorderRecords->handle(StudioRule::class, $request->ids());
+        $this->studioRuleService->reorder($request->ids());
 
         return response()->json(['status' => 'ok']);
     }
