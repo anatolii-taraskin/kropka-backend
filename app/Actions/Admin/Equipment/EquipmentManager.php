@@ -3,13 +3,16 @@
 namespace App\Actions\Admin\Equipment;
 
 use App\Actions\Admin\PhotoEntityService;
+use App\Config\Media\EquipmentPhotoEntityConfig;
 use App\Http\Requests\Admin\Equipment\EquipmentRequest;
 use App\Models\Equipment;
 
 class EquipmentManager
 {
-    public function __construct(private readonly PhotoEntityService $photoEntityService)
-    {
+    public function __construct(
+        private readonly PhotoEntityService $photoEntityService,
+        private readonly EquipmentPhotoEntityConfig $config
+    ) {
     }
 
     public function create(EquipmentRequest $request): Equipment
@@ -21,8 +24,7 @@ class EquipmentManager
             Equipment::class,
             $data,
             $request->file('photo'),
-            'public',
-            'equipment'
+            $this->config
         );
 
         return $equipment;
@@ -37,8 +39,7 @@ class EquipmentManager
             $equipment,
             $data,
             $request->file('photo'),
-            'public',
-            'equipment'
+            $this->config
         );
 
         return $equipment;
@@ -46,6 +47,6 @@ class EquipmentManager
 
     public function delete(Equipment $equipment): void
     {
-        $this->photoEntityService->delete($equipment, 'public');
+        $this->photoEntityService->delete($equipment, $this->config);
     }
 }

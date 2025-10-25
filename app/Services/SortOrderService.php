@@ -13,11 +13,11 @@ class SortOrderService
     /**
      * Determine the next sort value for the given model.
      */
-    public function nextSortValue(string $modelClass): int
+    public function nextSortValue(string $modelClass, string $column = 'sort'): int
     {
         $model = $this->resolveModel($modelClass);
 
-        $maxSort = $model::max('sort');
+        $maxSort = $model::max($column);
 
         return min((int) ($maxSort ?? 0) + 1, self::MAX_SORT);
     }

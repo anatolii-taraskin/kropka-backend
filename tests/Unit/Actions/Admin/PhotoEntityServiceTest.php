@@ -3,8 +3,12 @@
 namespace Tests\Unit\Actions\Admin;
 
 use App\Actions\Admin\PhotoEntityService;
+use App\Config\Media\EquipmentPhotoEntityConfig;
+use App\Config\Media\PhotoEntityConfig;
+use App\Config\Media\TeacherPhotoEntityConfig;
 use App\Models\Equipment;
 use App\Models\Teacher;
+use App\Services\Media\PhotoStorage;
 use App\Services\SortOrderService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
@@ -22,11 +26,11 @@ class PhotoEntityServiceTest extends TestCase
     {
         parent::setUp();
 
-        $this->service = new PhotoEntityService(new SortOrderService());
+        $this->service = new PhotoEntityService(new SortOrderService(), new PhotoStorage());
     }
 
     /**
-     * @return array<string, array{class-string, string, string, array<string, mixed>, array<string, mixed>}>
+     * @return array<string, array{class-string, string, PhotoEntityConfig, array<string, mixed>, array<string, mixed>}>
      */
     public static function photoEntityProvider(): array
     {
@@ -34,7 +38,7 @@ class PhotoEntityServiceTest extends TestCase
             'equipment' => [
                 Equipment::class,
                 'equipment',
-                'equipment',
+                new EquipmentPhotoEntityConfig(),
                 [
                     'name_ru' => 'Беговая дорожка',
                     'name_en' => 'Treadmill',
@@ -53,7 +57,7 @@ class PhotoEntityServiceTest extends TestCase
             'teacher' => [
                 Teacher::class,
                 'teachers',
-                'teachers',
+                new TeacherPhotoEntityConfig(),
                 [
                     'name_ru' => 'Алексей',
                     'name_en' => 'Alexey',
@@ -78,30 +82,30 @@ class PhotoEntityServiceTest extends TestCase
     public function test_it_creates_entities_with_photos_and_sorted_positions(
         string $modelClass,
         string $table,
-        string $directory,
+        PhotoEntityConfig $config,
         array $createData,
         array $updateData
     ): void {
-        Storage::fake('public');
+        Storage::fake($config->disk());
 
         $modelClass::query()->create(array_merge($createData, [
             'photo_path' => null,
-            'sort' => 1,
+            $config->sortField() => 1,
         ]));
 
         $photo = UploadedFile::fake()->image('photo.jpg');
 
-        $entity = $this->service->create($modelClass, $createData, $photo, 'public', $directory);
+        $entity = $this->service->create($modelClass, $createData, $photo, $config);
 
         $this->assertInstanceOf($modelClass, $entity);
-        $this->assertSame(2, $entity->sort);
+        $this->assertSame(2, $entity->getAttribute($config->sortField()));
         $this->assertNotNull($entity->photo_path);
-        Storage::disk('public')->assertExists($entity->photo_path);
+        Storage::disk($config->disk())->assertExists($entity->photo_path);
 
         $this->assertDatabaseHas($table, [
             'id' => $entity->id,
             'photo_path' => $entity->photo_path,
-            'sort' => 2,
+            $config->sortField() => 2,
         ]);
     }
 
@@ -109,23 +113,23 @@ class PhotoEntityServiceTest extends TestCase
     public function test_it_updates_entities_replacing_photos(
         string $modelClass,
         string $table,
-        string $directory,
+        PhotoEntityConfig $config,
         array $createData,
         array $updateData
     ): void {
-        Storage::fake('public');
+        Storage::fake($config->disk());
 
-        $oldPhotoPath = $directory.'/old-photo.jpg';
-        Storage::disk('public')->put($oldPhotoPath, 'old content');
+        $oldPhotoPath = $config->directory().'/old-photo.jpg';
+        Storage::disk($config->disk())->put($oldPhotoPath, 'old content');
 
         $entity = $modelClass::query()->create(array_merge($createData, [
             'photo_path' => $oldPhotoPath,
-            'sort' => 1,
+            $config->sortField() => 1,
         ]));
 
         $newPhoto = UploadedFile::fake()->image('new-photo.jpg');
 
-        $result = $this->service->update($entity, $updateData, $newPhoto, 'public', $directory);
+        $result = $this->service->update($entity, $updateData, $newPhoto, $config);
 
         $this->assertSame($entity->id, $result->id);
         foreach ($updateData as $attribute => $value) {
@@ -134,8 +138,8 @@ class PhotoEntityServiceTest extends TestCase
 
         $this->assertNotNull($result->photo_path);
         $this->assertNotSame($oldPhotoPath, $result->photo_path);
-        Storage::disk('public')->assertMissing($oldPhotoPath);
-        Storage::disk('public')->assertExists($result->photo_path);
+        Storage::disk($config->disk())->assertMissing($oldPhotoPath);
+        Storage::disk($config->disk())->assertExists($result->photo_path);
 
         $this->assertDatabaseHas($table, [
             'id' => $entity->id,
@@ -147,23 +151,23 @@ class PhotoEntityServiceTest extends TestCase
     public function test_it_deletes_entities_and_photos(
         string $modelClass,
         string $table,
-        string $directory,
+        PhotoEntityConfig $config,
         array $createData,
         array $updateData
     ): void {
-        Storage::fake('public');
+        Storage::fake($config->disk());
 
-        $photoPath = $directory.'/delete-photo.jpg';
-        Storage::disk('public')->put($photoPath, 'delete content');
+        $photoPath = $config->directory().'/delete-photo.jpg';
+        Storage::disk($config->disk())->put($photoPath, 'delete content');
 
         $entity = $modelClass::query()->create(array_merge($createData, [
             'photo_path' => $photoPath,
-            'sort' => 1,
+            $config->sortField() => 1,
         ]));
 
-        $this->service->delete($entity, 'public');
+        $this->service->delete($entity, $config);
 
-        Storage::disk('public')->assertMissing($photoPath);
+        Storage::disk($config->disk())->assertMissing($photoPath);
 
         $this->assertDatabaseMissing($table, [
             'id' => $entity->id,
