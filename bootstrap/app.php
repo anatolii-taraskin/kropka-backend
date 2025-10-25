@@ -17,6 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
             // Register short aliases so routes can attach the locale middlewares declaratively.
             'set.locale' => \App\Http\Middleware\SetLocaleFromRoute::class,
             'resolve.locale' => \App\Http\Middleware\ResolveRequestLocale::class,
+            'no-store' => \App\Http\Middleware\NoStoreCacheHeaders::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
