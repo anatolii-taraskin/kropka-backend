@@ -4,17 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StudioInfoRequest;
-use App\Services\StudioInfoFieldFactory;
-use App\Services\StudioInfoRepository;
+use App\Http\Services\StudioInfoService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
 class StudioInfoController extends Controller
 {
-    public function __construct(
-        private readonly StudioInfoFieldFactory $fieldFactory,
-        private readonly StudioInfoRepository $repository,
-    )
+    public function __construct(private readonly StudioInfoService $studioInfoService)
     {
     }
 
@@ -24,9 +20,7 @@ class StudioInfoController extends Controller
     public function edit(): View
     {
         return view('admin.studio-infos.edit', [
-            'fieldGroups' => $this->fieldFactory->fieldGroups(
-                $this->repository->all()
-            ),
+            'fieldGroups' => $this->studioInfoService->fieldGroups(),
         ]);
     }
 
@@ -35,10 +29,7 @@ class StudioInfoController extends Controller
      */
     public function update(StudioInfoRequest $request): RedirectResponse
     {
-        $this->repository->save(
-            $request->studioInfos(),
-            $this->fieldFactory->properties()
-        );
+        $this->studioInfoService->save($request->studioInfos());
 
         return redirect()
             ->route('admin.studio-infos.edit')

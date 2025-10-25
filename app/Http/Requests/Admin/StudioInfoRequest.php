@@ -2,12 +2,12 @@
 
 namespace App\Http\Requests\Admin;
 
-use App\Services\StudioInfoFieldFactory;
+use App\Http\Services\StudioInfoService;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StudioInfoRequest extends FormRequest
 {
-    public function __construct(private readonly StudioInfoFieldFactory $fieldFactory)
+    public function __construct(private readonly StudioInfoService $studioInfoService)
     {
         parent::__construct();
     }
@@ -36,12 +36,12 @@ class StudioInfoRequest extends FormRequest
 
     public function rules(): array
     {
-        return $this->fieldFactory->validationRules();
+        return $this->studioInfoService->validationRules();
     }
 
     public function attributes(): array
     {
-        return $this->fieldFactory->validationAttributes();
+        return $this->studioInfoService->validationAttributes();
     }
 
     public function studioInfos(): array
