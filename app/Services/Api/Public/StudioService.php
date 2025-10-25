@@ -2,18 +2,18 @@
 
 namespace App\Services\Api\Public;
 
-use App\Services\StudioInfoRepository;
+use App\Http\Services\StudioInfoService;
 use Illuminate\Support\Arr;
 
 class StudioService
 {
-    public function __construct(private readonly StudioInfoRepository $repository)
+    public function __construct(private readonly StudioInfoService $studioInfoService)
     {
     }
 
     public function details(string $locale): array
     {
-        $entries = $this->repository->all();
+        $entries = $this->studioInfoService->all();
 
         $data = [];
         $localized = [];
