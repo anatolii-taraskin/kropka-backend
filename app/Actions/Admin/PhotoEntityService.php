@@ -2,17 +2,18 @@
 
 namespace App\Actions\Admin;
 
-use App\Actions\Admin\Concerns\HandlesPhotoUploads;
+use App\Config\Media\PhotoEntityConfig;
+use App\Services\Media\PhotoStorage;
 use App\Services\SortOrderService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\UploadedFile;
 
 class PhotoEntityService
 {
-    use HandlesPhotoUploads;
-
-    public function __construct(private readonly SortOrderService $sortOrderService)
-    {
+    public function __construct(
+        private readonly SortOrderService $sortOrderService,
+        private readonly PhotoStorage $photoStorage
+    ) {
     }
 
     /**
@@ -22,12 +23,15 @@ class PhotoEntityService
      * @param  array<string, mixed>  $data
      * @return T
      */
-    public function create(string $modelClass, array $data, ?UploadedFile $photo, string $disk, string $directory): Model
+    public function create(string $modelClass, array $data, ?UploadedFile $photo, PhotoEntityConfig $config): Model
     {
-        $data['sort'] = $data['sort'] ?? $this->sortOrderService->nextSortValue($modelClass);
+        $sortField = $config->sortField();
+        if (! array_key_exists($sortField, $data) || $data[$sortField] === null) {
+            $data[$sortField] = $this->sortOrderService->nextSortValue($modelClass, $sortField);
+        }
 
         if ($photo) {
-            $data['photo_path'] = $this->storePhoto($photo, $directory, $disk);
+            $data['photo_path'] = $this->photoStorage->store($photo, $config->disk(), $config->directory());
         }
 
         /** @var T $model */
@@ -43,11 +47,11 @@ class PhotoEntityService
      * @param  array<string, mixed>  $data
      * @return T
      */
-    public function update(Model $model, array $data, ?UploadedFile $photo, string $disk, string $directory): Model
+    public function update(Model $model, array $data, ?UploadedFile $photo, PhotoEntityConfig $config): Model
     {
         if ($photo) {
-            $newPhotoPath = $this->storePhoto($photo, $directory, $disk);
-            $this->deletePhoto($model->getAttribute('photo_path'), $disk);
+            $newPhotoPath = $this->photoStorage->store($photo, $config->disk(), $config->directory());
+            $this->photoStorage->delete($model->getAttribute('photo_path'), $config->disk());
             $data['photo_path'] = $newPhotoPath;
         }
 
@@ -56,9 +60,9 @@ class PhotoEntityService
         return $model;
     }
 
-    public function delete(Model $model, string $disk): void
+    public function delete(Model $model, PhotoEntityConfig $config): void
     {
-        $this->deletePhoto($model->getAttribute('photo_path'), $disk);
+        $this->photoStorage->delete($model->getAttribute('photo_path'), $config->disk());
 
         $model->delete();
     }

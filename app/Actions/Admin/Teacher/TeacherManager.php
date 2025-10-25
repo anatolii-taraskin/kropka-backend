@@ -3,13 +3,16 @@
 namespace App\Actions\Admin\Teacher;
 
 use App\Actions\Admin\PhotoEntityService;
+use App\Config\Media\TeacherPhotoEntityConfig;
 use App\Http\Requests\Admin\Teacher\TeacherRequest;
 use App\Models\Teacher;
 
 class TeacherManager
 {
-    public function __construct(private readonly PhotoEntityService $photoEntityService)
-    {
+    public function __construct(
+        private readonly PhotoEntityService $photoEntityService,
+        private readonly TeacherPhotoEntityConfig $config
+    ) {
     }
 
     public function create(TeacherRequest $request): Teacher
@@ -21,8 +24,7 @@ class TeacherManager
             Teacher::class,
             $data,
             $request->file('photo'),
-            'public',
-            'teachers'
+            $this->config
         );
 
         return $teacher;
@@ -37,8 +39,7 @@ class TeacherManager
             $teacher,
             $data,
             $request->file('photo'),
-            'public',
-            'teachers'
+            $this->config
         );
 
         return $teacher;
@@ -46,6 +47,6 @@ class TeacherManager
 
     public function delete(Teacher $teacher): void
     {
-        $this->photoEntityService->delete($teacher, 'public');
+        $this->photoEntityService->delete($teacher, $this->config);
     }
 }
