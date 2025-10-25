@@ -4,14 +4,17 @@ namespace App\Http\Controllers\Api\Public;
 
 use App\Http\Controllers\Api\Public\Concerns\ResolvesLocale;
 use App\Http\Controllers\Controller;
-use App\Models\StudioInfo;
+use App\Services\Api\Public\StudioService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 
 class StudioController extends Controller
 {
     use ResolvesLocale;
+
+    public function __construct(private readonly StudioService $studioService)
+    {
+    }
 
     /**
      * Return localized studio details.
@@ -20,33 +23,8 @@ class StudioController extends Controller
     {
         $locale = $this->localeFrom($request);
 
-        $entries = StudioInfo::query()->pluck('value', 'property');
-
-        $data = [];
-        $localized = [];
-
-        foreach ($entries as $property => $value) {
-            if (preg_match('/^(?<base>.+)_(?<lang>ru|en)$/', $property, $matches)) {
-                $base = $matches['base'];
-                $lang = $matches['lang'];
-
-                $localized[$base][$lang] = $value;
-                continue;
-            }
-
-            $data[$property] = $value;
-        }
-
-        foreach ($localized as $property => $translations) {
-            $data[$property] = $translations[$locale]
-                ?? Arr::first($translations)
-                ?? null;
-        }
-
-        ksort($data);
-
         return response()->json([
-            'data' => $data,
+            'data' => $this->studioService->details($locale),
             'meta' => [
                 'locale' => $locale,
             ],
