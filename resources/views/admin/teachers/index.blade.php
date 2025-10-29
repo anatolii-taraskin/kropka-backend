@@ -95,7 +95,14 @@
 
                                             @if ($teacher->telegram_url)
                                                 <div>
-                                                    <span>{{ $teacher->telegram_url }}</span>
+                                                    <a
+                                                        href="{{ $teacher->telegram_url }}"
+                                                        class="text-sm text-indigo-600 underline transition hover:text-indigo-500"
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                    >
+                                                        {{ $teacher->telegram_url }}
+                                                    </a>
                                                 </div>
                                             @endif
                                         </div>
