@@ -1,130 +1,141 @@
-<?php
+    <?php
 
-use App\Http\Controllers\Admin\EquipmentController;
-use App\Http\Controllers\Admin\PriceController;
-use App\Http\Controllers\Admin\StudioInfoController;
-use App\Http\Controllers\Admin\StudioRuleController;
-use App\Http\Controllers\Admin\TeacherController;
-use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
+    use App\Http\Controllers\Admin\EquipmentController;
+    use App\Http\Controllers\Admin\PriceController;
+    use App\Http\Controllers\Admin\StudioInfoController;
+    use App\Http\Controllers\Admin\StudioRuleController;
+    use App\Http\Controllers\Admin\TeacherController;
+    use App\Http\Controllers\ProfileController;
+    use Illuminate\Support\Facades\Route;
 
-Route::redirect('/', '/'.config('app.locale'));
+    // Route::redirect('/', '/'.config('app.locale'));
 
-Route::prefix('{locale}')
-    ->whereIn('locale', config('app.supported_locales', []))
-    ->middleware('set.locale')
-    ->name('localized.')
-    ->group(function () {
-        Route::get('/', function () {
-            abort(404);
-        })->name('welcome');
+    Route::get('/', fn() => file_get_contents(public_path('index.html')));
+
+    //Route::prefix('{locale}')
+    //    ->whereIn('locale', config('app.supported_locales', []))
+    //    ->middleware('set.locale')
+    //    ->name('localized.')
+    //    ->group(function () {
+    //        Route::get('/', function () {
+    //            abort(404);
+    //        })->name('welcome');
+    //    });
+
+    Route::middleware('set.locale')->group(function () {
+        Route::get('/{locale}', fn () => file_get_contents(public_path('app/index.html')))
+            ->whereIn('locale', config('app.supported_locales', []));
+
+        Route::get('/{locale}/{any}', fn () => file_get_contents(public_path('app/index.html')))
+            ->whereIn('locale', config('app.supported_locales', []))
+            ->where('any', '^(?!api/|admin/|storage/).*');
     });
 
-Route::middleware(['auth', 'admin', 'resolve.locale:admin', 'no-store'])->group(function () {
-    Route::get('/admin', function () {
-        return view('admin.panel');
-    })->name('admin.panel');
+    Route::middleware(['auth', 'admin', 'resolve.locale:admin', 'no-store'])->group(function () {
+        Route::get('/admin', function () {
+            return view('admin.panel');
+        })->name('admin.panel');
 
-    Route::get('/admin/studio-infos', [StudioInfoController::class, 'edit'])
-        ->name('admin.studio-infos.edit');
+        Route::get('/admin/studio-infos', [StudioInfoController::class, 'edit'])
+            ->name('admin.studio-infos.edit');
 
-    Route::put('/admin/studio-infos', [StudioInfoController::class, 'update'])
-        ->name('admin.studio-infos.update');
+        Route::put('/admin/studio-infos', [StudioInfoController::class, 'update'])
+            ->name('admin.studio-infos.update');
 
-    Route::get('/admin/prices', [PriceController::class, 'index'])
-        ->name('admin.prices.index');
+        Route::get('/admin/prices', [PriceController::class, 'index'])
+            ->name('admin.prices.index');
 
-    Route::get('/admin/prices/create', [PriceController::class, 'create'])
-        ->name('admin.prices.create');
+        Route::get('/admin/prices/create', [PriceController::class, 'create'])
+            ->name('admin.prices.create');
 
-    Route::post('/admin/prices', [PriceController::class, 'store'])
-        ->name('admin.prices.store');
+        Route::post('/admin/prices', [PriceController::class, 'store'])
+            ->name('admin.prices.store');
 
-    Route::post('/admin/prices/reorder', [PriceController::class, 'reorder'])
-        ->name('admin.prices.reorder');
+        Route::post('/admin/prices/reorder', [PriceController::class, 'reorder'])
+            ->name('admin.prices.reorder');
 
-    Route::get('/admin/prices/{price}/edit', [PriceController::class, 'edit'])
-        ->name('admin.prices.edit');
+        Route::get('/admin/prices/{price}/edit', [PriceController::class, 'edit'])
+            ->name('admin.prices.edit');
 
-    Route::put('/admin/prices/{price}', [PriceController::class, 'update'])
-        ->name('admin.prices.update');
+        Route::put('/admin/prices/{price}', [PriceController::class, 'update'])
+            ->name('admin.prices.update');
 
-    Route::delete('/admin/prices/{price}', [PriceController::class, 'destroy'])
-        ->name('admin.prices.destroy');
+        Route::delete('/admin/prices/{price}', [PriceController::class, 'destroy'])
+            ->name('admin.prices.destroy');
 
-    Route::get('/admin/equipment', [EquipmentController::class, 'index'])
-        ->name('admin.equipment.index');
+        Route::get('/admin/equipment', [EquipmentController::class, 'index'])
+            ->name('admin.equipment.index');
 
-    Route::get('/admin/equipment/create', [EquipmentController::class, 'create'])
-        ->name('admin.equipment.create');
+        Route::get('/admin/equipment/create', [EquipmentController::class, 'create'])
+            ->name('admin.equipment.create');
 
-    Route::post('/admin/equipment', [EquipmentController::class, 'store'])
-        ->name('admin.equipment.store');
+        Route::post('/admin/equipment', [EquipmentController::class, 'store'])
+            ->name('admin.equipment.store');
 
-    Route::post('/admin/equipment/reorder', [EquipmentController::class, 'reorder'])
-        ->name('admin.equipment.reorder');
+        Route::post('/admin/equipment/reorder', [EquipmentController::class, 'reorder'])
+            ->name('admin.equipment.reorder');
 
-    Route::get('/admin/equipment/{equipment}/edit', [EquipmentController::class, 'edit'])
-        ->name('admin.equipment.edit');
+        Route::get('/admin/equipment/{equipment}/edit', [EquipmentController::class, 'edit'])
+            ->name('admin.equipment.edit');
 
-    Route::put('/admin/equipment/{equipment}', [EquipmentController::class, 'update'])
-        ->name('admin.equipment.update');
+        Route::put('/admin/equipment/{equipment}', [EquipmentController::class, 'update'])
+            ->name('admin.equipment.update');
 
-    Route::delete('/admin/equipment/{equipment}', [EquipmentController::class, 'destroy'])
-        ->name('admin.equipment.destroy');
+        Route::delete('/admin/equipment/{equipment}', [EquipmentController::class, 'destroy'])
+            ->name('admin.equipment.destroy');
 
-    Route::get('/admin/teachers', [TeacherController::class, 'index'])
-        ->name('admin.teachers.index');
+        Route::get('/admin/teachers', [TeacherController::class, 'index'])
+            ->name('admin.teachers.index');
 
-    Route::get('/admin/teachers/create', [TeacherController::class, 'create'])
-        ->name('admin.teachers.create');
+        Route::get('/admin/teachers/create', [TeacherController::class, 'create'])
+            ->name('admin.teachers.create');
 
-    Route::post('/admin/teachers', [TeacherController::class, 'store'])
-        ->name('admin.teachers.store');
+        Route::post('/admin/teachers', [TeacherController::class, 'store'])
+            ->name('admin.teachers.store');
 
-    Route::post('/admin/teachers/reorder', [TeacherController::class, 'reorder'])
-        ->name('admin.teachers.reorder');
+        Route::post('/admin/teachers/reorder', [TeacherController::class, 'reorder'])
+            ->name('admin.teachers.reorder');
 
-    Route::get('/admin/teachers/{teacher}/edit', [TeacherController::class, 'edit'])
-        ->name('admin.teachers.edit');
+        Route::get('/admin/teachers/{teacher}/edit', [TeacherController::class, 'edit'])
+            ->name('admin.teachers.edit');
 
-    Route::put('/admin/teachers/{teacher}', [TeacherController::class, 'update'])
-        ->name('admin.teachers.update');
+        Route::put('/admin/teachers/{teacher}', [TeacherController::class, 'update'])
+            ->name('admin.teachers.update');
 
-    Route::delete('/admin/teachers/{teacher}', [TeacherController::class, 'destroy'])
-        ->name('admin.teachers.destroy');
+        Route::delete('/admin/teachers/{teacher}', [TeacherController::class, 'destroy'])
+            ->name('admin.teachers.destroy');
 
-    Route::get('/admin/studio-rules', [StudioRuleController::class, 'index'])
-        ->name('admin.studio-rules.index');
+        Route::get('/admin/studio-rules', [StudioRuleController::class, 'index'])
+            ->name('admin.studio-rules.index');
 
-    Route::get('/admin/studio-rules/create', [StudioRuleController::class, 'create'])
-        ->name('admin.studio-rules.create');
+        Route::get('/admin/studio-rules/create', [StudioRuleController::class, 'create'])
+            ->name('admin.studio-rules.create');
 
-    Route::post('/admin/studio-rules', [StudioRuleController::class, 'store'])
-        ->name('admin.studio-rules.store');
+        Route::post('/admin/studio-rules', [StudioRuleController::class, 'store'])
+            ->name('admin.studio-rules.store');
 
-    Route::post('/admin/studio-rules/reorder', [StudioRuleController::class, 'reorder'])
-        ->name('admin.studio-rules.reorder');
+        Route::post('/admin/studio-rules/reorder', [StudioRuleController::class, 'reorder'])
+            ->name('admin.studio-rules.reorder');
 
-    Route::get('/admin/studio-rules/{studioRule}/edit', [StudioRuleController::class, 'edit'])
-        ->name('admin.studio-rules.edit');
+        Route::get('/admin/studio-rules/{studioRule}/edit', [StudioRuleController::class, 'edit'])
+            ->name('admin.studio-rules.edit');
 
-    Route::put('/admin/studio-rules/{studioRule}', [StudioRuleController::class, 'update'])
-        ->name('admin.studio-rules.update');
+        Route::put('/admin/studio-rules/{studioRule}', [StudioRuleController::class, 'update'])
+            ->name('admin.studio-rules.update');
 
-    Route::delete('/admin/studio-rules/{studioRule}', [StudioRuleController::class, 'destroy'])
-        ->name('admin.studio-rules.destroy');
+        Route::delete('/admin/studio-rules/{studioRule}', [StudioRuleController::class, 'destroy'])
+            ->name('admin.studio-rules.destroy');
 
-    Route::get('/admin/profile', [ProfileController::class, 'edit'])
-        ->name('profile.edit');
-    Route::patch('/admin/profile', [ProfileController::class, 'update'])
-        ->name('profile.update');
-});
+        Route::get('/admin/profile', [ProfileController::class, 'edit'])
+            ->name('profile.edit');
+        Route::patch('/admin/profile', [ProfileController::class, 'update'])
+            ->name('profile.update');
+    });
 
-Route::middleware('resolve.locale')->group(function () {
-    require __DIR__.'/auth.php';
-});
+    Route::middleware('resolve.locale')->group(function () {
+        require __DIR__.'/auth.php';
+    });
 
-Route::get('/{any}', function () {
-    return file_get_contents(public_path('app/index.html'));
-})->where('any', '^(?!api/|admin/|storage/).*');
+    Route::get('/{any}', function () {
+        return file_get_contents(public_path('app/index.html'));
+    })->where('any', '^(?!api/|admin/|storage/).*');
