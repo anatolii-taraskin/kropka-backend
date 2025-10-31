@@ -126,5 +126,5 @@ Route::middleware('resolve.locale')->group(function () {
 });
 
 Route::get('/{any}', function () {
-    return file_get_contents(public_path('index.html'));
+    return file_get_contents(public_path('app/index.html'));
 })->where('any', '^(?!api/|admin/|storage/).*');
