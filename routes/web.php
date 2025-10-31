@@ -10,7 +10,7 @@
 
     // Route::redirect('/', '/'.config('app.locale'));
 
-    Route::get('/', fn() => file_get_contents(public_path('index.html')));
+    Route::get('/', fn() => file_get_contents(public_path('app/index.html')));
 
     //Route::prefix('{locale}')
     //    ->whereIn('locale', config('app.supported_locales', []))
