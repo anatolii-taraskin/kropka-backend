@@ -10,7 +10,7 @@
 
     // Route::redirect('/', '/'.config('app.locale'));
 
-    Route::get('/', fn() => file_get_contents(public_path('app/index.html')));
+    Route::get('/', fn() => file_get_contents(public_path('index.html')));
 
     //Route::prefix('{locale}')
     //    ->whereIn('locale', config('app.supported_locales', []))
@@ -23,10 +23,10 @@
     //    });
 
     Route::middleware('set.locale')->group(function () {
-        Route::get('/{locale}', fn () => file_get_contents(public_path('app/index.html')))
+        Route::get('/{locale}', fn () => file_get_contents(public_path('index.html')))
             ->whereIn('locale', config('app.supported_locales', []));
 
-        Route::get('/{locale}/{any}', fn () => file_get_contents(public_path('app/index.html')))
+        Route::get('/{locale}/{any}', fn () => file_get_contents(public_path('index.html')))
             ->whereIn('locale', config('app.supported_locales', []))
             ->where('any', '^(?!api/|admin/|storage/).*');
     });
@@ -137,5 +137,5 @@
     });
 
     Route::get('/{any}', function () {
-        return file_get_contents(public_path('app/index.html'));
+        return file_get_contents(public_path('index.html'));
     })->where('any', '^(?!api/|admin/|storage/).*');
